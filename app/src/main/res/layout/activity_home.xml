@@ -1,0 +1,140 @@
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/activity_home_drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_toolbar"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/gray">
+
+
+
+                <!-- Conteudo da tela-->
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    card_view:cardCornerRadius="32dp"
+                    card_view:cardElevation="12dp"
+                    card_view:cardBackgroundColor="@color/white"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="35.3"
+                        android:id="@+id/activity_home_text_view_horas_semanais"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/verde_mowa"
+                        android:textSize="80sp"
+                        android:layout_margin="16dp"/>
+
+
+                </android.support.v7.widget.CardView>
+
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity_home_button_data"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:textColor="@color/verde_mowa"
+                    android:textSize="22sp"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button android:id="@+id/activity_home_button_horas_fim"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="2.5dp"
+                        android:textColor="@color/verde_mowa"
+                        android:textSize="18sp"/>
+
+                    <Button android:id="@+id/activity_home_button_horas_inicio"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="2.5dp"
+                        android:textColor="@color/verde_mowa"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
+                <Spinner android:id="@+id/activity_home_spinner_projeto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white">
+                </Spinner>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:background="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:hint="@string/activity_home_edit_text_descricao"
+                    android:gravity="top"
+                    android:textStyle="italic" />
+
+                <Button android:id="@+id/activity_home_button_enviar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/activity_home_button_enviar"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/verde_mowa"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+    <!-- Menu Lateral -->
+    <ListView android:id="@+id/activity_home_menu_lateral"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/black"
+        android:dividerHeight="0dp"
+        android:background="@color/white"/>
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_mowa"/>
+
+    <EditText android:id="@+id/activity_login_edit_text_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/campo_email"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:textStyle="italic"
+        android:inputType="textEmailAddress"
+        android:text="walky"/>
+
+    <EditText android:id="@+id/activity_login_edit_text_senha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/campo_senha"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:textStyle="italic"
+        android:inputType="textWebPassword"/>
+
+    <Button android:id="@+id/activity_login_botao_entrar"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="@string/login_botao_entrar"
+        android:layout_gravity="center"
+        android:background="@color/primary"
+        android:layout_marginTop="15dp" />
+
+
+</LinearLayout>

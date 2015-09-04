@@ -1,0 +1,27 @@
+<android.support.v4.widget.DrawerLayout android:id="@+id/activity_perfil_drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_toolbar"/>
+
+
+    </LinearLayout>
+
+    <!-- Menu Lateral -->
+    <ListView android:id="@+id/activity_perfil_menu_lateral"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/black"
+        android:dividerHeight="0dp"
+        android:background="@color/white"/>
+
+</android.support.v4.widget.DrawerLayout>
