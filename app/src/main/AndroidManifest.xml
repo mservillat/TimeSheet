@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="br.com.mowa.timesheet.activity.LoginActivity"
+            android:theme="@style/AppTheme.NavDrawer"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,11 +23,13 @@
         <activity
             android:name="br.com.mowa.timesheet.activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|adjustPan" >
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|adjustPan"
+            android:theme="@style/AppTheme.NavDrawer">
         </activity>
         <activity
             android:name="br.com.mowa.timesheet.activity.PerfilActivity"
-            android:label="@string/title_activity_perfil" >
+            android:label="@string/title_activity_perfil"
+            android:theme="@style/AppTheme.NavDrawer">
         </activity>
     </application>
 

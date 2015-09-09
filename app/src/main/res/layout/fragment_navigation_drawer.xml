@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="br.com.mowa.timesheet.fragment.NavigationDrawerFragment"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_marginTop="@dimen/margin_top_navigation_drawer"
+        android:layout_width="280dp"
+        android:layout_height="140dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/logo_mowa" />
+
+    <!-- Menu Lateral -->
+    <ListView android:id="@+id/fragment_navigation_drawer_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/black"
+        android:dividerHeight="0dp"/>
+        <!--android:listSelector="@drawable/ripple_rect"-->
+        <!--android:drawSelectorOnTop="true"/>-->
+
+</LinearLayout>

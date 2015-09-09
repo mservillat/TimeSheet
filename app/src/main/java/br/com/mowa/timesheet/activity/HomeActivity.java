@@ -3,7 +3,10 @@ package br.com.mowa.timesheet.activity;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.timesheet.R;
 
 public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -26,18 +30,25 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Button btHorainicio;
     private Button btHoraFim;
     private Button btUpdateButtonHoras;
-    private Button btEnviar;
+    private FloatingActionButton btEnviar;
     private Spinner spinner;
-
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Navigation drawer + toolbar
-        setUpToolbar();
-        setUpNavigationDrawer(R.id.activity_home_drawer_layout, R.id.activity_home_menu_lateral);
 
+        this.mToolbar = (Toolbar)findViewById(R.id.layout_toolbar);
+        if (this.mToolbar != null) {
+            setSupportActionBar(this.mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
+        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_container);
+        drawerFragment.setUp(R.id.activity_home_fragment_container, this.mDrawerLayout, this.mToolbar);
 
 
 
@@ -77,11 +88,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
 
         //Components (Button enviar)
-        this.btEnviar = (Button) findViewById(R.id.activity_home_button_enviar);
+        this.btEnviar = (FloatingActionButton) findViewById(R.id.fab);
         this.btEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toast("Enviando");
+                snack(btEnviar, "enviando");
             }
         });
 
@@ -161,5 +172,12 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         list.add("Projeto 4");
         return list;
     }
-
+//
+//    @Override
+//    protected void replaceActivity(Class activity) {
+//        if (!(activity == HomeActivity.class)) {
+//            Intent intent = new Intent(getActivity(), activity);
+//            startActivity(intent);
+//        }
+//    }
 }

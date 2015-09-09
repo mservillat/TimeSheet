@@ -28,5 +28,8 @@
 
     <dimen name="userEmail_textSize">14sp</dimen>
     <dimen name="userEmail_layout_marginLeft">16dp</dimen>
+    <dimen name="include_toolbar_top_padding">0dp</dimen>
+    <dimen name="margin_top">24dp</dimen>
+    <dimen name="margin_top_navigation_drawer">24dp</dimen>
 
-</resources>
+ </resources>

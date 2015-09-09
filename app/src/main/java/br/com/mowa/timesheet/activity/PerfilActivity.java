@@ -13,7 +13,7 @@ public class PerfilActivity extends BaseActivity {
 
         // Load Toolbar e Navigation Drawer
         setUpToolbar();
-        setUpNavigationDrawer(R.id.activity_perfil_drawer_layout, R.id.activity_perfil_menu_lateral);
+        //setUpNavigationDrawer(R.id.activity_perfil_drawer_layout);
     }
 
 }
