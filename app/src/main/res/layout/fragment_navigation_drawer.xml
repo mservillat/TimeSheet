@@ -21,6 +21,8 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/black"
         android:dividerHeight="0dp"/>
+        <!--android:listSelector="@drawable/ripple_rect_navigation"-->
+        <!--android:drawSelectorOnTop="true"/>-->
         <!--android:listSelector="@drawable/ripple_rect"-->
         <!--android:drawSelectorOnTop="true"/>-->
 

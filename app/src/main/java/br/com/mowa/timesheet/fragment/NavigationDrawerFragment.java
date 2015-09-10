@@ -1,6 +1,7 @@
 package br.com.mowa.timesheet.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,16 +25,12 @@ import br.com.mowa.timesheet.adapter.NavDrawerMenuAdapter;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuItem;
 import br.com.mowa.timesheet.timesheet.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class NavigationDrawerFragment extends Fragment {
     public static final String PREF_FILE_NAME="namePreference";
     public static final String KEY_USER_LEANERD_DRAWER= "use_learned_drawer";
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView listDrawer;
     private DrawerLayout mDrawerLayout;
-    private View containerView;
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
 
@@ -51,10 +48,17 @@ public class NavigationDrawerFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        replaceActivity(HomeActivity.class);
+                        Intent intent = new Intent(getContext(), HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        closeDrawer();
+                        startActivity(intent);
+
                         break;
                     case 1:
-                        replaceActivity(PerfilActivity.class);
+                        Intent intent1 = new Intent(getContext(), PerfilActivity.class);
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        closeDrawer();
+                        startActivity(intent1);
                         break;
                     default:
                         break;
@@ -67,8 +71,7 @@ public class NavigationDrawerFragment extends Fragment {
         return view;
     }
 
-    public void setUp(int containerId, DrawerLayout drawerLayout, Toolbar toolbar) {
-        this.containerView = getActivity().findViewById(containerId);
+    public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
         this.mDrawerLayout = drawerLayout;
         this.mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.navigation_drawer_aberto, R.string.navigation_drawer_fechado) {
 
@@ -112,11 +115,9 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-    protected void replaceActivity(Class activity) {
-        Intent intent = new Intent(getContext(), activity);
-        if (activity == HomeActivity.class) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+    public void closeDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(Gravity.START);
         }
     }
 

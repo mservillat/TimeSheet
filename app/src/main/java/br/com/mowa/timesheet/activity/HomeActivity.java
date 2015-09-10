@@ -42,7 +42,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         setContentView(R.layout.activity_home);
 
 
-        this.mToolbar = (Toolbar)findViewById(R.id.layout_toolbar);
+        this.mToolbar = (Toolbar)findViewById(R.id.activity_home_toolbar);
         if (this.mToolbar != null) {
             setSupportActionBar(this.mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,7 +50,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_container);
-        drawerFragment.setUp(R.id.activity_home_fragment_container, this.mDrawerLayout, this.mToolbar);
+        drawerFragment.setUp(this.mDrawerLayout, this.mToolbar);
 
 
 
@@ -101,7 +101,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.btEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                snack(btEnviar, "enviando");
+                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
             }
         });
 
@@ -171,8 +171,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.hour = hourOfDay;
         this.minute = minute;
 
-        this.btUpdateButtonHoras.setText(this.hour + ":" + this.minute);
+        if (minute < 10) {
+            this.btUpdateButtonHoras.setText(this.hour + ":" + "0"+this.minute);
+        } else {
+            this.btUpdateButtonHoras.setText(this.hour + ":" + this.minute);
+        }
         this.btUpdateButtonHoras = null;
+
     }
     public List<String> getListSpinner() {
         List<String> list = new ArrayList<String>();

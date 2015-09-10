@@ -31,5 +31,7 @@
     <dimen name="include_toolbar_top_padding">0dp</dimen>
     <dimen name="margin_top">24dp</dimen>
     <dimen name="margin_top_navigation_drawer">24dp</dimen>
+    <dimen name="width_navigation_drawer">280dp</dimen>
+    <dimen name="height_toolbar">56dp</dimen>
 
  </resources>

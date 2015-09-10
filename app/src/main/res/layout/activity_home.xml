@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/include_toolbar"/>
+        <include android:id="@+id/activity_home_toolbar"
+            layout="@layout/include_toolbar"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -141,6 +142,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_add_white"
                     android:layout_gravity="bottom|end"
+                    android:layout_marginTop="5dp"
                     app:elevation="6dp"
                     app:pressedTranslationZ="12dp"
                     app:backgroundTint="@color/laranja_mowa"/>
@@ -150,7 +152,7 @@
     </LinearLayout>
 
     <br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout
-        android:id="@+id/activity_home_ScrimInsets"
+        android:id="@+id/activity_home_scrimInsets"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -160,7 +162,7 @@
 
         <fragment
             android:id="@+id/activity_home_fragment_container"
-            android:layout_width="280dp"
+            android:layout_width="@dimen/width_navigation_drawer"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:layout="@layout/fragment_navigation_drawer"
