@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,9 +93,9 @@ public class NavigationDrawerFragment extends Fragment {
                 super.onDrawerSlide(drawerView, slideOffset);
             }
         };
-//        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-//            mDrawerLayout.openDrawer(containerView);
-//        }
+        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+            openDrawer();
+        }
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
@@ -104,6 +105,11 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
+    }
+    public void openDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.openDrawer(Gravity.START);
+        }
     }
 
     protected void replaceActivity(Class activity) {

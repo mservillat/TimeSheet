@@ -94,15 +94,27 @@
                         android:textSize="18sp"/>
 
                 </LinearLayout>
-
-                <Spinner android:id="@+id/activity_home_spinner_projeto"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/white">
-                </Spinner>
+                    android:layout_height="match_parent">
+
+                    <Spinner android:id="@+id/activity_home_spinner_projeto"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/white">
+                    </Spinner>
+                    <ImageButton android:id="@+id/activity_home_button_spinner"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:src="@drawable/abc_ic_menu_paste_mtrl_am_alpha"/>
+
+                </FrameLayout>
 
                 <EditText
                     android:layout_width="match_parent"

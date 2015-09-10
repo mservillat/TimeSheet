@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -30,6 +31,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Button btHorainicio;
     private Button btHoraFim;
     private Button btUpdateButtonHoras;
+    private ImageButton btSpinner;
     private FloatingActionButton btEnviar;
     private Spinner spinner;
     private Toolbar mToolbar;
@@ -85,6 +87,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, getListSpinner());
         this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
         this.spinner.setAdapter(adapter);
+        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
+        this.btSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner.performClick();
+            }
+        });
 
 
         //Components (Button enviar)

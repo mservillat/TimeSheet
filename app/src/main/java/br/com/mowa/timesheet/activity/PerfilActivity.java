@@ -12,7 +12,6 @@ public class PerfilActivity extends BaseActivity {
         setContentView(R.layout.activity_perfil);
 
         // Load Toolbar e Navigation Drawer
-        setUpToolbar();
         //setUpNavigationDrawer(R.id.activity_perfil_drawer_layout);
     }
 
