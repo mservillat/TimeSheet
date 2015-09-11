@@ -4,9 +4,10 @@
     package="br.com.mowa.timesheet.timesheet" >
 
     <uses-sdk tools:overrideLibrary="com.wdullaer.materialdatetimepicker" />
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
+        android:name="br.com.mowa.timesheet.TimeSheetApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >

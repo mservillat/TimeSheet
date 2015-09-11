@@ -23,7 +23,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void toast(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
     protected void snack(View view, String msg) {
         Snackbar snackBar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
