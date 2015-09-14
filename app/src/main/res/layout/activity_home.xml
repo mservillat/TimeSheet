@@ -117,7 +117,7 @@
 
                 </FrameLayout>
 
-                <EditText
+                <EditText android:id="@+id/activity_home_text_view_descricao_atividade"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
                     android:background="@color/white"
@@ -137,7 +137,7 @@
                     <!--android:background="@color/verde_mowa"/>-->
 
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fab"
+                    android:id="@+id/activity_home_floating_button_enviar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_add_white"

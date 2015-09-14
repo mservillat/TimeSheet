@@ -1,7 +1,6 @@
 package br.com.mowa.timesheet.fragment;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -96,9 +95,9 @@ public class NavigationDrawerFragment extends Fragment {
                 super.onDrawerSlide(drawerView, slideOffset);
             }
         };
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            openDrawer();
-        }
+//        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+//            openDrawer();
+//        }
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
@@ -109,11 +108,11 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
     }
-    public void openDrawer() {
-        if (mDrawerLayout != null) {
-            mDrawerLayout.openDrawer(Gravity.START);
-        }
-    }
+//    public void openDrawer() {
+//        if (mDrawerLayout != null) {
+//            mDrawerLayout.openDrawer(Gravity.START);
+//        }
+//    }
 
     public void closeDrawer() {
         if (mDrawerLayout != null) {

@@ -1,7 +1,6 @@
 package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
-import android.app.DownloadManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,15 +22,16 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
+import br.com.mowa.timesheet.model.Project;
+import br.com.mowa.timesheet.model.Task;
 import br.com.mowa.timesheet.network.CustomJsonObjectRequest;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
@@ -47,9 +48,14 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Spinner spinner;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private final String url = "http://walkyteste.goldarkapi.com/project";
+    private final String urlGetProjet = "http://walkyteste.goldarkapi.com/project";
     private RequestQueue mRequestQueue;
-    private List<String> listaDeProjetos;
+    private List<String> listaDeProjetosString;
+    private List<Project> listaDeProjetosObjProject;
+    private Project project = new Project();
+    private Task task = new Task();
+    private HashMap<String, String> params;
+    private TextView tvDescricaoAtividade;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,40 +103,104 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         loadDateCurrent();
 
 
-        //Request lista de projetos e carrega na view spinner
-        this.mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
-        callJsonObject();
 
-        //Components (Button enviar)
-        this.btEnviar = (FloatingActionButton) findViewById(R.id.fab);
-        this.btEnviar.setOnClickListener(new View.OnClickListener() {
+        //Request lista de projetos e carrega na view spinner
+        this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
+        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
+        this.btSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                spinner.performClick();
             }
         });
 
+        this.mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        callJsonObject();
+
+        // Component TextView Descricao atividade
+        this.tvDescricaoAtividade = (TextView) findViewById(R.id.activity_home_text_view_descricao_atividade);
+
+
+        //Components (Floating Button enviar)
+        this.btEnviar = (FloatingActionButton) findViewById(R.id.activity_home_floating_button_enviar);
+        this.btEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    JSONObject requestBody = new JSONObject();
+
+                    requestBody.put("date", Calendar.getInstance());
+                    requestBody.put("project", "55f4e55b657f6f07dd64e8ff");
+                    requestBody.put("user", "55f4e2ec657f6f069a9b6a38");
+
+                    callJsonObjectSend(requestBody);
+
+                    snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+
+                } catch (JSONException e) {
+
+                }
+            }
+        });
+
+
     }
 
-    private void callJsonObject() {
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET, this.url, null, new Response.Listener<JSONObject>() {
+    private void callJsonObjectSend(JSONObject requestBody) {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, "http://walkyteste.goldarkapi.com/task", requestBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    montaListaProjeto(response);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                toast("OK");
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                toast(error.getMessage());
+                toast("NOK: " + error.getMessage());
+
             }
         });
 
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, "http://walkyteste.goldarkapi.com/task", new JSONObject(), new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                toast("Bem sucedido");
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                toast("Mal sucedido");
+//            }
+//        });
+
         this.mRequestQueue.add(request);
+    }
+
+    private void callJsonObject() {
+//        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET, this.urlGetProjet, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    listaDeProjetosObjProject = project.modelBuild(response);
+//                    buildListaProjeto();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                toast(error.getMessage());
+//            }
+//        });
+//
+//        this.mRequestQueue.add(request);
+    }
+
+    public void buildListaProjeto() {
+        listaDeProjetosString = project.getListaProject(listaDeProjetosObjProject);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.listaDeProjetosString);
+        this.spinner.setAdapter(adapter);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -189,6 +259,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.day = dayOfMonth;
 
         this.btDate.setText(day + "/" + (month + 1) + "/" + year);
+        this.task.setDate(tDefaul.getTime());
     }
 
 
@@ -203,27 +274,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             this.btUpdateButtonHoras.setText(this.hour + ":" + this.minute);
         }
         this.btUpdateButtonHoras = null;
-
-    }
-    public void montaListaProjeto(JSONObject jsonObject) throws JSONException {
-        this.listaDeProjetos = new ArrayList<>();
-        JSONArray jsonArray = jsonObject.getJSONArray("data");
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject obj = jsonArray.getJSONObject(i);
-            this.listaDeProjetos.add(obj.optString("name"));
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.listaDeProjetos);
-        this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
-        this.spinner.setAdapter(adapter);
-        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
-        this.btSpinner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinner.performClick();
-            }
-        });
-
     }
 
 }
