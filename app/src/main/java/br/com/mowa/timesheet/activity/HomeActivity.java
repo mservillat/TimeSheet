@@ -1,6 +1,7 @@
 package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
+import android.app.DownloadManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,15 +14,25 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
+import br.com.mowa.timesheet.network.CustomJsonObjectRequest;
+import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
 
 public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -36,6 +47,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Spinner spinner;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
+    private final String url = "http://walkyteste.goldarkapi.com/project";
+    private RequestQueue mRequestQueue;
+    private List<String> listaDeProjetos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,18 +97,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         loadDateCurrent();
 
 
-        //Components (Spinner)
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, getListSpinner());
-        this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
-        this.spinner.setAdapter(adapter);
-        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
-        this.btSpinner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinner.performClick();
-            }
-        });
-
+        //Request lista de projetos e carrega na view spinner
+        this.mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        callJsonObject();
 
         //Components (Button enviar)
         this.btEnviar = (FloatingActionButton) findViewById(R.id.fab);
@@ -105,6 +110,27 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
+    }
+
+    private void callJsonObject() {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET, this.url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    montaListaProjeto(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                toast(error.getMessage());
+            }
+        });
+
+        this.mRequestQueue.add(request);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -179,20 +205,25 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.btUpdateButtonHoras = null;
 
     }
-    public List<String> getListSpinner() {
-        List<String> list = new ArrayList<String>();
-        list.add("Projeto 1");
-        list.add("Projeto 2");
-        list.add("Projeto 3");
-        list.add("Projeto 4");
-        return list;
+    public void montaListaProjeto(JSONObject jsonObject) throws JSONException {
+        this.listaDeProjetos = new ArrayList<>();
+        JSONArray jsonArray = jsonObject.getJSONArray("data");
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            this.listaDeProjetos.add(obj.optString("name"));
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.listaDeProjetos);
+        this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
+        this.spinner.setAdapter(adapter);
+        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
+        this.btSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner.performClick();
+            }
+        });
+
     }
-//
-//    @Override
-//    protected void replaceActivity(Class activity) {
-//        if (!(activity == HomeActivity.class)) {
-//            Intent intent = new Intent(getActivity(), activity);
-//            startActivity(intent);
-//        }
-//    }
+
 }

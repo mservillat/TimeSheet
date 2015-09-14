@@ -10,6 +10,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.Response.Listener;
+import com.android.volley.Response.ErrorListener;
 
 import org.json.JSONObject;
 
@@ -52,17 +54,17 @@ public class LoginActivity extends BaseActivity {
 
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         url = "http://walkyteste.goldarkapi.com/sessions";
-        callJsonObject(null);
+        callJsonObject();
     }
 
-    public void callJsonObject(View view){
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, getParams(), new Response.Listener<JSONObject>() {
+    private void callJsonObject(){
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, getParams(), new Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 toast("certo");
                 //toast(response.getJSONArray("data").getJSONObject(0).optString("name"));
             }
-        }, new Response.ErrorListener() {
+        }, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 toast("erro " + error.getMessage());

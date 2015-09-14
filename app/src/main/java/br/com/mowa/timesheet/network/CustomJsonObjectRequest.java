@@ -31,6 +31,7 @@ public class CustomJsonObjectRequest extends Request<JSONObject> {
     public Map<String, String> getHeaders() throws AuthFailureError {
         HashMap<String, String> header = new HashMap<String, String>();
         header.put("X-Api-Token", "QdqV9mQud/PT0LiiEW4zpuJeuCWfEsToMqiuto98XyT5U48CymfdXW/m5us+Tcx9dewwJuiYOYi2JFdd8qD0Rw==");
+        header.put("Content-Type:", "application/json;charset=utf-8");
 
         return(header);
     }
