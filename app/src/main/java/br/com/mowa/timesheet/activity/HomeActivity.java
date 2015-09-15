@@ -32,6 +32,7 @@ import java.util.List;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.Project;
 import br.com.mowa.timesheet.model.Task;
+import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.CustomJsonObjectRequest;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
@@ -48,7 +49,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Spinner spinner;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private final String urlGetProjet = "http://walkyteste.goldarkapi.com/project";
+    private static final String URL_GET_PROJECT = "http://walkyteste.goldarkapi.com/project";
     private RequestQueue mRequestQueue;
     private List<String> listaDeProjetosString;
     private List<Project> listaDeProjetosObjProject;
@@ -115,7 +116,18 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         });
 
         this.mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
-        callJsonObject();
+        CallJsonNetwork callJson = new CallJsonNetwork();
+        callJson.callJsonObjectGet(URL_GET_PROJECT, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    listaDeProjetosObjProject = project.modelBuild(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                buildListaProjeto();
+            }
+        });
 
         // Component TextView Descricao atividade
         this.tvDescricaoAtividade = (TextView) findViewById(R.id.activity_home_text_view_descricao_atividade);
@@ -143,7 +155,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-
     }
 
     private void callJsonObjectSend(JSONObject requestBody) {
@@ -160,42 +171,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, "http://walkyteste.goldarkapi.com/task", new JSONObject(), new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                toast("Bem sucedido");
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                toast("Mal sucedido");
-//            }
-//        });
-
         this.mRequestQueue.add(request);
     }
 
-    private void callJsonObject() {
-//        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET, this.urlGetProjet, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    listaDeProjetosObjProject = project.modelBuild(response);
-//                    buildListaProjeto();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                toast(error.getMessage());
-//            }
-//        });
-//
-//        this.mRequestQueue.add(request);
-    }
 
     public void buildListaProjeto() {
         listaDeProjetosString = project.getListaProject(listaDeProjetosObjProject);
