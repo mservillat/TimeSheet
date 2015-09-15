@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <Button android:id="@+id/activity_home_button_horas_fim"
+                    <Button android:id="@+id/activity_home_button_horas_inicio"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
@@ -83,7 +83,7 @@
                         android:textColor="@color/laranja_mowa"
                         android:textSize="18sp"/>
 
-                    <Button android:id="@+id/activity_home_button_horas_inicio"
+                    <Button android:id="@+id/activity_home_button_horas_fim"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"

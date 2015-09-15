@@ -1,15 +1,13 @@
 package br.com.mowa.timesheet.model;
 
-import java.util.Date;
-
 /**
  * Created by walky on 9/14/15.
  */
 public class Task {
     private String name;
-    private Date date;
-    private Date start_time;
-    private Date end_time;
+    private String date;
+    private String start_time;
+    private String end_time;
     private String comments;
     private User user;
     private String project;
@@ -18,16 +16,20 @@ public class Task {
         this.name = name;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(int year, int month, int day, int hour, int minute) {
+        this.date = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
     }
 
-    public void setStart_time(Date start_time) {
-        this.start_time = start_time;
+    public String getDate(){
+        return this.date;
     }
 
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
+    public void setStart_time(int year, int month, int day, int hour, int minute) {
+        this.start_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+    }
+
+    public void setEnd_time(int year, int month, int day, int hour, int minute) {
+        this.end_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
     }
 
     public void setComments(String comments) {
@@ -46,12 +48,11 @@ public class Task {
         return name;
     }
 
-
-    public Date getStart_time() {
+    public String getStart_time() {
         return start_time;
     }
 
-    public Date getEnd_time() {
+    public String getEnd_time() {
         return end_time;
     }
 
@@ -66,4 +67,5 @@ public class Task {
     public String getProject() {
         return project;
     }
+
 }

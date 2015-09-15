@@ -20,7 +20,7 @@
         android:layout_marginRight="30dp"
         android:textStyle="italic"
         android:inputType="textEmailAddress"
-        android:text="walky"/>
+        android:text="walky.silva@mowa.com.br"/>
 
     <EditText android:id="@+id/activity_login_edit_text_senha"
         android:layout_width="match_parent"
@@ -30,7 +30,8 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:textStyle="italic"
-        android:inputType="textWebPassword"/>
+        android:inputType="textWebPassword"
+        android:text="12345"/>
 
     <Button android:id="@+id/activity_login_botao_entrar"
         android:layout_width="wrap_content"

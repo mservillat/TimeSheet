@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,10 +15,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -32,8 +31,8 @@ import java.util.List;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.Project;
 import br.com.mowa.timesheet.model.Task;
+import br.com.mowa.timesheet.model.User;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
-import br.com.mowa.timesheet.network.CustomJsonObjectRequest;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
 
@@ -50,6 +49,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private static final String URL_GET_PROJECT = "http://walkyteste.goldarkapi.com/project";
+    private static final String URL_POST_CREATE_TASK = "http://walkyteste.goldarkapi.com/task";
     private RequestQueue mRequestQueue;
     private List<String> listaDeProjetosString;
     private List<Project> listaDeProjetosObjProject;
@@ -57,11 +57,12 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Task task = new Task();
     private HashMap<String, String> params;
     private TextView tvDescricaoAtividade;
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        this.user = (User) getIntent().getSerializableExtra("user");
 
 
         this.mToolbar = (Toolbar)findViewById(R.id.activity_home_toolbar);
@@ -142,11 +143,22 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                 try {
                     JSONObject requestBody = new JSONObject();
 
-                    requestBody.put("date", Calendar.getInstance());
                     requestBody.put("project", "55f4e55b657f6f07dd64e8ff");
-                    requestBody.put("user", "55f4e2ec657f6f069a9b6a38");
+                    requestBody.put("user", user.getId());
+                    Log.d("walkyTeste", user.getId());
+                    requestBody.put("date", task.getDate());
+                    requestBody.put("start_time", task.getStart_time());
+                    requestBody.put("end_time", task.getEnd_time());
 
-                    callJsonObjectSend(requestBody);
+
+
+                    CallJsonNetwork callJson = new CallJsonNetwork();
+                    callJson.callJsonObjectPost(URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            toast("Ok");
+                        }
+                    });
 
                     snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
 
@@ -158,29 +170,21 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     }
 
-    private void callJsonObjectSend(JSONObject requestBody) {
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, "http://walkyteste.goldarkapi.com/task", requestBody, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                toast("OK");
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                toast("NOK: " + error.getMessage());
-
-            }
-        });
-
-        this.mRequestQueue.add(request);
-    }
-
 
     public void buildListaProjeto() {
         listaDeProjetosString = project.getListaProject(listaDeProjetosObjProject);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.listaDeProjetosString);
         this.spinner.setAdapter(adapter);
     }
+
+
+
+
+
+
+
+
+    //  CALENDÁRIO E RELÓGIO
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void calendarioPickerDialog() {
@@ -233,12 +237,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {
         Calendar tDefaul = Calendar.getInstance();
         tDefaul.set(year, month, day, hour, minute);
+
         this.year = year;
         this.month = monthOfYear;
         this.day = dayOfMonth;
 
         this.btDate.setText(day + "/" + (month + 1) + "/" + year);
-        this.task.setDate(tDefaul.getTime());
+        this.task.setDate(this.year, this.month, this.day, hour, minute);
     }
 
 
@@ -247,12 +252,25 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.hour = hourOfDay;
         this.minute = minute;
 
+        if (btUpdateButtonHoras == btHorainicio) {
+            validacaoMinutos();
+            this.task.setStart_time(this.year, this.month, this.day, this.hour, this.minute);
+        }
+        if(btUpdateButtonHoras == btHoraFim) {
+            validacaoMinutos();
+            this.task.setEnd_time(this.year, this.month, this.day, this.hour, this.minute);
+        }
+
+        this.btUpdateButtonHoras = null;
+    }
+
+    private void validacaoMinutos() {
         if (minute < 10) {
             this.btUpdateButtonHoras.setText(this.hour + ":" + "0"+this.minute);
         } else {
             this.btUpdateButtonHoras.setText(this.hour + ":" + this.minute);
         }
-        this.btUpdateButtonHoras = null;
     }
+
 
 }

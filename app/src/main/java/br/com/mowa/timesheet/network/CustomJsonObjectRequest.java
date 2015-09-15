@@ -1,7 +1,5 @@
 package br.com.mowa.timesheet.network;
 
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -27,7 +25,6 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
         customHeader.put("X-Api-Token", "QdqV9mQud/PT0LiiEW4zpuJeuCWfEsToMqiuto98XyT5U48CymfdXW/m5us+Tcx9dewwJuiYOYi2JFdd8qD0Rw==");
         customHeader.put("Content-Type", "application/json;charset=utf-8");
 
-        Log.d("TestesTeste", "Passando parametros " + customHeader.toString());
         return customHeader;
     }
 }

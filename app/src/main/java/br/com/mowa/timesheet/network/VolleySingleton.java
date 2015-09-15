@@ -9,7 +9,7 @@ import br.com.mowa.timesheet.TimeSheetApplication;
  * Created by walky on 9/11/15.
  */
 public class VolleySingleton {
-    private static final String URL_GET_PROJECT = "http://walkyteste.goldarkapi.com/project";
+    public static String URL_POST_CREATE_SESSIONS = "http://walkyteste.goldarkapi.com/sessions";
     private static VolleySingleton sInstance = null;
     private RequestQueue mRequestQueue;
 
