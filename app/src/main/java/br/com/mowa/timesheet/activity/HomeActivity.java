@@ -63,6 +63,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         setContentView(R.layout.activity_home);
 
 
+
         this.mToolbar = (Toolbar)findViewById(R.id.activity_home_toolbar);
         if (this.mToolbar != null) {
             setSupportActionBar(this.mToolbar);
