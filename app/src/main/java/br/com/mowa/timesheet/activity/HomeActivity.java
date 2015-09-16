@@ -15,8 +15,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
@@ -74,7 +73,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
 
         // Components (DATA e HORA)
-        this.btDate = (Button) findViewById(R.id.activity_home_button_data);
+        this.btDate = (Button) findViewById(R.id.activity_home_button_data_inicio);
         this.btDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,20 +145,24 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                     requestBody.put("end_time", task.getEnd_time());
 
 
-
                     CallJsonNetwork callJson = new CallJsonNetwork();
                     callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             toast("Ok");
+                            snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
                         }
                     });
-
-                    snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
 
                 } catch (JSONException e) {
 
                 }
+
             }
         });
 

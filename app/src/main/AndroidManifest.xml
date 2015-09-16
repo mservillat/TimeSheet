@@ -24,12 +24,12 @@
         <activity
             android:name="br.com.mowa.timesheet.activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|adjustPan"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/AppTheme.NavDrawer">
         </activity>
         <activity
             android:name="br.com.mowa.timesheet.activity.PerfilActivity"
-            android:label="@string/title_activity_perfil"
+            android:label="@string/activity_perfil_title"
             android:theme="@style/AppTheme.NavDrawer">
         </activity>
     </application>

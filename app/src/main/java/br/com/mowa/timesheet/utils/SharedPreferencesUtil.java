@@ -17,11 +17,15 @@ public class SharedPreferencesUtil {
      */
     public static User getUserFromSharedPreferences() {
         SharedPreferences shared = getContextSharedPreference(KEY_USER_LOGIN_PREFERENCE_USERNAME);
-        String username = shared.getString("username",null);
-        String id = shared.getString("id", null);
-        String token = shared.getString("token", null);
-        User user = new User(username, id, token);
-        return user;
+
+        if (null != shared.getString("username", null)) {
+            String username = shared.getString("username",null);
+            String id = shared.getString("id", null);
+            String token = shared.getString("token", null);
+            User user = new User(username, id, token);
+            return user;
+        }
+        return null;
     }
 
     /**
@@ -30,7 +34,7 @@ public class SharedPreferencesUtil {
      */
     public static void setUserInSharedPreferences(User user) {
         SharedPreferences.Editor editor= getSharedPreferenceEdit(KEY_USER_LOGIN_PREFERENCE_USERNAME);
-        editor.putString("usarname", user.getUsername());
+        editor.putString("username", user.getUsername());
         editor.putString("id", user.getId());
         editor.putString("token", user.getToken());
         editor.commit();

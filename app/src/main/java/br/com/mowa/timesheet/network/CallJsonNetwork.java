@@ -30,14 +30,9 @@ public class CallJsonNetwork {
     }
 
 
-    public void callJsonObjectPost(String url, JSONObject requestBody ,Response.Listener<JSONObject> responseListener) {
+    public void callJsonObjectPost(String url, JSONObject requestBody ,Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, requestBody, responseListener, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Erro metodo CallJsonObjectPost" + error.getMessage());
-            }
-        });
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, requestBody, responseListener, errorListener);
 
         this.mRequestQueue.add(request);
     }

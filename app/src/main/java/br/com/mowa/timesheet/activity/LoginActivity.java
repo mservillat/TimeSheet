@@ -2,15 +2,17 @@ package br.com.mowa.timesheet.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Pattern;
 
 import br.com.mowa.timesheet.model.User;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
@@ -37,7 +39,7 @@ public class LoginActivity extends BaseActivity {
         User mUser = SharedPreferencesUtil.getUserFromSharedPreferences();
 
         if (mUser != null) {
-            // Usuário tá logado
+            // Usuário já está logado
 
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
@@ -51,10 +53,14 @@ public class LoginActivity extends BaseActivity {
                 public void onClick(View v) {
                     JSONObject requestBody = new JSONObject();
                     try {
-                        requestBody.put("username", editEmail.getText().toString());
-                        //editEmail.setError("Campo inválido");
+                        if (isValidEmail(editEmail.getText().toString())) {
+                            requestBody.put("username", editEmail.getText().toString());
+                        }
+                        if (isValidPassord(editSenha.getText().toString())) {
+                            requestBody.put("password", editSenha.getText().toString());
+                        }
 
-                        requestBody.put("password", editSenha.getText().toString());
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -70,21 +76,53 @@ public class LoginActivity extends BaseActivity {
                                 String token = response.getString("token");
                                 user = new User(username, id, token);
 
-                                Log.d("walkyTeste", username + " / " + id + "/" + token);
-
                                 SharedPreferencesUtil.setUserInSharedPreferences(user);
 
                                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                 startActivity(intent);
                                 finish();
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            toast(getResources().getString(R.string.activity_login_toast_usuario_ou_senha_invalido));
                         }
                     });
                 }
             });
         }
 
+    }
+
+    private boolean isValidEmail(String email) {
+        Pattern emailPattern = Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$");
+        if (emailPattern.matcher(email).matches()) {
+            return true;
+        }
+        editEmail.setError(getResources().getString(R.string.activity_login_set_error_email_invalido));
+        return false;
+
+    }
+
+    private boolean isValidPassord(String password) {
+        if (password.length() >5 ) {
+            Pattern passwordPattern = Pattern.compile("[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789]*");
+            if(!(passwordPattern.matcher(password).matches())) {
+                editSenha.setError(getResources().getString(R.string.activity_login_set_error_caractere_invalido));
+                return false;
+            }
+            return true;
+        }
+        editSenha.setError(getResources().getString(R.string.activity_login_set_error_minimo_caractere));
+        return false;
     }
 }

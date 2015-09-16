@@ -4,9 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="login_campo_email">email</string>
-    <string name="login_campo_senha">senha</string>
-    <string name="erro_login">Usuario ou senha invalido</string>
+
+
 
 
 
@@ -24,12 +23,25 @@
     <string name="login_botao_entrar">entrar</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="activity_home_edit_text_descricao">Descrição da atividade</string>
-    <string name="activity_home_button_enviar">Enviar</string>
-    <string name="title_activity_perfil">PerfilActivity</string>
-    <string name="perfil_campo_senha_atual">senha atual</string>
-    <string name="perfil_campo_senha_nova">nova senha</string>
-    <string name="perfil_campo_senha_nova_repetir">repetir senha</string>
-    <string name="perfil_text_view_alterar_senha">Alterar senha</string>
+
+
+    <!-- Activity Perfil-->
+    <string name="activity_perfil_title">PerfilActivity</string>
+    <string name="activity_perfil_campo_senha_atual">senha atual</string>
+    <string name="activity_perfil_campo_senha_nova">nova senha</string>
+    <string name="activity_perfil_campo_senha_nova_repetir">repetir senha</string>
+    <string name="activity_perfil_text_view_alterar_senha">Alterar senha</string>
     <string name="activity_home_button_floating_msg_enviar">enviando</string>
     <string name="activity_perfil_button_floationg_msg_senha_alterada">senha alterada</string>
+
+
+
+
+    <!-- Activity Login-->
+    <string name="activity_login_edit_text_hint_email">email</string>
+    <string name="activity_login_edit_text_hint_senha">senha</string>
+    <string name="activity_login_set_error_caractere_invalido">caractere inválido</string>
+    <string name="activity_login_set_error_minimo_caractere">a senha deve ter no minimo 6 digitos</string>
+    <string name="activity_login_set_error_email_invalido">email inválido</string>
+    <string name="activity_login_toast_usuario_ou_senha_invalido">usuario ou senha invalido</string>
 </resources>
