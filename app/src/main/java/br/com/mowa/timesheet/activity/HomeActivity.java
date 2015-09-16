@@ -48,14 +48,10 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Spinner spinner;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private static final String URL_GET_PROJECT = "http://walkyteste.goldarkapi.com/project";
-    private static final String URL_POST_CREATE_TASK = "http://walkyteste.goldarkapi.com/task";
-    private RequestQueue mRequestQueue;
     private List<String> listaDeProjetosString;
     private List<Project> listaDeProjetosObjProject;
     private Project project = new Project();
     private Task task = new Task();
-    private HashMap<String, String> params;
     private TextView tvDescricaoAtividade;
     private User user;
     @Override
@@ -117,9 +113,8 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-        this.mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         CallJsonNetwork callJson = new CallJsonNetwork();
-        callJson.callJsonObjectGet(URL_GET_PROJECT, new Response.Listener<JSONObject>() {
+        callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -153,7 +148,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
 
                     CallJsonNetwork callJson = new CallJsonNetwork();
-                    callJson.callJsonObjectPost(URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+                    callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             toast("Ok");

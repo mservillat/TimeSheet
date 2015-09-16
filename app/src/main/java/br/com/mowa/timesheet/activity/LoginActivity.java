@@ -39,8 +39,12 @@ public class LoginActivity extends BaseActivity {
         if (mUser != null) {
             // Usuário tá logado
 
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+
         } else {
-            // Usuário mão está logado
+            // Usuário não está logado
 
             btLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,7 +75,6 @@ public class LoginActivity extends BaseActivity {
                                 SharedPreferencesUtil.setUserInSharedPreferences(user);
 
                                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                intent.putExtra("user", user);
                                 startActivity(intent);
                                 finish();
                             } catch (JSONException e) {

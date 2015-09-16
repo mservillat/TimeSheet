@@ -3,6 +3,7 @@ package br.com.mowa.timesheet.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import br.com.mowa.timesheet.TimeSheetApplication;
 import br.com.mowa.timesheet.model.User;
 
 /**
@@ -10,30 +11,38 @@ import br.com.mowa.timesheet.model.User;
  */
 public class SharedPreferencesUtil {
     private static final String KEY_USER_LOGIN_PREFERENCE_USERNAME = "KEY_USER_LOGIN_PREFERENCE_USERNAME";
-    private static final String KEY_USER_LOGIN_PREFERENCE_ID = "KEY_USER_LOGIN_PREFERENCE_ID";
-    private static final String KEY_USER_LOGIN_PREFERENCE_TOKEN = "KEY_USER_LOGIN_PREFERENCE_TOKEN";
     /**
      * Retorna um objeto do tipo User com o usuário logado, caso não esteja logado, irá retornar null.
      * @return o usuário logado ou null caso não tenha
      */
     public static User getUserFromSharedPreferences() {
-
-        return null;
+        SharedPreferences shared = getContextSharedPreference(KEY_USER_LOGIN_PREFERENCE_USERNAME);
+        String username = shared.getString("username",null);
+        String id = shared.getString("id", null);
+        String token = shared.getString("token", null);
+        User user = new User(username, id, token);
+        return user;
     }
 
     /**
      * Salva o objeto do tipo User no SharedPreferences
      * @param user objeto a ser salvo
      */
-    public static void setUserInSharedPreferences(Context context, User user) {
-        SharedPreferences sharedPref;
-        SharedPreferences.Editor editor;
-        sharedPref =  context.getSharedPreferences(KEY_USER_LOGIN_PREFERENCE_USERNAME, Context.MODE_PRIVATE);
-        editor = sharedPref.edit();
-
-        editor.putString(KEY_USER_LOGIN_PREFERENCE_USERNAME, user.getUsername());
-        editor.putString(KEY_USER_LOGIN_PREFERENCE_ID, user.getId());
-        editor.putString(KEY_USER_LOGIN_PREFERENCE_TOKEN, user.getToken());
+    public static void setUserInSharedPreferences(User user) {
+        SharedPreferences.Editor editor= getSharedPreferenceEdit(KEY_USER_LOGIN_PREFERENCE_USERNAME);
+        editor.putString("usarname", user.getUsername());
+        editor.putString("id", user.getId());
+        editor.putString("token", user.getToken());
+        editor.commit();
     }
 
+    public static SharedPreferences.Editor getSharedPreferenceEdit(String key) {
+        return TimeSheetApplication.getInstance().getApplicationContext().getSharedPreferences(key, Context.MODE_PRIVATE).edit();
+
+    }
+
+    public static SharedPreferences getContextSharedPreference(String key) {
+        return TimeSheetApplication.getInstance().getApplicationContext().getSharedPreferences(key, Context.MODE_PRIVATE);
+
+    }
 }
