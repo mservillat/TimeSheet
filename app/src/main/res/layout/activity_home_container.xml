@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="16dp"
+    android:layout_marginTop="8dp"
     android:background="@color/gray">
 
     <ScrollView
@@ -20,7 +21,6 @@
             <!-- Conteudo da tela-->
             <!-- A CardView that contains a TextView -->
             <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/activity_home_card_view_horas_semanais"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
@@ -29,8 +29,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"
                 card_view:cardElevation="12dp"
-                card_view:cardBackgroundColor="@color/white"
-                android:layout_marginTop="5dp">
+                card_view:cardCornerRadius="8dp"
+                card_view:cardBackgroundColor="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -39,13 +39,13 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Horas semanais"
-                        android:textColor="@color/black"
-                        android:textSize="24sp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
+                        android:text="Total de horas"
+                        android:textColor="@color/white"
+                        android:textSize="32sp"
+                        android:paddingBottom="16dp"
+                        android:gravity="center"
                         android:paddingTop="24dp"
-                        android:paddingBottom="16dp"></TextView>
+                        android:background="@color/primary"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                         android:id="@+id/activity_home_text_view_horas_semanais"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:textColor="@color/laranja_mowa"
+                        android:textColor="@color/primary"
                         android:textSize="80sp"
                         android:paddingBottom="16dp"/>
 
@@ -66,7 +66,6 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/activity_home_card_view_formulario"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
@@ -75,6 +74,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginBottom="16dp"
                 card_view:cardElevation="12dp"
+                card_view:cardCornerRadius="8dp"
                 card_view:cardBackgroundColor="@color/white"
                 android:layout_marginTop="5dp">
 
@@ -86,88 +86,181 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
+                        android:gravity="center"
                         android:paddingBottom="16dp"
                         android:paddingTop="24dp"
+                        android:textSize="32sp"
+                        android:text="@string/activity_home_text_view_title_adicionar_atividade"
+                        android:background="@color/primary"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="24dp"
                         android:textSize="24sp"
-                        android:text="Tarefa"
-                        android:textColor="@color/black"/>
+                        android:text="@string/activity_home_text_view_title_projeto"
+                        android:textColor="@color/primary_dark"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="32dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="24dp"
+                        android:textSize="16sp"
+                        android:text="@string/activity_home_text_view_subtitle_nome_e_projeto"
+                        android:textStyle="italic"
+                        android:textColor="@color/gray_subtitle"/>
+
+                    <EditText android:id="@+id/activity_home_edit_text_nome_atividade"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="90dp"
+                        android:hint="@string/activity_home_edit_text_nome_atividade"
+                        android:layout_marginRight="4dp"
+                        android:inputType="text"
+                        android:textColorHint="@color/white"
+                        android:background="@color/verde_claro"/>
+
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginRight="4dp">
 
                         <Spinner android:id="@+id/activity_home_spinner_projeto"
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
-                            android:layout_marginLeft="100dp"
-                            android:background="@color/white">
+                            android:layout_marginLeft="90dp"
+                            android:background="@color/verde_claro">
                         </Spinner>
                         <ImageButton android:id="@+id/activity_home_button_spinner"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:elevation="6dp"
+                            android:layout_marginLeft="90dp"
+                            android:background="@color/verde_claro"
                             android:layout_gravity="right|center_vertical"
-                            android:src="@drawable/abc_ic_menu_paste_mtrl_am_alpha"/>
+                            android:src="@drawable/ic_expand"/>
                     </FrameLayout>
 
-                    <EditText
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/verde_claro"></View>
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:hint="Nome da atividade"/>
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="24dp"
+                        android:textSize="24sp"
+                        android:text="Tempo"
+                        android:textColor="@color/primary_dark"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="32dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="24dp"
+                        android:textSize="16sp"
+                        android:text="@string/activity_home_text_view_subtitle_tempo"
+                        android:textStyle="italic"
+                        android:textColor="@color/gray_subtitle"/>
+
 
                     <Button android:id="@+id/activity_home_button_data_inicio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:textColor="@color/laranja_mowa"
+                        android:background="@color/verde_claro"
+                        android:textColor="@color/white"
                         android:textSize="18sp"
+                        android:layout_marginLeft="90dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="4dp"
                         android:text="data aqui"
-                        android:drawableLeft="@drawable/ic_time"/>
+                        android:drawableLeft="@drawable/ic_calendar"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginLeft="90dp"
+                        android:layout_marginRight="4dp">
 
                         <Button android:id="@+id/activity_home_button_horas_inicio"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/white"
-                            android:layout_marginLeft="5dp"
+                            android:background="@color/verde_claro"
                             android:layout_marginRight="2.5dp"
-                            android:textColor="@color/laranja_mowa"
+                            android:textColor="@color/white"
                             android:textSize="18sp"
-                            android:hint="Hora inicial"/>
+                            android:hint="Hora inicial"
+                            android:drawableLeft="@drawable/ic_time"/>
 
                         <Button android:id="@+id/activity_home_button_horas_fim"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/white"
-                            android:layout_marginRight="5dp"
+                            android:background="@color/verde_claro"
                             android:layout_marginLeft="2.5dp"
-                            android:textColor="@color/laranja_mowa"
-                            android:textSize="18sp"/>
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:drawableLeft="@drawable/ic_time"/>
 
                     </LinearLayout>
 
-                    <EditText android:id="@+id/activity_home_text_view_descricao_atividade"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/verde_claro"></View>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="16dp"
+                        android:textSize="24sp"
+                        android:text="@string/activity_home_text_view_title_comentarios"
+                        android:textColor="@color/primary_dark"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="32dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="24dp"
+                        android:textSize="16sp"
+                        android:text="@string/activity_home_text_view_subtitle_descricao"
+                        android:textStyle="italic"
+                        android:textColor="@color/gray_subtitle"/>
+
+
+                    <EditText android:id="@+id/activity_home_edit_text_descricao_atividade"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
-                        android:background="@color/white"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:background="@color/verde_claro"
+                        android:layout_marginLeft="90dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginBottom="16dp"
                         android:hint="@string/activity_home_edit_text_descricao"
                         android:gravity="top"
+                        android:textColorHint="@color/white"
                         android:textStyle="italic"
-                        android:inputType="textMultiLine" />
+                        android:inputType="textMultiLine"/>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -179,11 +272,13 @@
         android:id="@+id/activity_home_floating_button_enviar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_white"
+        android:src="@drawable/ic_check"
         android:layout_gravity="bottom|end"
         app:elevation="6dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         app:pressedTranslationZ="12dp"
-        app:backgroundTint="@color/laranja_mowa"/>
+        app:backgroundTint="@color/primary"/>
 </FrameLayout>
 
 

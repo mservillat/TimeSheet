@@ -8,6 +8,8 @@
 
 
     <!-- Outras cores -->
+    <color name="gray_subtitle">#CFD8DC</color>
+    <color name="verde_claro">#E0F7FA</color>
     <color name="laranja">#FFA500</color>
     <color name="transparent">#0000</color>
     <color name="white">#fff</color>

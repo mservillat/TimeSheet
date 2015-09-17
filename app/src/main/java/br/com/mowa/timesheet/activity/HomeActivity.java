@@ -1,6 +1,7 @@
 package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,14 +10,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -34,6 +35,7 @@ import br.com.mowa.timesheet.model.User;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
     private ActionBarDrawerToggle drawerToggle;
@@ -51,13 +53,16 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private List<Project> listaDeProjetosObjProject;
     private Project project = new Project();
     private Task task = new Task();
-    private TextView tvDescricaoAtividade;
     private User user;
+    private EditText etNomeAtividade;
+    private EditText etDescricaoAtividade;
+    private JSONObject requestBody;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        this.user = (User) getIntent().getSerializableExtra("user");
+        this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
 
 
         this.mToolbar = (Toolbar)findViewById(R.id.activity_home_toolbar);
@@ -70,6 +75,10 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_container);
         drawerFragment.setUp(this.mDrawerLayout, this.mToolbar);
 
+
+        // Component EditText nome e descricao atividade
+        this.etNomeAtividade = (EditText) findViewById(R.id.activity_home_edit_text_nome_atividade);
+        this.etDescricaoAtividade = (EditText) findViewById(R.id.activity_home_edit_text_descricao_atividade);
 
 
         // Components (DATA e HORA)
@@ -109,6 +118,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             @Override
             public void onClick(View v) {
                 spinner.performClick();
+
             }
         });
 
@@ -118,15 +128,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             public void onResponse(JSONObject response) {
                 try {
                     listaDeProjetosObjProject = project.modelBuild(response);
+                    buildListaProjeto();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                buildListaProjeto();
             }
         });
 
-        // Component TextView Descricao atividade
-        this.tvDescricaoAtividade = (TextView) findViewById(R.id.activity_home_text_view_descricao_atividade);
 
 
         //Components (Floating Button enviar)
@@ -135,36 +143,40 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             @Override
             public void onClick(View v) {
                 try {
-                    JSONObject requestBody = new JSONObject();
+                    if(buildForm()) {
 
-                    requestBody.put("project", "55f4e55b657f6f07dd64e8ff");
-                    requestBody.put("user", user.getId());
-                    Log.d("walkyTeste", user.getId());
-                    requestBody.put("date", task.getDate());
-                    requestBody.put("start_time", task.getStart_time());
-                    requestBody.put("end_time", task.getEnd_time());
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
 
-
-                    CallJsonNetwork callJson = new CallJsonNetwork();
-                    callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            toast("Ok");
-                            snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-
+//                        CallJsonNetwork callJson = new CallJsonNetwork();
+//                        callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+//                            @Override
+//                            public void onResponse(JSONObject response) {
+//                                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+//                            }
+//                        }, new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//
+//                            }
+//                        });
+                    } else {
+                        toast("Algum campo não foi preenchido corretamente");
+                    }
                 } catch (JSONException e) {
 
                 }
 
+//                Log.d("walkyTeste", " project " + task.getProject() );
+//                Log.d("walkyTeste", " user " + user.getId());
+//                Log.d("walkyTeste", " date " + task.getDate());
+//                Log.d("walkyTeste", " start time " + task.getStart_time());
+//                Log.d("walkyTeste", " end time " + task.getEnd_time());
+
             }
         });
+
 
     }
 
@@ -173,6 +185,17 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         listaDeProjetosString = project.getListaProject(listaDeProjetosObjProject);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.listaDeProjetosString);
         this.spinner.setAdapter(adapter);
+        this.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                task.setProject(listaDeProjetosObjProject.get(position).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
 
@@ -226,8 +249,8 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             this.minute = c.get(Calendar.MINUTE);
 
             this.btDate.setText(day + "/" + month + "/" + year);
-            this.btHorainicio.setText(this.hour + ":" + this.minute);
-            this.btHoraFim.setText(this.hour + ":" + this.minute);
+            validacaoMinutos(this.btHorainicio);
+            validacaoMinutos(this.btHoraFim);
         }
     }
 
@@ -251,24 +274,69 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.minute = minute;
 
         if (btUpdateButtonHoras == btHorainicio) {
-            validacaoMinutos();
+            validacaoMinutos(btUpdateButtonHoras);
             this.task.setStart_time(this.year, this.month, this.day, this.hour, this.minute);
         }
         if(btUpdateButtonHoras == btHoraFim) {
-            validacaoMinutos();
+            validacaoMinutos(btUpdateButtonHoras);
             this.task.setEnd_time(this.year, this.month, this.day, this.hour, this.minute);
         }
 
         this.btUpdateButtonHoras = null;
     }
 
-    private void validacaoMinutos() {
+    private void validacaoMinutos(Button bt) {
         if (minute < 10) {
-            this.btUpdateButtonHoras.setText(this.hour + ":" + "0"+this.minute);
+            bt.setText(this.hour + ":" + "0"+this.minute);
         } else {
-            this.btUpdateButtonHoras.setText(this.hour + ":" + this.minute);
+            bt.setText(this.hour + ":" + this.minute);
         }
     }
 
+
+    private boolean buildForm() throws JSONException {
+        requestBody = new JSONObject();
+
+        if (task.getProject() != null) {
+            requestBody.put("project", task.getProject());
+        } else {
+            return false;
+        }
+
+        if (user.getId() != null) {
+            requestBody.put("user", user.getId());
+        } else {
+            return false;
+        }
+
+        if (task.getDate() != null) {
+            requestBody.put("date", task.getDate());
+        } else {
+            return false;
+        }
+
+        if (task.getStart_time() != null) {
+            requestBody.put("start_time", task.getStart_time());
+        } else {
+            return false;
+        }
+
+        if (task.getEnd_time() != null) {
+            requestBody.put("end_time", task.getEnd_time());
+        } else {
+            return false;
+        }
+
+        if (this.etNomeAtividade.getText().toString().length() >4 ) {
+            Log.d("walkyTeste", " nome da atividade: " + this.etNomeAtividade.getText().toString());
+            requestBody.put("name", this.etNomeAtividade.getText().toString());
+        } else {
+            return false;
+        }
+
+
+
+        return true;
+    }
 
 }

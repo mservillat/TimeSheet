@@ -22,7 +22,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_botao_entrar">entrar</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="activity_home_edit_text_descricao">Descrição da atividade</string>
 
 
     <!-- Activity Perfil-->
@@ -31,11 +30,7 @@
     <string name="activity_perfil_campo_senha_nova">nova senha</string>
     <string name="activity_perfil_campo_senha_nova_repetir">repetir senha</string>
     <string name="activity_perfil_text_view_alterar_senha">Alterar senha</string>
-    <string name="activity_home_button_floating_msg_enviar">enviando</string>
     <string name="activity_perfil_button_floationg_msg_senha_alterada">senha alterada</string>
-
-
-
 
     <!-- Activity Login-->
     <string name="activity_login_edit_text_hint_email">email</string>
@@ -44,4 +39,18 @@
     <string name="activity_login_set_error_minimo_caractere">a senha deve ter no minimo 6 digitos</string>
     <string name="activity_login_set_error_email_invalido">email inválido</string>
     <string name="activity_login_toast_usuario_ou_senha_invalido">usuario ou senha invalido</string>
+
+
+    <!-- Activity Home-->
+    <string name="activity_home_text_view_subtitle_nome_e_projeto"><![CDATA[Nome da funcionalidade & Projeto]]></string>
+    <string name="activity_home_text_view_subtitle_tempo"><![CDATA[Data & Horario de inicio e término]]></string>
+    <string name="activity_home_text_view_subtitle_descricao">Comentários sobre a atividade</string>
+    <string name="activity_home_button_floating_msg_enviar">enviando</string>
+    <string name="activity_home_edit_text_nome_atividade">nome da atividade deve ter no minimo 5 caracteres</string>
+    <string name="activity_home_text_view_title_projeto">Projeto</string>
+    <string name="activity_home_text_view_title_adicionar_atividade">Adicionar Atividade</string>
+    <string name="activity_home_text_view_title_comentarios">Comentários</string>
+    <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
+
+
 </resources>
