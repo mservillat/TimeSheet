@@ -1,123 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="5dp">
-
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_marginTop="16dp"
     android:background="@color/gray">
 
-
-
-    <!-- Conteudo da tela-->
-    <!-- A CardView that contains a TextView -->
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="32dp"
-        card_view:cardElevation="12dp"
-        card_view:cardBackgroundColor="@color/white"
-        android:layout_marginTop="5dp">
+        android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="35.3"
-            android:id="@+id/activity_home_text_view_horas_semanais"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@color/laranja_mowa"
-            android:textSize="80sp"
-            android:layout_margin="16dp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
-    </android.support.v7.widget.CardView>
+            <!-- Conteudo da tela-->
+            <!-- A CardView that contains a TextView -->
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/activity_home_card_view_horas_semanais"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                card_view:cardElevation="12dp"
+                card_view:cardBackgroundColor="@color/white"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-    <Button android:id="@+id/activity_home_button_data_inicio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="2.5dp"
-        android:layout_marginRight="5dp"
-        android:paddingLeft="8dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/black"
-        android:textColor="@color/laranja_mowa"
-        android:textSize="18sp"
-        android:drawableLeft="@drawable/ic_time"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Horas semanais"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="24dp"
+                        android:paddingBottom="16dp"></TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="35.3"
+                        android:id="@+id/activity_home_text_view_horas_semanais"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/laranja_mowa"
+                        android:textSize="80sp"
+                        android:paddingBottom="16dp"/>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                </LinearLayout>
 
-        <Button android:id="@+id/activity_home_button_horas_inicio"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_marginTop="10dp"
-            android:background="@color/white"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="2.5dp"
-            android:textColor="@color/laranja_mowa"
-            android:textSize="18sp"
-            android:hint="Hora inicial"/>
 
-        <Button android:id="@+id/activity_home_button_horas_fim"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_marginTop="10dp"
-            android:background="@color/white"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="2.5dp"
-            android:textColor="@color/laranja_mowa"
-            android:textSize="18sp"/>
+            </android.support.v7.widget.CardView>
 
-    </LinearLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/activity_home_card_view_formulario"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="16dp"
+                card_view:cardElevation="12dp"
+                card_view:cardBackgroundColor="@color/white"
+                android:layout_marginTop="5dp">
 
-        <Spinner android:id="@+id/activity_home_spinner_projeto"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/white">
-        </Spinner>
-        <ImageButton android:id="@+id/activity_home_button_spinner"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_gravity="right|center_vertical"
-            android:src="@drawable/abc_ic_menu_paste_mtrl_am_alpha"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-    </FrameLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="24dp"
+                        android:textSize="24sp"
+                        android:text="Tarefa"
+                        android:textColor="@color/black"/>
 
-    <EditText android:id="@+id/activity_home_text_view_descricao_atividade"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:background="@color/white"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:hint="@string/activity_home_edit_text_descricao"
-        android:gravity="top"
-        android:textStyle="italic"
-        android:inputType="textMultiLine" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Spinner android:id="@+id/activity_home_spinner_projeto"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginLeft="100dp"
+                            android:background="@color/white">
+                        </Spinner>
+                        <ImageButton android:id="@+id/activity_home_button_spinner"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:elevation="6dp"
+                            android:layout_gravity="right|center_vertical"
+                            android:src="@drawable/abc_ic_menu_paste_mtrl_am_alpha"/>
+                    </FrameLayout>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:hint="Nome da atividade"/>
+
+                    <Button android:id="@+id/activity_home_button_data_inicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:textColor="@color/laranja_mowa"
+                        android:textSize="18sp"
+                        android:text="data aqui"
+                        android:drawableLeft="@drawable/ic_time"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button android:id="@+id/activity_home_button_horas_inicio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/white"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="2.5dp"
+                            android:textColor="@color/laranja_mowa"
+                            android:textSize="18sp"
+                            android:hint="Hora inicial"/>
+
+                        <Button android:id="@+id/activity_home_button_horas_fim"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/white"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="2.5dp"
+                            android:textColor="@color/laranja_mowa"
+                            android:textSize="18sp"/>
+
+                    </LinearLayout>
+
+                    <EditText android:id="@+id/activity_home_text_view_descricao_atividade"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        android:background="@color/white"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:hint="@string/activity_home_edit_text_descricao"
+                        android:gravity="top"
+                        android:textStyle="italic"
+                        android:inputType="textMultiLine" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/activity_home_floating_button_enviar"
@@ -125,10 +181,9 @@ android:padding="5dp">
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add_white"
         android:layout_gravity="bottom|end"
-        android:layout_marginTop="5dp"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/laranja_mowa"/>
+</FrameLayout>
 
-</LinearLayout>
-</ScrollView>
+
