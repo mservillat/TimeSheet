@@ -46,11 +46,12 @@
     <string name="activity_home_text_view_subtitle_tempo"><![CDATA[Data & Horario de inicio e término]]></string>
     <string name="activity_home_text_view_subtitle_descricao">Comentários sobre a atividade</string>
     <string name="activity_home_button_floating_msg_enviar">enviando</string>
-    <string name="activity_home_edit_text_nome_atividade">nome da atividade deve ter no minimo 5 caracteres</string>
+    <string name="activity_home_edit_text_nome_atividade">minimo 5 caracteres</string>
     <string name="activity_home_text_view_title_projeto">Projeto</string>
     <string name="activity_home_text_view_title_adicionar_atividade">Adicionar Atividade</string>
     <string name="activity_home_text_view_title_comentarios">Comentários</string>
     <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
+    <string name="title_activity_registros">RegistrosActivity</string>
 
 
 </resources>

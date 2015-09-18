@@ -20,6 +20,7 @@ import java.util.List;
 
 import br.com.mowa.timesheet.activity.HomeActivity;
 import br.com.mowa.timesheet.activity.PerfilActivity;
+import br.com.mowa.timesheet.activity.RegistrosActivity;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuAdapter;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuItem;
 import br.com.mowa.timesheet.timesheet.R;
@@ -54,11 +55,16 @@ public class NavigationDrawerFragment extends Fragment {
 
                         break;
                     case 1:
-                        Intent intent1 = new Intent(getContext(), PerfilActivity.class);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        Intent intenteOne = new Intent(getContext(), PerfilActivity.class);
+                        intenteOne.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         closeDrawer();
-                        startActivity(intent1);
+                        startActivity(intenteOne);
                         break;
+                    case 2:
+                        Intent intentTwo = new Intent(getContext(), RegistrosActivity.class);
+                        intentTwo.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        closeDrawer();
+                        startActivity(intentTwo);
                     default:
                         break;
                 }

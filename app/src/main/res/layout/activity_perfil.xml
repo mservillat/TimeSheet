@@ -69,12 +69,12 @@
                 android:id="@+id/activity_perfil_floating_button_alterar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_white"
+                android:src="@drawable/ic_edit"
                 android:layout_gravity="bottom|end"
                 android:layout_marginRight="5dp"
                 app:elevation="6dp"
                 app:pressedTranslationZ="12dp"
-                app:backgroundTint="@color/laranja_mowa"/>
+                app:backgroundTint="@color/primary"/>
 
 
         </LinearLayout>

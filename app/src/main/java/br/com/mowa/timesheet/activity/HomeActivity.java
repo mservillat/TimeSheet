@@ -1,7 +1,6 @@
 package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -72,7 +72,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_container);
+        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
         drawerFragment.setUp(this.mDrawerLayout, this.mToolbar);
 
 
@@ -145,22 +145,22 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                 try {
                     if(buildForm()) {
 
-                        Intent intent = getIntent();
-                        finish();
-                        startActivity(intent);
+                        CallJsonNetwork callJson = new CallJsonNetwork();
+                        snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                        callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+//                                Intent intent = getIntent();
+//                                finish();
+//                                startActivity(intent);
 
-//                        CallJsonNetwork callJson = new CallJsonNetwork();
-//                        callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
-//                            @Override
-//                            public void onResponse(JSONObject response) {
-//                                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
-//                            }
-//                        }, new Response.ErrorListener() {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//
-//                            }
-//                        });
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        });
                     } else {
                         toast("Algum campo não foi preenchido corretamente");
                     }
@@ -334,6 +334,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             return false;
         }
 
+        requestBody.put("comments", this.etDescricaoAtividade.getText().toString());
+//        task.calculaTime();
+//        requestBody.put("time", task.getTime());
 
 
         return true;

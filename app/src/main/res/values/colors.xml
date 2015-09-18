@@ -8,6 +8,7 @@
 
 
     <!-- Outras cores -->
+    <color name="background_title">#4DD0E1</color>
     <color name="gray_subtitle">#CFD8DC</color>
     <color name="verde_claro">#E0F7FA</color>
     <color name="laranja">#FFA500</color>

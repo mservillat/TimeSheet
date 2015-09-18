@@ -4,17 +4,19 @@
     package="br.com.mowa.timesheet.timesheet" >
 
     <uses-sdk tools:overrideLibrary="com.wdullaer.materialdatetimepicker" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:allowBackup="true"
         android:name="br.com.mowa.timesheet.TimeSheetApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name="br.com.mowa.timesheet.activity.LoginActivity"
-            android:theme="@style/AppTheme.NavDrawer"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NavDrawer" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,13 +26,17 @@
         <activity
             android:name="br.com.mowa.timesheet.activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme.NavDrawer">
+            android:theme="@style/AppTheme.NavDrawer"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity
             android:name="br.com.mowa.timesheet.activity.PerfilActivity"
             android:label="@string/activity_perfil_title"
-            android:theme="@style/AppTheme.NavDrawer">
+            android:theme="@style/AppTheme.NavDrawer" >
+        </activity>
+        <activity
+            android:name="br.com.mowa.timesheet.activity.RegistrosActivity"
+            android:label="@string/title_activity_registros" >
         </activity>
     </application>
 

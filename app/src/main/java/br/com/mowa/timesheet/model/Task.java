@@ -1,5 +1,8 @@
 package br.com.mowa.timesheet.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * Created by walky on 9/14/15.
  */
@@ -11,13 +14,20 @@ public class Task {
     private String comments;
     private User user;
     private String project;
-
+    private Long time;
+    private Integer timeIncialMilissegundos;
+    private Integer timeFinalMilissegundos;
     public void setName(String name) {
         this.name = name;
     }
 
     public void setDate(int year, int month, int day, int hour, int minute) {
-        this.date = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+//        this.date = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMddTHHmmss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute, 00);
+        this.start_time = simpleDate.format(calendar);
     }
 
     public String getDate(){
@@ -25,11 +35,19 @@ public class Task {
     }
 
     public void setStart_time(int year, int month, int day, int hour, int minute) {
-        this.start_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+//        this.start_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMddTHHmmss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute, 00);
+        this.start_time = simpleDate.format(calendar);
     }
 
     public void setEnd_time(int year, int month, int day, int hour, int minute) {
-        this.end_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+//        this.end_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMddTHHmmss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute, 00);
+        this.start_time = simpleDate.format(calendar);
     }
 
     public void setComments(String comments) {
@@ -67,5 +85,16 @@ public class Task {
     public String getProject() {
         return project;
     }
+
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void calculaTime() {
+        Integer i = (this.timeFinalMilissegundos - this.timeIncialMilissegundos);
+        this.time = i.longValue();
+    }
+
 
 }
