@@ -133,6 +133,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                     e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
         });
 
 
@@ -335,8 +340,8 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         requestBody.put("comments", this.etDescricaoAtividade.getText().toString());
-//        task.calculaTime();
-//        requestBody.put("time", task.getTime());
+        task.calculaTime();
+        requestBody.put("time", task.getTime());
 
 
         return true;

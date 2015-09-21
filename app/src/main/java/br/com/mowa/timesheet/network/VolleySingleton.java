@@ -12,6 +12,7 @@ public class VolleySingleton {
     public static String URL_POST_CREATE_SESSIONS = "http://walkyteste.goldarkapi.com/sessions";
     public static final String URL_GET_PROJECT = "http://walkyteste.goldarkapi.com/project";
     public static final String URL_POST_CREATE_TASK = "http://walkyteste.goldarkapi.com/task";
+    public static final String URL_GET_TASK = "http://walkyteste.goldarkapi.com/task";
 
     private static VolleySingleton sInstance = null;
     private RequestQueue mRequestQueue;
