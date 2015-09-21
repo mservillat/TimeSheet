@@ -51,7 +51,7 @@
     <string name="activity_home_text_view_title_adicionar_atividade">Adicionar Atividade</string>
     <string name="activity_home_text_view_title_comentarios">Comentários</string>
     <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
-    <string name="title_activity_registros">RegistrosActivity</string>
+    <string name="title_activity_registros">Registros de tarefas</string>
 
 
 </resources>

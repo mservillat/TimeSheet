@@ -23,7 +23,7 @@ public class NavDrawerMenuAdapter extends BaseAdapter {
     public NavDrawerMenuAdapter(Context context, List list) {
         this.list = list;
         this.context = context;
-        this.inflater = (LayoutInflater)LayoutInflater.from(this.context);
+        this.inflater = LayoutInflater.from(this.context);
     }
 
     @Override

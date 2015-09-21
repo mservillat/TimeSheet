@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:paddingLeft="24dp">
+
+
+    <TextView android:id="@+id/adapter_campo0"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Projeto"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:textColor="@color/black"/>
+
+    <TextView android:id="@+id/adapter_campo1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginLeft="56dp"
+        android:layout_gravity="center"
+        android:text="campo " />
+
+    <TextView android:id="@+id/adapter_campo2"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="56dp"
+        android:gravity="right"
+        android:layout_gravity="center"
+        android:text="2015-09-21 21:00:00 "/>
+
+    <TextView android:id="@+id/adapter_campo3"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginLeft="56dp"
+        android:layout_gravity="center"
+        android:text="campo"/>
+
+    <TextView android:id="@+id/adapter_campo4"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="56dp"
+        android:gravity="right"
+        android:layout_gravity="center"
+        android:text="campo"/>
+
+</LinearLayout>

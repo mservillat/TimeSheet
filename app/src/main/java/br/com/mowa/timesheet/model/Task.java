@@ -1,12 +1,7 @@
 package br.com.mowa.timesheet.model;
 
-import android.util.Log;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by walky on 9/14/15.
@@ -20,6 +15,9 @@ public class Task {
     private User user;
     private String project;
     private Long time;
+
+
+
     private Long timeIncialMilissegundos;
     private Long timeFinalMilissegundos;
     public void setName(String name) {
@@ -41,7 +39,6 @@ public class Task {
     }
 
     public void setStart_time(int year, int month, int day, int hour, int minute) {
-//        this.start_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute, 00);
@@ -51,7 +48,6 @@ public class Task {
     }
 
     public void setEnd_time(int year, int month, int day, int hour, int minute) {
-//        this.end_time = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute, 00);
@@ -103,6 +99,17 @@ public class Task {
     public void calculaTime() {
         this.time = (this.timeFinalMilissegundos - this.timeIncialMilissegundos);
     }
+
+//    public List<Task> getListTask(JSONObject response) throws JSONException {
+//        List<Task> list = new ArrayList<>();
+//        JSONArray array = response.getJSONArray("data");
+//        for (int i = 0; i <= array.length(); i ++) {
+//            JSONObject object = array.getJSONObject(i);
+//
+//        }
+//
+//        return list;
+//    }
 
 
 }
