@@ -1,13 +1,13 @@
 package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,12 +28,13 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.mowa.timesheet.entity.ProjectEntity;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
-import br.com.mowa.timesheet.model.Project;
 import br.com.mowa.timesheet.model.Task;
 import br.com.mowa.timesheet.model.User;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
+import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
@@ -50,8 +51,8 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private List<String> listaDeProjetosString;
-    private List<Project> listaDeProjetosObjProject;
-    private Project project = new Project();
+    private List<ProjectEntity> listaDeProjetosObjProject;
+    private ParseProject parseProject;
     private Task task = new Task();
     private User user;
     private EditText etNomeAtividade;
@@ -122,12 +123,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
+        parseProject = new ParseProject();
         CallJsonNetwork callJson = new CallJsonNetwork();
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listaDeProjetosObjProject = project.modelBuild(response);
+                    listaDeProjetosObjProject = parseProject.parseJsonToProjectEntity(response);
                     buildListaProjeto();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -155,9 +157,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                         callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-//                                Intent intent = getIntent();
-//                                finish();
-//                                startActivity(intent);
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
 
 
                             }
@@ -173,11 +175,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
                 }
 
-//                Log.d("walkyTeste", " project " + task.getProject() );
-//                Log.d("walkyTeste", " user " + user.getId());
-//                Log.d("walkyTeste", " date " + task.getDate());
-//                Log.d("walkyTeste", " start time " + task.getStart_time());
-//                Log.d("walkyTeste", " end time " + task.getEnd_time());
 
             }
         });
@@ -187,7 +184,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
 
     public void buildListaProjeto() {
-        listaDeProjetosString = project.getListaProject(listaDeProjetosObjProject);
+        listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.listaDeProjetosString);
         this.spinner.setAdapter(adapter);
         this.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -333,7 +330,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         if (this.etNomeAtividade.getText().toString().length() >4 ) {
-            Log.d("walkyTeste", " nome da atividade: " + this.etNomeAtividade.getText().toString());
             requestBody.put("name", this.etNomeAtividade.getText().toString());
         } else {
             return false;

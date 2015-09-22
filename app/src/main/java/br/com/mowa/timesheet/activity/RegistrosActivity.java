@@ -16,14 +16,18 @@ import java.util.List;
 
 import br.com.mowa.timesheet.adapter.RegistrosTableAdapter;
 import br.com.mowa.timesheet.adapter.RegistrosTableItem;
+import br.com.mowa.timesheet.entity.TaskEntity;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
+import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 
 public class RegistrosActivity extends BaseActivity {
     private ListView listView;
-    List<RegistrosTableItem> list;
+    private List<RegistrosTableItem> list;
+    private ParseTask parseTask;
+    private List<TaskEntity> listTaskEntity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +43,7 @@ public class RegistrosActivity extends BaseActivity {
         navDraFragment.setUp(drawerLayout, mToolbar);
 
         listView = (ListView) findViewById(R.id.activity_registros_list_view);
-
+        parseTask = new ParseTask();
 
 
 
@@ -49,12 +53,13 @@ public class RegistrosActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    list = RegistrosTableItem.builderList(response);
+                    listTaskEntity = parseTask.jsonObjectToTaskEntity(response);
+                    list = RegistrosTableItem.builderList(listTaskEntity);
                     listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
-                    Log.d("walkyTeste", "on Response");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                    Log.d("walkyTeste", "on Response");
 
             }
         }, new Response.ErrorListener() {

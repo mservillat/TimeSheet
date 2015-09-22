@@ -100,16 +100,4 @@ public class Task {
         this.time = (this.timeFinalMilissegundos - this.timeIncialMilissegundos);
     }
 
-//    public List<Task> getListTask(JSONObject response) throws JSONException {
-//        List<Task> list = new ArrayList<>();
-//        JSONArray array = response.getJSONArray("data");
-//        for (int i = 0; i <= array.length(); i ++) {
-//            JSONObject object = array.getJSONObject(i);
-//
-//        }
-//
-//        return list;
-//    }
-
-
 }

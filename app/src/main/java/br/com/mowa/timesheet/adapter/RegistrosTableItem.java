@@ -1,11 +1,9 @@
 package br.com.mowa.timesheet.adapter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.mowa.timesheet.entity.TaskEntity;
 
 /**
  * Created by walky on 9/21/15.
@@ -19,32 +17,22 @@ public class RegistrosTableItem {
     private String user;
     private String project;
 
-    public RegistrosTableItem(String project, String name, String start_time, String end_time, Long time){
-        this.project = project;
-        this.name = name;
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.time = time;
-    }
 
-    public static List<RegistrosTableItem> builderList(JSONObject response) throws JSONException {
+    public static List<RegistrosTableItem> builderList(List<TaskEntity> listTaskEntity) {
         List<RegistrosTableItem> list = new ArrayList<>();
-        JSONArray array = response.getJSONArray("data");
-        for (int i = 0; i < array.length(); i ++) {
-            JSONObject object = array.getJSONObject(i);
-
-            list.add(new RegistrosTableItem(object.getJSONObject("project").optString("name"),
-                    object.optString("name"),
-                    object.optString("start_time"),
-                    object.optString("end_time"),
-                    object.optLong("time")));
+        for (int i = 0; i < listTaskEntity.size(); i ++) {
+            RegistrosTableItem tableItem = new RegistrosTableItem();
+            TaskEntity taskEntity = listTaskEntity.get(i);
+            tableItem.name = taskEntity.getName();
+            tableItem.start_time = taskEntity.getStartTime();
+            tableItem.end_time = taskEntity.getEndTime();
+            tableItem.time = taskEntity.getTime();
+            tableItem.project = taskEntity.getProject().getName();
+            list.add(tableItem);
         }
         return list;
     }
 
-    public String getProject() {
-        return project;
-    }
 
     public String getName() {
         return name;
@@ -61,4 +49,6 @@ public class RegistrosTableItem {
     public Long getTime() {
         return time;
     }
+
+    public String getProject() {return project; }
 }

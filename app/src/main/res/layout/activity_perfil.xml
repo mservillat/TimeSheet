@@ -83,7 +83,7 @@
 
     <!-- Menu Lateral -->
     <br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout
-        android:id="@+id/activity_perfil_scrimInsets"
+        android:id="@+id/activity_perfil_scrim_insets"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

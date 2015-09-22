@@ -25,9 +25,8 @@ public class NavDrawerMenuItem {
         list.add(new NavDrawerMenuItem("Home", R.mipmap.ic_launcher));
         list.add(new NavDrawerMenuItem("Perfil", R.mipmap.ic_launcher));
         list.add(new NavDrawerMenuItem("Registros", R.mipmap.ic_launcher));
-        list.add(new NavDrawerMenuItem("Projeto 1", R.mipmap.ic_launcher));
-        list.add(new NavDrawerMenuItem("Projeto 2", R.mipmap.ic_launcher));
-        list.add(new NavDrawerMenuItem("Projeto 3", R.mipmap.ic_launcher));
+        list.add(new NavDrawerMenuItem("Projetos", R.mipmap.ic_launcher));
+
 
         return list;
     }
