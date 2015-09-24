@@ -14,26 +14,37 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mowa.timesheet.adapter.ProjetosDetalhesUserItemAdapter;
+import br.com.mowa.timesheet.adapter.ProjetosDetalhesUserListAdapter;
 import br.com.mowa.timesheet.entity.ProjectEntity;
+import br.com.mowa.timesheet.entity.TaskEntity;
+import br.com.mowa.timesheet.entity.UserEntity;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseProject;
+import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 
 public class ProjetosActivity extends BaseActivity {
     private ParseProject parseProject;
     private List<ProjectEntity> listProjectEntity;
-    private List<String> listProjectString;
-    private ListView listView;
+    private ListView listViewProjetos;
+    private ListView listViewDetalhes;
     private CallJsonNetwork callJson;
-    String teste;
+    private UserEntity user;
+    private ProjectEntity project;
+    private List<ProjetosDetalhesUserItemAdapter> listDetalhesUser;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projetos);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.activity_projetos_toolbar);
         if (toolbar != null) {
@@ -45,8 +56,9 @@ public class ProjetosActivity extends BaseActivity {
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_projetos_fragment_container);
         navDraFragment.setUp(drawerLayout, toolbar);
 
+        this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
 
-        this.listView = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);
+        this.listViewProjetos = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);
         this.parseProject = new ParseProject();
         this.callJson = new CallJsonNetwork();
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
@@ -71,29 +83,44 @@ public class ProjetosActivity extends BaseActivity {
     private void builderListViewProject(JSONObject response) throws JSONException {
         this.listProjectEntity = parseProject.parseJsonToProjectEntity(response);
         ArrayAdapter<ProjectEntity> adapter = new ArrayAdapter<>(this , android.R.layout.simple_list_item_1, listProjectEntity);
-        this.listView.setAdapter(adapter);
-        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.listViewProjetos.setAdapter(adapter);
+        this.listViewProjetos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ProjectEntity project = listProjectEntity.get(position);
+                project = listProjectEntity.get(position);
+                listDetalhesUser = new ArrayList<>();
+                listViewDetalhes.setAdapter(null);
 
+                for (int i = 0; i < project.getUsers().size(); i++) {
+                    user = project.getUsers().get(i);
 
+                    callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_PROJECT_ID + project.getId() + "&user=" + user.getId(), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            ParseTask parseTask = new ParseTask();
+                            try {
+                                List<TaskEntity> taskEntities = parseTask.jsonObjectToTaskEntity(response);
+                                ProjetosDetalhesUserItemAdapter item = new ProjetosDetalhesUserItemAdapter().builderList(taskEntities);
+                                listDetalhesUser.add(item);
+                                ProjetosDetalhesUserListAdapter adapter = new ProjetosDetalhesUserListAdapter(getActivity(), listDetalhesUser);
+                                listViewDetalhes.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
 
+                        }
+                    });
+                }
 
-
-                callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_PROJECT_ID + project.getId(), new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        toast("deu certo");
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        toast(error.getMessage());
-                    }
-                });
             }
+
         });
+
     }
 
 }

@@ -49,4 +49,10 @@ public class SharedPreferencesUtil {
         return TimeSheetApplication.getInstance().getApplicationContext().getSharedPreferences(key, Context.MODE_PRIVATE);
 
     }
+
+    public static void deleteSharedPreferences() {
+        SharedPreferences.Editor edit = getSharedPreferenceEdit(KEY_USER_LOGIN_PREFERENCE_USERNAME);
+        edit.clear().commit();
+    }
+
 }

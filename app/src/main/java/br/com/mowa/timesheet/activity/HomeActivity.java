@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,11 +25,13 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import br.com.mowa.timesheet.entity.ProjectEntity;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
@@ -58,6 +63,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private EditText etNomeAtividade;
     private EditText etDescricaoAtividade;
     private JSONObject requestBody;
+    private TextView tvQuantidadeDeHoras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
         drawerFragment.setUp(this.mDrawerLayout, this.mToolbar);
+
+        // Component TextView Quantidade de horas na semana
+        this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.activity_home_text_view_horas_semanais);
 
 
         // Component EditText nome e descricao atividade
@@ -109,6 +118,27 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
         loadDateCurrent();
+
+        CallJsonNetwork jsonNetwork = new CallJsonNetwork();
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray data = response.getJSONArray("data");
+                        JSONObject jsonObject = data.getJSONObject(0);
+                        Long time = jsonObject.optLong("time");
+                        tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
 
 
 
@@ -343,4 +373,21 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.activity_home_menu_action_exit) {
+            SharedPreferencesUtil.deleteSharedPreferences();
+            Intent intent = new Intent(this, LoginActivity.class);
+            getActivity().finish();
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

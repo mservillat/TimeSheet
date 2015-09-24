@@ -28,14 +28,14 @@ public class ParseProject {
             project.setDone(object.optBoolean("done"));
 
 
-            JSONArray arrayUser = object.getJSONArray("user");
+            JSONArray arrayUser = object.getJSONArray("users");
             for (int j = 0; j < arrayUser.length(); j++) {
                 JSONObject objectUser = arrayUser.getJSONObject(j);
-                List<UserEntity> listUser = new ArrayList<>();
                 UserEntity userEntity = new UserEntity();
                 userEntity.setId(objectUser.optString("id"));
-                listUser.add(userEntity);
+                project.getUsers().add(userEntity);
             }
+
             list.add(project);
         }
         return list;

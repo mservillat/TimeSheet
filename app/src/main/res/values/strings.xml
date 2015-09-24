@@ -53,6 +53,8 @@
     <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
     <string name="title_activity_registros">Registros de tarefas</string>
     <string name="title_activity_projetos">ProjetosActivity</string>
+    <string name="activity_home_menu_action_sair">sair</string>
+    <string name="title_activity_testeac">testeac</string>
 
 
 </resources>

@@ -39,24 +39,24 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Total de horas"
+                        android:text="Total de minutos"
                         android:textColor="@color/white"
-                        android:textSize="32sp"
+                        android:textSize="26sp"
                         android:paddingBottom="16dp"
                         android:gravity="center"
                         android:paddingTop="16dp"
                         android:background="@color/background_title"/>
 
                     <TextView
+                        android:id="@+id/activity_home_text_view_horas_semanais"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="35.3"
-                        android:id="@+id/activity_home_text_view_horas_semanais"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:textColor="@color/primary"
-                        android:textSize="80sp"
+                        android:textSize="40sp"
                         android:paddingBottom="16dp"/>
 
 
@@ -89,7 +89,7 @@
                         android:gravity="center"
                         android:paddingBottom="16dp"
                         android:paddingTop="16dp"
-                        android:textSize="32sp"
+                        android:textSize="26sp"
                         android:text="@string/activity_home_text_view_title_adicionar_atividade"
                         android:background="@color/background_title"
                         android:textColor="@color/white"/>
