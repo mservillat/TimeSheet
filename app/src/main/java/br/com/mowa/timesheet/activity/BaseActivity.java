@@ -12,7 +12,7 @@ import br.com.mowa.timesheet.timesheet.R;
 /**
  * Created by walky on 8/31/15.
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected Context getContext() {
         return this;
@@ -36,4 +36,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void toast(int msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
+
+
+
 }

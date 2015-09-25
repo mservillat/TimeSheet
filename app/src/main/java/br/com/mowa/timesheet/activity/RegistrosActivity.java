@@ -29,7 +29,7 @@ public class RegistrosActivity extends BaseActivity {
     private ParseTask parseTask;
     private List<TaskEntity> listTaskEntity;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registros);
 

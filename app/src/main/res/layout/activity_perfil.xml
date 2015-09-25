@@ -27,43 +27,72 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"/>
 
+
             <TextView
+                android:id="@+id/activity_perfil_text_view_nome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_perfil_text_view_alterar_senha"
-                android:gravity="center_horizontal"
-                android:layout_marginRight="100dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="5dp"/>
+                android:text="nome" />
 
-            <EditText android:id="@+id/activity_perfil_edit_text_senha_atual"
+            <TextView
+                android:id="@+id/activity_perfil_text_view_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/activity_perfil_campo_senha_atual"
-                android:inputType="textPassword"
-                android:textStyle="italic"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="100dp"
-                android:layout_marginLeft="5dp"/>
+                android:text="email" />
 
-            <EditText android:id="@+id/activity_perfil_edit_text_senha_nova"
+            <TextView
+                android:id="@+id/activity_perfil_text_view_situacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/activity_perfil_campo_senha_nova"
-                android:inputType="textPassword"
-                android:textStyle="italic"
-                android:layout_marginRight="100dp"
-                android:layout_marginLeft="5dp"/>
+                android:text="situacao" />
 
-            <EditText android:id="@+id/activity_perfil_edit_text_senha_nova_repetir"
+            <ListView
+                android:id="@+id/activity_perfil_list_view_projetos"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/activity_perfil_campo_senha_nova_repetir"
-                android:inputType="textPassword"
-                android:textStyle="italic"
-                android:layout_marginRight="100dp"
-                android:layout_marginLeft="5dp"/>
+                android:layout_height="wrap_content"/>
+
+
+
+
+
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/activity_perfil_text_view_alterar_senha"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:layout_marginRight="100dp"-->
+                <!--android:textSize="16sp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:layout_marginLeft="5dp"/>-->
+
+            <!--<EditText android:id="@+id/activity_perfil_edit_text_senha_atual"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/activity_perfil_campo_senha_atual"-->
+                <!--android:inputType="textPassword"-->
+                <!--android:textStyle="italic"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_marginRight="100dp"-->
+                <!--android:layout_marginLeft="5dp"/>-->
+
+            <!--<EditText android:id="@+id/activity_perfil_edit_text_senha_nova"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/activity_perfil_campo_senha_nova"-->
+                <!--android:inputType="textPassword"-->
+                <!--android:textStyle="italic"-->
+                <!--android:layout_marginRight="100dp"-->
+                <!--android:layout_marginLeft="5dp"/>-->
+
+            <!--<EditText android:id="@+id/activity_perfil_edit_text_senha_nova_repetir"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/activity_perfil_campo_senha_nova_repetir"-->
+                <!--android:inputType="textPassword"-->
+                <!--android:textStyle="italic"-->
+                <!--android:layout_marginRight="100dp"-->
+                <!--android:layout_marginLeft="5dp"/>-->
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/activity_perfil_floating_button_alterar"

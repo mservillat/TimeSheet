@@ -25,7 +25,7 @@ public class Task {
     }
 
     public void setDate(int year, int month, int day, int hour, int minute) {
-        this.date = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
+//        this.date = (year+"-"+(month+1)+"-"+day+"T"+hour+":"+minute);
 
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
@@ -59,6 +59,10 @@ public class Task {
         this.comments = comments;
     }
 
+    public String getComments() {
+        return comments;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -77,10 +81,6 @@ public class Task {
 
     public String getEnd_time() {
         return end_time;
-    }
-
-    public String getComments() {
-        return comments;
     }
 
     public User getUser() {

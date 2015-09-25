@@ -15,6 +15,7 @@
             layout="@layout/include_toolbar"/>
 
         <include layout="@layout/activity_home_container"/>
+
     </LinearLayout>
 
     <br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout
@@ -27,12 +28,21 @@
         app:insetForeground="#4000">
 
         <fragment
-            android:id="@+id/activity_home_fragment_navigation_drawer_container"
-            android:layout_width="@dimen/width_navigation_drawer"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:layout="@layout/fragment_navigation_drawer"
-            android:name="br.com.mowa.timesheet.fragment.NavigationDrawerFragment" />
+        android:id="@+id/activity_home_fragment_navigation_drawer_container"
+        android:layout_width="@dimen/width_navigation_drawer"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout="@layout/fragment_navigation_drawer"
+        android:name="br.com.mowa.timesheet.fragment.NavigationDrawerFragment" />
+
+
+        <!--<ListView android:id="@+id/activity_home_list_view_navigation_drawer"-->
+            <!--android:layout_width="@dimen/width_navigation_drawer"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="start"-->
+            <!--android:choiceMode="singleChoice"-->
+            <!--android:divider="@android:color/black"-->
+            <!--android:dividerHeight="0dp"/>-->
 
     </br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout>
 

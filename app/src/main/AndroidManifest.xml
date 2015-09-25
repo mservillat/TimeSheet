@@ -32,24 +32,27 @@
         <activity
             android:name="br.com.mowa.timesheet.activity.PerfilActivity"
             android:label="@string/activity_perfil_title"
-            android:theme="@style/AppTheme.NavDrawer" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.mowa.timesheet.activity.HomeActivity" />
+            android:theme="@style/AppTheme.NavDrawer">
+            <!--android:noHistory="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
         <activity
             android:name="br.com.mowa.timesheet.activity.RegistrosActivity"
-            android:label="@string/title_activity_registros" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.mowa.timesheet.activity.HomeActivity" />
+            android:label="@string/title_activity_registros">
+            <!--android:noHistory="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
         <activity
             android:name="br.com.mowa.timesheet.activity.ProjetosActivity"
-            android:label="@string/title_activity_projetos" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.mowa.timesheet.activity.HomeActivity" />
+            android:label="@string/title_activity_projetos">
+            <!--android:noHistory="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
     </application>
 

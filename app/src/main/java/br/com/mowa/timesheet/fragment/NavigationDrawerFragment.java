@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,28 +51,40 @@ public class NavigationDrawerFragment extends Fragment {
                 switch (position) {
                     case 0:
                         Intent intent = new Intent(getContext(), HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         closeDrawer();
                         startActivity(intent);
 
                         break;
                     case 1:
-                        Intent intenteOne = new Intent(getContext(), PerfilActivity.class);
-                        intenteOne.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        if (!("br.com.mowa.timesheet.activity.PerfilActivity".equals(getActivity().getLocalClassName()))) {
+                            Intent intenteOne = new Intent(getContext(), PerfilActivity.class);
+                            intenteOne.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            closeDrawer();
+                            startActivity(intenteOne);
+                        }
                         closeDrawer();
-                        startActivity(intenteOne);
+
                         break;
                     case 2:
-                        Intent intentTwo = new Intent(getContext(), RegistrosActivity.class);
-                        intentTwo.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        if (!("br.com.mowa.timesheet.activity.RegistrosActivity".equals(getActivity().getLocalClassName()))) {
+                            Intent intentTwo = new Intent(getContext(), RegistrosActivity.class);
+                            intentTwo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            closeDrawer();
+                            startActivity(intentTwo);
+                        }
                         closeDrawer();
-                        startActivity(intentTwo);
+
                         break;
                     case 3:
-                        Intent intentThree = new Intent(getContext(), ProjetosActivity.class);
-                        intentThree.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        if (!("br.com.mowa.timesheet.activity.ProjetosActivity".equals(getActivity().getLocalClassName()))){
+                            Intent intentThree = new Intent(getContext(), ProjetosActivity.class);
+                            intentThree.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            closeDrawer();
+                            startActivity(intentThree);
+                        }
                         closeDrawer();
-                        startActivity(intentThree);
+
                         break;
                     default:
                         break;

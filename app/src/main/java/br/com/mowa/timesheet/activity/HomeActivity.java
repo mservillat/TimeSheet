@@ -66,7 +66,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private TextView tvQuantidadeDeHoras;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
@@ -80,7 +80,8 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
-        drawerFragment.setUp(this.mDrawerLayout, this.mToolbar);
+//        setUp(this.mDrawerLayout, this.mToolbar, R.id.activity_home_list_view_navigation_drawer);
+        drawerFragment.setUp(mDrawerLayout, mToolbar);
 
         // Component TextView Quantidade de horas na semana
         this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.activity_home_text_view_horas_semanais);
