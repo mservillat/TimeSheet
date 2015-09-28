@@ -1,0 +1,35 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textSize="24dp"
+        android:text="Você realmente deseja sair"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/fragment_home_exit_button_sim"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="48dp"
+            android:text="sim" />
+
+        <Button
+            android:id="@+id/fragment_home_exit_button_nao"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="48dp"
+            android:text="não"/>
+
+    </LinearLayout>
+</LinearLayout>

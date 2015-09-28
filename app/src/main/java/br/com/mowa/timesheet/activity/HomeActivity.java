@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,10 +14,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +35,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
 import br.com.mowa.timesheet.entity.ProjectEntity;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.Task;
@@ -44,8 +47,7 @@ import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
-    private ActionBarDrawerToggle drawerToggle;
-    private int year, month, day, hour, minute;
+    private int mYear, mMonth, mDay, mHour, mMinute;
     private Button btDate;
     private Button btHorainicio;
     private Button btHoraFim;
@@ -97,7 +99,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.btDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendarioPickerDialog();
+                if (Build.VERSION.SDK_INT >= 11) {
+                    calendarioPickerDialog();
+                } else {
+                    calendarioPickerDialogVersaoInferior();
+                }
             }
         });
 
@@ -106,7 +112,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             @Override
             public void onClick(View v) {
                 btUpdateButtonHoras = btHorainicio;
-                relogioPickerDialog();
+                if (Build.VERSION.SDK_INT >= 11) {
+                    relogioPickerDialog();
+                } else {
+                    relogioPickerDialogVersaoInferior();
+                }
             }
         });
 
@@ -115,9 +125,15 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             @Override
             public void onClick(View v) {
                 btUpdateButtonHoras = btHoraFim;
-                relogioPickerDialog();
+                if (Build.VERSION.SDK_INT >= 11) {
+                    relogioPickerDialog();
+                } else {
+                    relogioPickerDialogVersaoInferior();
+                }
             }
         });
+
+
         loadDateCurrent();
 
         CallJsonNetwork jsonNetwork = new CallJsonNetwork();
@@ -236,14 +252,17 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
 
 
-
-
     //  CALENDÁRIO E RELÓGIO
 
+
+
+    /**
+     * DATE PICKER PARA VERSÕES SUPERIORES A HONEYCOMB (11)
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void calendarioPickerDialog() {
         Calendar calendarDefaul = Calendar.getInstance();
-        calendarDefaul.set(this.year, this.month, this.day);
+        calendarDefaul.set(this.mYear, this.mMonth, this.mDay);
 
 
         DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
@@ -259,7 +278,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void relogioPickerDialog() {
         Calendar relogioDefaul = Calendar.getInstance();
-        relogioDefaul.set(this.year, this.month, this.day, this.hour, this.minute);
+        relogioDefaul.set(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
 
         TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
                 this,
@@ -273,15 +292,15 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     private void loadDateCurrent() {
-        if (year == 0) {
+        if (mYear == 0) {
             Calendar c = Calendar.getInstance();
-            this.year = c.get(Calendar.YEAR);
-            this.month = c.get(Calendar.MONTH);
-            this.day = c.get(Calendar.DAY_OF_MONTH);
-            this.hour = c.get(Calendar.HOUR_OF_DAY);
-            this.minute = c.get(Calendar.MINUTE);
+            this.mYear = c.get(Calendar.YEAR);
+            this.mMonth = c.get(Calendar.MONTH);
+            this.mDay = c.get(Calendar.DAY_OF_MONTH);
+            this.mHour = c.get(Calendar.HOUR_OF_DAY);
+            this.mMinute = c.get(Calendar.MINUTE);
 
-            this.btDate.setText(day + "/" + month + "/" + year);
+            this.btDate.setText(mDay + "/" + mMonth + "/" + mYear);
             validacaoMinutos(this.btHorainicio);
             validacaoMinutos(this.btHoraFim);
         }
@@ -290,39 +309,99 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {
         Calendar tDefaul = Calendar.getInstance();
-        tDefaul.set(year, month, day, hour, minute);
+        tDefaul.set(year, mMonth, mDay, mHour, mMinute);
 
-        this.year = year;
-        this.month = monthOfYear;
-        this.day = dayOfMonth;
+        this.mYear = year;
+        this.mMonth = monthOfYear;
+        this.mDay = dayOfMonth;
 
-        this.btDate.setText(day + "/" + (month + 1) + "/" + year);
-        this.task.setDate(this.year, this.month, this.day, hour, minute);
+        this.btDate.setText(mDay + "/" + (mMonth + 1) + "/" + year);
+        this.task.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
     }
 
 
     @Override
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
-        this.hour = hourOfDay;
-        this.minute = minute;
+        this.mHour = hourOfDay;
+        this.mMinute = minute;
 
         if (btUpdateButtonHoras == btHorainicio) {
             validacaoMinutos(btUpdateButtonHoras);
-            this.task.setStart_time(this.year, this.month, this.day, this.hour, this.minute);
+            this.task.setStart_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
         if(btUpdateButtonHoras == btHoraFim) {
             validacaoMinutos(btUpdateButtonHoras);
-            this.task.setEnd_time(this.year, this.month, this.day, this.hour, this.minute);
+            this.task.setEnd_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
 
         this.btUpdateButtonHoras = null;
     }
 
+
+
+
+    /**
+     * DATE PICKER PARA VERSÕES INFERIORES A HONEYCOMB (11)
+     */
+    private void calendarioPickerDialogVersaoInferior() {
+        Calendar calendarDefault = Calendar.getInstance();
+        calendarDefault.set(this.mYear, this.mMonth, this.mDay);
+
+        android.app.DatePickerDialog datePicker = new android.app.DatePickerDialog(getContext(), new android.app.DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar tCalendar = Calendar.getInstance();
+                tCalendar.set(year, monthOfYear, dayOfMonth);
+
+                mYear = year;
+                mMonth = monthOfYear;
+                mDay = dayOfMonth;
+
+                btDate.setText(mDay + "/" + (mMonth + 1) + "/" + mYear);
+                task.setDate(year, mMonth, mDay, mHour, mMinute);
+            }
+        }, calendarDefault.get(Calendar.YEAR), calendarDefault.get(Calendar.MONTH), calendarDefault.get(Calendar.DAY_OF_MONTH));
+
+        datePicker.show();
+    }
+
+    /**
+     * TIME PICKER PARA VERSÕES INFERIORES A HONEYCOMB (11)
+     */
+    private void relogioPickerDialogVersaoInferior() {
+        Calendar calendarDefault = Calendar.getInstance();
+        calendarDefault.set(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
+
+        android.app.TimePickerDialog timePicker = new android.app.TimePickerDialog(getContext(), new android.app.TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                mHour = hourOfDay;
+                mMinute = minute;
+
+                if (btUpdateButtonHoras == btHorainicio) {
+                    validacaoMinutos(btUpdateButtonHoras);
+                    task.setStart_time(mYear, mMonth, mDay, mHour, mMinute);
+                }
+                if(btUpdateButtonHoras == btHoraFim) {
+                    validacaoMinutos(btUpdateButtonHoras);
+                    task.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
+                }
+
+                btUpdateButtonHoras = null;
+            }
+        }, calendarDefault.get(Calendar.HOUR_OF_DAY), calendarDefault.get(Calendar.MINUTE), true);
+
+        timePicker.show();
+    }
+
+
+
+
     private void validacaoMinutos(Button bt) {
-        if (minute < 10) {
-            bt.setText(this.hour + ":" + "0"+this.minute);
+        if (mMinute < 10) {
+            bt.setText(this.mHour + ":" + "0"+this.mMinute);
         } else {
-            bt.setText(this.hour + ":" + this.minute);
+            bt.setText(this.mHour + ":" + this.mMinute);
         }
     }
 
@@ -390,5 +469,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        HomeExitDialogFragment exitDialogFragment = new HomeExitDialogFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        exitDialogFragment.show(fm, "HomeExitDialogFragment");
+//        super.onBackPressed();
     }
 }

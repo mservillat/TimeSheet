@@ -2,6 +2,7 @@ package br.com.mowa.timesheet.activity;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
@@ -22,12 +23,15 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.IsConnectionNetworkAvailable;
 
 public class RegistrosActivity extends BaseActivity {
     private ListView listView;
     private List<RegistrosTableItem> list;
     private ParseTask parseTask;
     private List<TaskEntity> listTaskEntity;
+    private CallJsonNetwork callJson;
+    private SwipeRefreshLayout swipeLayout;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +46,20 @@ public class RegistrosActivity extends BaseActivity {
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_registros_fragment_navigation_drawer_container);
         navDraFragment.setUp(drawerLayout, mToolbar);
 
+        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
+        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
+        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
+
+
         listView = (ListView) findViewById(R.id.activity_registros_list_view);
         parseTask = new ParseTask();
+        callJson = new CallJsonNetwork();
+        callRefreshRegistros();
+
+    }
 
 
-
-
-        CallJsonNetwork callJson = new CallJsonNetwork();
+    private void callRefreshRegistros() {
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -56,10 +67,11 @@ public class RegistrosActivity extends BaseActivity {
                     listTaskEntity = parseTask.jsonObjectToTaskEntity(response);
                     list = RegistrosTableItem.builderList(listTaskEntity);
                     listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
+                    stopRefresh();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                    Log.d("walkyTeste", "on Response");
+                Log.d("walkyTeste", "on Response");
 
             }
         }, new Response.ErrorListener() {
@@ -68,5 +80,26 @@ public class RegistrosActivity extends BaseActivity {
                 Log.d("walkyTeste", "Deu ruim");
             }
         });
+    }
+
+    private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
+        return new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (IsConnectionNetworkAvailable.isNetworkAvailable(getContext())) {
+                    callRefreshRegistros();
+                } else {
+                    toast("erro - verifique sua conexão");
+                    stopRefresh();
+                }
+
+            }
+        };
+    }
+
+    private void stopRefresh() {
+        if (swipeLayout.isRefreshing()) {
+            swipeLayout.setRefreshing(false);
+        }
     }
 }

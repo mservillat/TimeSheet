@@ -51,6 +51,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <Button
+                android:id="@+id/activity_perfil_button_alterar_senha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alterar a senha"/>
+
 
 
 
@@ -94,19 +100,19 @@
                 <!--android:layout_marginRight="100dp"-->
                 <!--android:layout_marginLeft="5dp"/>-->
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/activity_perfil_floating_button_alterar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_edit"
-                android:layout_gravity="bottom|end"
-                android:layout_marginRight="5dp"
-                app:elevation="6dp"
-                app:pressedTranslationZ="12dp"
-                app:backgroundTint="@color/primary"/>
-
-
         </LinearLayout>
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/activity_perfil_floating_button_alterar"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_edit"-->
+            <!--android:layout_gravity="bottom|end"-->
+            <!--app:elevation="6dp"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--android:layout_marginBottom="16dp"-->
+            <!--app:pressedTranslationZ="12dp"-->
+            <!--app:backgroundTint="@color/primary"/>-->
 
     </LinearLayout>
 

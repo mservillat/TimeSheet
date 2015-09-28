@@ -1,11 +1,10 @@
 package br.com.mowa.timesheet.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +31,7 @@ import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 public class PerfilActivity extends BaseActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private FloatingActionButton btAlterarSenha;
+//    private FloatingActionButton btAlterarSenha;
     private EditText editSenhaNova;
     private EditText editSenhaAtual;
     private EditText editSenhaRepetir;
@@ -45,6 +44,7 @@ public class PerfilActivity extends BaseActivity {
     private List<ProjectEntity> listProjectEntity;
     private ListView listViewProjetos;
     private List<String> listProjectString;
+    private Button btAlterarSenha;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,13 +74,16 @@ public class PerfilActivity extends BaseActivity {
 //        this.editSenhaAtual = (EditText) findViewById(R.id.activity_perfil_edit_text_senha_atual);
 //        this.editSenhaNova = (EditText) findViewById(R.id.activity_perfil_edit_text_senha_nova);
 //        this.editSenhaRepetir = (EditText) findViewById(R.id.activity_perfil_edit_text_senha_nova_repetir);
-        this.btAlterarSenha = (FloatingActionButton) findViewById(R.id.activity_perfil_floating_button_alterar);
-        this.btAlterarSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snack(btAlterarSenha, getResources().getString(R.string.activity_perfil_button_floationg_msg_senha_alterada));
-            }
-        });
+//        this.btAlterarSenha = (FloatingActionButton) findViewById(R.id.activity_perfil_floating_button_alterar);
+//        this.btAlterarSenha.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                snack(btAlterarSenha, getResources().getString(R.string.activity_perfil_button_floationg_msg_senha_alterada));
+//            }
+//        });
+
+
+        this.btAlterarSenha = (Button) findViewById(R.id.activity_perfil_button_alterar_senha);
 
 
         this.callJson = new CallJsonNetwork();
@@ -110,7 +113,7 @@ public class PerfilActivity extends BaseActivity {
                     ParseProject parse = new ParseProject();
                     listProjectEntity = parse.parseJsonToProjectEntity(response);
                     listProjectString = parse.parseListProjectEntityToString(listProjectEntity);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, listProjectString);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listProjectString);
                     listViewProjetos.setAdapter(adapter);
 
                 } catch (JSONException e) {
