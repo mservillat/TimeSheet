@@ -7,21 +7,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.mowa.timesheet.entity.ProjectEntity;
-import br.com.mowa.timesheet.entity.UserEntity;
+import br.com.mowa.timesheet.model.ProjectModel;
+import br.com.mowa.timesheet.model.UserModel;
 
 /**
  * Created by walky on 9/22/15.
  */
 public class ParseProject {
 
-    public List<ProjectEntity> parseJsonToProjectEntity(JSONObject response) throws JSONException {
-        List<ProjectEntity> list = new ArrayList<>();
+    public List<ProjectModel> parseJsonToProjectEntity(JSONObject response) throws JSONException {
+        List<ProjectModel> list = new ArrayList<>();
         JSONArray jsonArray = response.getJSONArray("data");
         for (int i = 0; i < jsonArray.length(); i++ ) {
             JSONObject object = jsonArray.getJSONObject(i);
 
-            ProjectEntity project = new ProjectEntity();
+            ProjectModel project = new ProjectModel();
             project.setId(object.optString("id"));
             project.setName(object.optString("name"));
             project.setActivite(object.optBoolean("activite"));
@@ -31,9 +31,9 @@ public class ParseProject {
             JSONArray arrayUser = object.getJSONArray("users");
             for (int j = 0; j < arrayUser.length(); j++) {
                 JSONObject objectUser = arrayUser.getJSONObject(j);
-                UserEntity userEntity = new UserEntity();
-                userEntity.setId(objectUser.optString("id"));
-                project.getUsers().add(userEntity);
+                UserModel userModel = new UserModel();
+                userModel.setId(objectUser.optString("id"));
+                project.getUsers().add(userModel);
             }
 
             list.add(project);
@@ -41,10 +41,10 @@ public class ParseProject {
         return list;
     }
 
-    public List<String> parseListProjectEntityToString(List<ProjectEntity> listProjectEntity) {
+    public List<String> parseListProjectEntityToString(List<ProjectModel> listProjectModel) {
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < listProjectEntity.size(); i++) {
-            list.add(listProjectEntity.get(i).getName());
+        for (int i = 0; i < listProjectModel.size(); i++) {
+            list.add(listProjectModel.get(i).getName());
         }
         return list;
     }

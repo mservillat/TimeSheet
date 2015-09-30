@@ -1,11 +1,11 @@
-package br.com.mowa.timesheet.entity;
+package br.com.mowa.timesheet.model;
 
 import java.util.Date;
 
 /**
  * Created by walky on 9/22/15.
  */
-public class UserEntity {
+public class UserModel {
     private String id;
     private String name;
     private String userName;
@@ -14,6 +14,17 @@ public class UserEntity {
     private Date createdAt;
     private Date updateAt;
     private boolean activite;
+
+
+    public UserModel() {
+
+    }
+
+    public UserModel(String id, String username, String token) {
+        this.id = id;
+        this.userName = username;
+        this.token = token;
+    }
 
     public String getId() {
         return id;

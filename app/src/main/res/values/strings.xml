@@ -51,10 +51,20 @@
     <string name="activity_home_text_view_title_adicionar_atividade">Adicionar Atividade</string>
     <string name="activity_home_text_view_title_comentarios">Comentários</string>
     <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
+    <string name="activity_home_menu_action_sair">logoff</string>
+
+
+    <!-- Activity Registros-->
     <string name="title_activity_registros">Registros de tarefas</string>
+
+
+    <!-- Activity Projetos-->
     <string name="title_activity_projetos">ProjetosActivity</string>
-    <string name="activity_home_menu_action_sair">sair</string>
-    <string name="title_activity_testeac">testeac</string>
+
+
+    <!-- Dialog Fragment Perfil Alterar senha-->
+    <string name="dialog_fragment_perfil_set_error_caractere_invalido">caractere inválido</string>
+    <string name="dialog_fragment_perfil_set_error_minimo_caractere">a senha deve ter no minimo 6 digitos</string>
 
 
 </resources>

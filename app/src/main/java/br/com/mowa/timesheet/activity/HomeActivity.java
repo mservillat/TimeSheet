@@ -36,10 +36,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
-import br.com.mowa.timesheet.entity.ProjectEntity;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
-import br.com.mowa.timesheet.model.Task;
-import br.com.mowa.timesheet.model.User;
+import br.com.mowa.timesheet.model.FormTaskModel;
+import br.com.mowa.timesheet.model.ProjectModel;
+import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseProject;
@@ -47,31 +47,33 @@ import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+    private FormTaskModel formTaskModel = new FormTaskModel();
+    private List<ProjectModel> listaDeProjetosObjProject;
     private int mYear, mMonth, mDay, mHour, mMinute;
-    private Button btDate;
-    private Button btHorainicio;
-    private Button btHoraFim;
-    private Button btUpdateButtonHoras;
-    private ImageButton btSpinner;
-    private FloatingActionButton btEnviar;
-    private Spinner spinner;
-    private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
     private List<String> listaDeProjetosString;
-    private List<ProjectEntity> listaDeProjetosObjProject;
-    private ParseProject parseProject;
-    private Task task = new Task();
-    private User user;
-    private EditText etNomeAtividade;
-    private EditText etDescricaoAtividade;
-    private JSONObject requestBody;
+    private FloatingActionButton btEnviar;
     private TextView tvQuantidadeDeHoras;
+    private CallJsonNetwork jsonNetwork;
+    private DrawerLayout mDrawerLayout;
+    private ParseProject parseProject;
+    private EditText etDescricaoAtividade;
+    private EditText etNomeAtividade;
+    private JSONObject requestBody;
+    private ImageButton btSpinner;
+    private Toolbar mToolbar;
+    private Spinner spinner;
+    private UserModel user;
+    private Button btUpdateButtonHoras;
+    private Button btHorainicio;
+    private Button btDate;
+    private Button btHoraFim;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
+        jsonNetwork = new CallJsonNetwork();
 
 
         this.mToolbar = (Toolbar)findViewById(R.id.activity_home_toolbar);
@@ -82,7 +84,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
-//        setUp(this.mDrawerLayout, this.mToolbar, R.id.activity_home_list_view_navigation_drawer);
         drawerFragment.setUp(mDrawerLayout, mToolbar);
 
         // Component TextView Quantidade de horas na semana
@@ -133,29 +134,8 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-
         loadDateCurrent();
-
-        CallJsonNetwork jsonNetwork = new CallJsonNetwork();
-        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray data = response.getJSONArray("data");
-                        JSONObject jsonObject = data.getJSONObject(0);
-                        Long time = jsonObject.optLong("time");
-                        tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
+        loadDisplayAllHoursWork();
 
 
 
@@ -213,6 +193,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                toast(error.getMessage());
                             }
                         });
                     } else {
@@ -237,7 +218,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                task.setProject(listaDeProjetosObjProject.get(position).getId());
+                formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
             }
 
             @Override
@@ -247,6 +228,31 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         });
     }
 
+
+    /**
+     * Faz a chamada rest nas tarefas (task) do usuario logado, soma as horas trabalhadas e apresenta no TextView "QuantidadeDEHoras"
+     */
+    private void loadDisplayAllHoursWork() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray data = response.getJSONArray("data");
+                    JSONObject jsonObject = data.getJSONObject(0);
+                    Long time = jsonObject.optLong("time");
+                    tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
 
 
 
@@ -300,9 +306,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             this.mHour = c.get(Calendar.HOUR_OF_DAY);
             this.mMinute = c.get(Calendar.MINUTE);
 
-            this.btDate.setText(mDay + "/" + mMonth + "/" + mYear);
             validacaoMinutos(this.btHorainicio);
             validacaoMinutos(this.btHoraFim);
+            this.btDate.setText(mDay + "/" + mMonth + "/" + mYear);
+            this.formTaskModel.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
+            this.formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
         }
     }
 
@@ -316,7 +324,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.mDay = dayOfMonth;
 
         this.btDate.setText(mDay + "/" + (mMonth + 1) + "/" + year);
-        this.task.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
+        this.formTaskModel.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
     }
 
 
@@ -327,11 +335,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
         if (btUpdateButtonHoras == btHorainicio) {
             validacaoMinutos(btUpdateButtonHoras);
-            this.task.setStart_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
+            this.formTaskModel.setStart_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
         if(btUpdateButtonHoras == btHoraFim) {
             validacaoMinutos(btUpdateButtonHoras);
-            this.task.setEnd_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
+            this.formTaskModel.setEnd_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
 
         this.btUpdateButtonHoras = null;
@@ -358,7 +366,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                 mDay = dayOfMonth;
 
                 btDate.setText(mDay + "/" + (mMonth + 1) + "/" + mYear);
-                task.setDate(year, mMonth, mDay, mHour, mMinute);
+                formTaskModel.setDate(year, mMonth, mDay, mHour, mMinute);
             }
         }, calendarDefault.get(Calendar.YEAR), calendarDefault.get(Calendar.MONTH), calendarDefault.get(Calendar.DAY_OF_MONTH));
 
@@ -380,11 +388,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
                 if (btUpdateButtonHoras == btHorainicio) {
                     validacaoMinutos(btUpdateButtonHoras);
-                    task.setStart_time(mYear, mMonth, mDay, mHour, mMinute);
+                    formTaskModel.setStart_time(mYear, mMonth, mDay, mHour, mMinute);
                 }
                 if(btUpdateButtonHoras == btHoraFim) {
                     validacaoMinutos(btUpdateButtonHoras);
-                    task.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
+                    formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
                 }
 
                 btUpdateButtonHoras = null;
@@ -406,11 +414,16 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
 
+    /**
+     * Validação e preenchimento do formulario
+     * @return true se estiver tudo ok....false se algum campo estiver incorreto
+     * @throws JSONException
+     */
     private boolean buildForm() throws JSONException {
         requestBody = new JSONObject();
 
-        if (task.getProject() != null) {
-            requestBody.put("project", task.getProject());
+        if (formTaskModel.getProject() != null) {
+            requestBody.put("project", formTaskModel.getProject());
         } else {
             return false;
         }
@@ -421,20 +434,20 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             return false;
         }
 
-        if (task.getDate() != null) {
-            requestBody.put("date", task.getDate());
+        if (formTaskModel.getDate() != null) {
+            requestBody.put("date", formTaskModel.getDate());
         } else {
             return false;
         }
 
-        if (task.getStart_time() != null) {
-            requestBody.put("start_time", task.getStart_time());
+        if (formTaskModel.getStartTime() != null) {
+            requestBody.put("start_time", formTaskModel.getStartTime());
         } else {
             return false;
         }
 
-        if (task.getEnd_time() != null) {
-            requestBody.put("end_time", task.getEnd_time());
+        if (formTaskModel.getEndTime() != null) {
+            requestBody.put("end_time", formTaskModel.getEndTime());
         } else {
             return false;
         }
@@ -446,12 +459,14 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         requestBody.put("comments", this.etDescricaoAtividade.getText().toString());
-        task.calculaTime();
-        requestBody.put("time", task.getTime());
+        formTaskModel.calculaTime();
+        requestBody.put("time", formTaskModel.getTime());
 
 
         return true;
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

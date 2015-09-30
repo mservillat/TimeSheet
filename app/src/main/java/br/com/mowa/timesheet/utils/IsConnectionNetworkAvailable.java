@@ -7,10 +7,17 @@ import android.util.Log;
 
 /**
  * Created by walky on 9/28/15.
+ * Classe que Testa a conexão
  */
 public class IsConnectionNetworkAvailable {
     private static String TAG = "TIMESHEET - IsConnectionNetworkAvailable";
 
+
+    /**
+     *Testa se a conexão esta funcionando
+     * @param context
+     * @return caso exista conexão com wifi ou 3g o retorno será true
+     */
     public static boolean isNetworkAvailable(Context context) {
         try {
             ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

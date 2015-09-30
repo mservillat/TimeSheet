@@ -15,8 +15,13 @@ public class VolleySingleton {
     public static final String URL_GET_TASK = "http://walkyteste.goldarkapi.com/task";
     public static final String URL_GET_TASK_PROJECT_ID = "http://walkyteste.goldarkapi.com/task?project=";
     public static final String URL_GET_TASK_USER_ID = "http://walkyteste.goldarkapi.com/task?user=";
-    public static final String URL_GET_USER_ID = "http://walkyteste.goldarkapi.com/users?id=";
+    public static final String URL_GET_USERS_ID = "http://walkyteste.goldarkapi.com/users?id=";
     public static final String URL_GET_PROJECT_USER_ID = "http://walkyteste.goldarkapi.com/project?users=";
+    public static final String URL_PUT_USERS_ID = "http://walkyteste.goldarkapi.com/users/";
+
+
+
+    public static final String URL_ATRIBUTO_USER = "&user=";
 
     private static VolleySingleton sInstance = null;
     private RequestQueue mRequestQueue;

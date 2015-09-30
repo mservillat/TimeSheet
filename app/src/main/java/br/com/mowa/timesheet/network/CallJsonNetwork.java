@@ -1,11 +1,8 @@
 package br.com.mowa.timesheet.network;
 
-import android.util.Log;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
@@ -28,6 +25,14 @@ public class CallJsonNetwork {
     public void callJsonObjectPost(String url, JSONObject requestBody ,Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, requestBody, responseListener, errorListener);
+
+        this.mRequestQueue.add(request);
+    }
+
+
+    public void callJsonObjectPut(String url, JSONObject requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.PUT, url, requestBody, responseListener, errorListener);
 
         this.mRequestQueue.add(request);
     }

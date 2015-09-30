@@ -17,7 +17,7 @@ import java.util.List;
 
 import br.com.mowa.timesheet.adapter.RegistrosTableAdapter;
 import br.com.mowa.timesheet.adapter.RegistrosTableItem;
-import br.com.mowa.timesheet.entity.TaskEntity;
+import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
@@ -29,7 +29,7 @@ public class RegistrosActivity extends BaseActivity {
     private ListView listView;
     private List<RegistrosTableItem> list;
     private ParseTask parseTask;
-    private List<TaskEntity> listTaskEntity;
+    private List<TaskModel> listTaskModel;
     private CallJsonNetwork callJson;
     private SwipeRefreshLayout swipeLayout;
     @Override
@@ -64,8 +64,8 @@ public class RegistrosActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listTaskEntity = parseTask.jsonObjectToTaskEntity(response);
-                    list = RegistrosTableItem.builderList(listTaskEntity);
+                    listTaskModel = parseTask.jsonObjectToTaskEntity(response);
+                    list = RegistrosTableItem.builderList(listTaskModel);
                     listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
                     stopRefresh();
                 } catch (JSONException e) {

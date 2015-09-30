@@ -9,18 +9,19 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.timesheet.R;
 
 /**
  * Created by walky on 9/23/15.
  */
 public class ProjetosDetalhesUserListAdapter extends BaseAdapter {
-    private List<ProjetosDetalhesUserItemAdapter> list;
+    private List<TaskModel.ObjectDisplayUserAndTotalHours> list;
     private Context context;
     private LayoutInflater inflater;
 
 
-    public ProjetosDetalhesUserListAdapter(Context context, List<ProjetosDetalhesUserItemAdapter> list) {
+    public ProjetosDetalhesUserListAdapter(Context context, List<TaskModel.ObjectDisplayUserAndTotalHours> list) {
         this.list = list;
         this.context = context;
         this.inflater = LayoutInflater.from(this.context);
@@ -53,9 +54,9 @@ public class ProjetosDetalhesUserListAdapter extends BaseAdapter {
         } else {
             holder = (HolderDetalhes) convertView.getTag();
         }
-        ProjetosDetalhesUserItemAdapter item = list.get(position);
+        TaskModel.ObjectDisplayUserAndTotalHours item = list.get(position);
         holder.name.setText(item.getName());
-        holder.time.setText(item.getTime());
+        holder.time.setText(item.getTimeDisplay());
 
 
         return convertView;
@@ -66,4 +67,7 @@ public class ProjetosDetalhesUserListAdapter extends BaseAdapter {
         TextView name;
         TextView time;
     }
+
+
+
 }

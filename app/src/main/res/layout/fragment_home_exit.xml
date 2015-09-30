@@ -1,35 +1,55 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="280dp"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:textSize="24dp"
-        android:text="Você realmente deseja sair"/>
-
+    android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="Você realmente deseja sair"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
 
         <Button
-            android:id="@+id/fragment_home_exit_button_sim"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="48dp"
+            android:id="@+id/dialog_fragment_home_exit_button_sim"
+            android:layout_toLeftOf="@+id/dialog_fragment_home_exit_button_nao"
+            android:layout_width="64dp"
+            android:layout_height="52dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/white"
+            android:textColor="@color/blue_text_button_dialog_fragment"
             android:text="sim" />
 
         <Button
-            android:id="@+id/fragment_home_exit_button_nao"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="48dp"
+            android:id="@+id/dialog_fragment_home_exit_button_nao"
+            android:layout_alignParentRight="true"
+            android:layout_width="64dp"
+            android:layout_height="52dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/white"
+            android:textColor="@color/blue_text_button_dialog_fragment"
             android:text="não"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

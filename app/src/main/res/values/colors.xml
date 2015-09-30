@@ -20,5 +20,6 @@
     <color name="green">#0f0</color>
     <color name="gray">#eee</color>
     <color name="laranja_mowa">#FF5722</color>
+    <color name="blue_text_button_dialog_fragment">#2196F3</color>
 
 </resources>

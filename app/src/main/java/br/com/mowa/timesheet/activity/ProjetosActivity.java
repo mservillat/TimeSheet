@@ -17,11 +17,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.mowa.timesheet.adapter.ProjetosDetalhesUserItemAdapter;
 import br.com.mowa.timesheet.adapter.ProjetosDetalhesUserListAdapter;
-import br.com.mowa.timesheet.entity.ProjectEntity;
-import br.com.mowa.timesheet.entity.TaskEntity;
-import br.com.mowa.timesheet.entity.UserEntity;
+import br.com.mowa.timesheet.model.ProjectModel;
+import br.com.mowa.timesheet.model.TaskModel;
+import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
@@ -31,13 +30,14 @@ import br.com.mowa.timesheet.timesheet.R;
 
 public class ProjetosActivity extends BaseActivity {
     private ParseProject parseProject;
-    private List<ProjectEntity> listProjectEntity;
+    private List<ProjectModel> listProjectModel;
     private ListView listViewProjetos;
     private ListView listViewDetalhes;
     private CallJsonNetwork callJson;
-    private UserEntity user;
-    private ProjectEntity project;
-    private List<ProjetosDetalhesUserItemAdapter> listDetalhesUser;
+    private UserModel user;
+    private ProjectModel project;
+    private List<TaskModel.ObjectDisplayUserAndTotalHours> listDetalhesUser;
+    private List<TaskModel> taskEntities;
 
 
     @Override
@@ -57,7 +57,6 @@ public class ProjetosActivity extends BaseActivity {
         navDraFragment.setUp(drawerLayout, toolbar);
 
         this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
-
         this.listViewProjetos = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);
         this.parseProject = new ParseProject();
         this.callJson = new CallJsonNetwork();
@@ -81,30 +80,33 @@ public class ProjetosActivity extends BaseActivity {
     }
 
     private void builderListViewProject(JSONObject response) throws JSONException {
-        this.listProjectEntity = parseProject.parseJsonToProjectEntity(response);
-        ArrayAdapter<ProjectEntity> adapter = new ArrayAdapter<>(this , android.R.layout.simple_list_item_1, listProjectEntity);
+        this.listProjectModel = parseProject.parseJsonToProjectEntity(response);
+        ArrayAdapter<ProjectModel> adapter = new ArrayAdapter<>(this , android.R.layout.simple_list_item_1, listProjectModel);
         this.listViewProjetos.setAdapter(adapter);
         this.listViewProjetos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                project = listProjectEntity.get(position);
+                listViewProjetos.setEnabled(false);
+                project = listProjectModel.get(position);
                 listDetalhesUser = new ArrayList<>();
                 listViewDetalhes.setAdapter(null);
 
                 for (int i = 0; i < project.getUsers().size(); i++) {
                     user = project.getUsers().get(i);
 
-                    callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_PROJECT_ID + project.getId() + "&user=" + user.getId(), new Response.Listener<JSONObject>() {
+                    callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_PROJECT_ID + project.getId() + VolleySingleton.URL_ATRIBUTO_USER + user.getId(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             ParseTask parseTask = new ParseTask();
                             try {
-                                List<TaskEntity> taskEntities = parseTask.jsonObjectToTaskEntity(response);
-                                ProjetosDetalhesUserItemAdapter item = new ProjetosDetalhesUserItemAdapter().builderList(taskEntities);
+                                TaskModel.ObjectDisplayUserAndTotalHours item = TaskModel.builderListTaskToObjectDisplay(parseTask.jsonObjectToTaskEntity(response));
                                 listDetalhesUser.add(item);
+
                                 ProjetosDetalhesUserListAdapter adapter = new ProjetosDetalhesUserListAdapter(getActivity(), listDetalhesUser);
                                 listViewDetalhes.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
+
+                                listViewProjetos.setEnabled(true);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

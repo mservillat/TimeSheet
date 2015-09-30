@@ -3,7 +3,7 @@ package br.com.mowa.timesheet.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.mowa.timesheet.entity.TaskEntity;
+import br.com.mowa.timesheet.model.TaskModel;
 
 /**
  * Created by walky on 9/21/15.
@@ -18,16 +18,16 @@ public class RegistrosTableItem {
     private String project;
 
 
-    public static List<RegistrosTableItem> builderList(List<TaskEntity> listTaskEntity) {
+    public static List<RegistrosTableItem> builderList(List<TaskModel> listTaskModel) {
         List<RegistrosTableItem> list = new ArrayList<>();
-        for (int i = 0; i < listTaskEntity.size(); i ++) {
+        for (int i = 0; i < listTaskModel.size(); i ++) {
             RegistrosTableItem tableItem = new RegistrosTableItem();
-            TaskEntity taskEntity = listTaskEntity.get(i);
-            tableItem.name = taskEntity.getName();
-            tableItem.start_time = taskEntity.getStartTime();
-            tableItem.end_time = taskEntity.getEndTime();
-            tableItem.time = taskEntity.getTime();
-            tableItem.project = taskEntity.getProject().getName();
+            TaskModel taskModel = listTaskModel.get(i);
+            tableItem.name = taskModel.getName();
+            tableItem.start_time = taskModel.getStartTime();
+            tableItem.end_time = taskModel.getEndTime();
+            tableItem.time = taskModel.getTime();
+            tableItem.project = taskModel.getProject().getName();
             list.add(tableItem);
         }
         return list;

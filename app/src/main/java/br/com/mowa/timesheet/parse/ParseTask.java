@@ -7,42 +7,42 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.mowa.timesheet.entity.ProjectEntity;
-import br.com.mowa.timesheet.entity.TaskEntity;
-import br.com.mowa.timesheet.entity.UserEntity;
+import br.com.mowa.timesheet.model.ProjectModel;
+import br.com.mowa.timesheet.model.TaskModel;
+import br.com.mowa.timesheet.model.UserModel;
 
 /**
  * Created by walky on 9/22/15.
  */
 public class ParseTask {
 
-    public List<TaskEntity> jsonObjectToTaskEntity(JSONObject response) throws JSONException {
-        List<TaskEntity> list = new ArrayList<>();
+    public List<TaskModel> jsonObjectToTaskEntity(JSONObject response) throws JSONException {
+        List<TaskModel> list = new ArrayList<>();
         JSONArray array = response.getJSONArray("data");
         for (int i = 0; i < array.length(); i ++) {
             JSONObject object = array.getJSONObject(i);
-            TaskEntity taskEntity = new TaskEntity();
-            taskEntity.setId(object.optString("id"));
-            taskEntity.setName(object.optString("name"));
-            taskEntity.setComments(object.optString("comments"));
-            taskEntity.setStartTime(object.optString("start_time"));
-            taskEntity.setEndTime(object.optString("end_time"));
-            taskEntity.setTime(object.optLong("time"));
+            TaskModel taskModel = new TaskModel();
+            taskModel.setId(object.optString("id"));
+            taskModel.setName(object.optString("name"));
+            taskModel.setComments(object.optString("comments"));
+            taskModel.setStartTime(object.optString("start_time"));
+            taskModel.setEndTime(object.optString("end_time"));
+            taskModel.setTime(object.optLong("time"));
 
             // User
             JSONObject objectUser = object.getJSONObject("user");
-            UserEntity userEntity = new UserEntity();
-            userEntity.setName(objectUser.optString("name"));
-            taskEntity.setUser(userEntity);
+            UserModel userModel = new UserModel();
+            userModel.setName(objectUser.optString("name"));
+            taskModel.setUser(userModel);
 
             //Project
             JSONObject objectProject = object.getJSONObject("project");
-            ProjectEntity projectEntity = new ProjectEntity();
-            projectEntity.setName(objectProject.optString("name"));
-            taskEntity.setProject(projectEntity);
+            ProjectModel projectModel = new ProjectModel();
+            projectModel.setName(objectProject.optString("name"));
+            taskModel.setProject(projectModel);
 
 
-            list.add(taskEntity);
+            list.add(taskModel);
         }
 
         return list;

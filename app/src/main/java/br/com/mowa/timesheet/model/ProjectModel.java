@@ -1,4 +1,4 @@
-package br.com.mowa.timesheet.entity;
+package br.com.mowa.timesheet.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,12 +7,12 @@ import java.util.List;
 /**
  * Created by walky on 9/22/15.
  */
-public class ProjectEntity {
+public class ProjectModel {
     private String id;
     private String name;
     private Date startDate;
     private Date endDate;
-    private List<UserEntity> users = new ArrayList<>();
+    private List<UserModel> users = new ArrayList<>();
     private boolean activite;
     private boolean done;
 
@@ -40,11 +40,11 @@ public class ProjectEntity {
         this.endDate = endDate;
     }
 
-    public List<UserEntity> getUsers() {
+    public List<UserModel> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserEntity> users) {
+    public void setUsers(List<UserModel> users) {
         this.users = users;
     }
 

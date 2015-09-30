@@ -1,8 +1,10 @@
 package br.com.mowa.timesheet.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +19,10 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import br.com.mowa.timesheet.entity.ProjectEntity;
-import br.com.mowa.timesheet.entity.UserEntity;
+import br.com.mowa.timesheet.dialog.PerfilAlterarSenhaDialogFragment;
+import br.com.mowa.timesheet.model.ProjectModel;
+import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
-import br.com.mowa.timesheet.model.User;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseProject;
@@ -35,13 +37,13 @@ public class PerfilActivity extends BaseActivity {
     private EditText editSenhaNova;
     private EditText editSenhaAtual;
     private EditText editSenhaRepetir;
-    private User user;
+    private UserModel user;
     private CallJsonNetwork callJson;
-    private UserEntity userEntity;
+    private UserModel userModel;
     private TextView tvNome;
     private TextView tvEmail;
     private TextView tvSituacao;
-    private List<ProjectEntity> listProjectEntity;
+    private List<ProjectModel> listProjectModel;
     private ListView listViewProjetos;
     private List<String> listProjectString;
     private Button btAlterarSenha;
@@ -84,17 +86,27 @@ public class PerfilActivity extends BaseActivity {
 
 
         this.btAlterarSenha = (Button) findViewById(R.id.activity_perfil_button_alterar_senha);
+        this.btAlterarSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PerfilAlterarSenhaDialogFragment dialogAlterarSenha = new PerfilAlterarSenhaDialogFragment();
+                FragmentManager fm = getSupportFragmentManager();
+                dialogAlterarSenha.show(fm, "DialogAlterarSenha");
+            }
+        });
+
+
 
 
         this.callJson = new CallJsonNetwork();
-        callJson.callJsonObjectGet(VolleySingleton.URL_GET_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+        callJson.callJsonObjectGet(VolleySingleton.URL_GET_USERS_ID + this.user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    userEntity = new ParseUser().jsonObjectToUserEntity(response);
-                    tvNome.setText(userEntity.getName());
-                    tvEmail.setText(userEntity.getUserName());
-                    tvSituacao.setText((userEntity.isActivite() == true ? "true" : "false"));
+                    userModel = new ParseUser().jsonObjectToUserEntity(response);
+                    tvNome.setText(userModel.getName());
+                    tvEmail.setText(userModel.getUserName());
+                    tvSituacao.setText((userModel.isActivite() == true ? "true" : "false"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -111,8 +123,8 @@ public class PerfilActivity extends BaseActivity {
             public void onResponse(JSONObject response) {
                 try {
                     ParseProject parse = new ParseProject();
-                    listProjectEntity = parse.parseJsonToProjectEntity(response);
-                    listProjectString = parse.parseListProjectEntityToString(listProjectEntity);
+                    listProjectModel = parse.parseJsonToProjectEntity(response);
+                    listProjectString = parse.parseListProjectEntityToString(listProjectModel);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listProjectString);
                     listViewProjetos.setAdapter(adapter);
 
