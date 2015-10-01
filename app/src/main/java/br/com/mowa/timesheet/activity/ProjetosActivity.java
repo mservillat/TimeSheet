@@ -45,16 +45,9 @@ public class ProjetosActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projetos);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_projetos_toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_projetos_drawer_layout);
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_projetos_fragment_container);
-        navDraFragment.setUp(drawerLayout, toolbar);
+        navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_projetos_toolbar));
 
         this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
         this.listViewProjetos = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);

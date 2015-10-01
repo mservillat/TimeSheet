@@ -3,7 +3,7 @@ package br.com.mowa.timesheet.activity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -15,10 +15,10 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import br.com.mowa.timesheet.adapter.RegistrosTableAdapter;
+import br.com.mowa.timesheet.adapter.RegistrosRecyclerviewAdapter;
 import br.com.mowa.timesheet.adapter.RegistrosTableItem;
-import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
+import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
@@ -37,21 +37,16 @@ public class RegistrosActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registros);
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_registros_toolbar);
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_registros_drawer_layout);
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_registros_fragment_navigation_drawer_container);
-        navDraFragment.setUp(drawerLayout, mToolbar);
+        navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_registros_toolbar));
 
-        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
-        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
-        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
+//        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
+//        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
+//        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
 
 
-        listView = (ListView) findViewById(R.id.activity_registros_list_view);
+//        listView = (ListView) findViewById(R.id.activity_registros_list_view);
         parseTask = new ParseTask();
         callJson = new CallJsonNetwork();
         callRefreshRegistros();
@@ -66,8 +61,12 @@ public class RegistrosActivity extends BaseActivity {
                 try {
                     listTaskModel = parseTask.jsonObjectToTaskEntity(response);
                     list = RegistrosTableItem.builderList(listTaskModel);
-                    listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
-                    stopRefresh();
+                    RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
+                    RegistrosRecyclerviewAdapter recy = new RegistrosRecyclerviewAdapter(list);
+                    toast("recycler create");
+                    rv.setAdapter(recy);
+//                    listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
+//                    stopRefresh();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

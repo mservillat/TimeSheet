@@ -45,13 +45,15 @@
     <string name="activity_home_text_view_subtitle_nome_e_projeto"><![CDATA[Nome da funcionalidade & Projeto]]></string>
     <string name="activity_home_text_view_subtitle_tempo"><![CDATA[Data & Horario de inicio e término]]></string>
     <string name="activity_home_text_view_subtitle_descricao">Comentários sobre a atividade</string>
-    <string name="activity_home_button_floating_msg_enviar">enviando</string>
-    <string name="activity_home_edit_text_nome_atividade">minimo 5 caracteres</string>
+    <string name="activity_home_button_floating_msg_enviar">enviado</string>
+    <string name="activity_home_edit_text_nome_atividade">nome da tarefa</string>
+    <string name="activity_home_edit_text_nome_atividade_error">5 caracteres</string>
     <string name="activity_home_text_view_title_projeto">Projeto</string>
     <string name="activity_home_text_view_title_adicionar_atividade">Adicionar Atividade</string>
     <string name="activity_home_text_view_title_comentarios">Comentários</string>
     <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
     <string name="activity_home_menu_action_sair">logoff</string>
+
 
 
     <!-- Activity Registros-->
@@ -65,6 +67,7 @@
     <!-- Dialog Fragment Perfil Alterar senha-->
     <string name="dialog_fragment_perfil_set_error_caractere_invalido">caractere inválido</string>
     <string name="dialog_fragment_perfil_set_error_minimo_caractere">a senha deve ter no minimo 6 digitos</string>
+    <string name="activity_home_button_horas_inicio_error">hora de inicio</string>
 
 
 </resources>

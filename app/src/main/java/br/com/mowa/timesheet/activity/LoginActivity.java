@@ -38,11 +38,7 @@ public class LoginActivity extends BaseActivity {
         this.editEmail = (EditText)findViewById(R.id.activity_login_edit_text_email);
         this.editSenha = (EditText)findViewById(R.id.activity_login_edit_text_senha);
         this.btLogin = (Button) findViewById(R.id.activity_login_botao_entrar);
-        this.progress = new ProgressDialog(this);
-        this.progress.setTitle("Iniciando sessão");
-        this.progress.setMessage("Conectando");
-        this.progress.setIndeterminate(true);
-        this.progress.setCancelable(true);
+        this.progress = createProgressDialog("Iniciando sessão", "Conectando", true, true);
 
 
         UserModel mUser = SharedPreferencesUtil.getUserFromSharedPreferences();

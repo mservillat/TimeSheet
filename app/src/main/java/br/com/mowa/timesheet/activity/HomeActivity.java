@@ -1,13 +1,13 @@
 package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,9 +58,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private ParseProject parseProject;
     private EditText etDescricaoAtividade;
     private EditText etNomeAtividade;
+    private ProgressDialog progress;
     private JSONObject requestBody;
     private ImageButton btSpinner;
-    private Toolbar mToolbar;
     private Spinner spinner;
     private UserModel user;
     private Button btUpdateButtonHoras;
@@ -72,19 +72,17 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        this.progress = createProgressDialog("Loading", "calculando horas trabalhadas", true, true);
+        this.progress.show();
+
+
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         jsonNetwork = new CallJsonNetwork();
 
 
-        this.mToolbar = (Toolbar)findViewById(R.id.activity_home_toolbar);
-        if (this.mToolbar != null) {
-            setSupportActionBar(this.mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
-        drawerFragment.setUp(mDrawerLayout, mToolbar);
+        drawerFragment.setUp(mDrawerLayout, createToolbar(R.id.activity_home_toolbar));
 
         // Component TextView Quantidade de horas na semana
         this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.activity_home_text_view_horas_semanais);
@@ -151,13 +149,25 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         });
 
         parseProject = new ParseProject();
-        CallJsonNetwork callJson = new CallJsonNetwork();
-        callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     listaDeProjetosObjProject = parseProject.parseJsonToProjectEntity(response);
-                    buildListaProjeto();
+                    listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, listaDeProjetosString);
+                    spinner.setAdapter(adapter);
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -179,16 +189,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                 try {
                     if(buildForm()) {
 
-                        CallJsonNetwork callJson = new CallJsonNetwork();
-                        snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
-                        callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+
+                        progress.show();
+                        jsonNetwork.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Intent intent = getIntent();
-                                finish();
-                                startActivity(intent);
-
-
+                                clearFilderForm();
+                                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -207,30 +214,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-
-    }
-
-
-    public void buildListaProjeto() {
-        listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, this.listaDeProjetosString);
-        this.spinner.setAdapter(adapter);
-        this.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
 
     /**
+     *
      * Faz a chamada rest nas tarefas (task) do usuario logado, soma as horas trabalhadas e apresenta no TextView "QuantidadeDEHoras"
+     *
      */
     private void loadDisplayAllHoursWork() {
         jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
@@ -241,6 +231,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
                     JSONObject jsonObject = data.getJSONObject(0);
                     Long time = jsonObject.optLong("time");
                     tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
+                    progress.dismiss();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -255,10 +246,28 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
 
+    /**
+     *
+     * Carrega as variaveis int de data e hora para a hora atual, e seta nos buttons da activity e formulario.
+     */
+    private void loadDateCurrent() {
+        if (mYear == 0) {
+            Calendar c = Calendar.getInstance();
+            this.mYear = c.get(Calendar.YEAR);
+            this.mMonth = c.get(Calendar.MONTH);
+            this.mDay = c.get(Calendar.DAY_OF_MONTH);
+            this.mHour = c.get(Calendar.HOUR_OF_DAY);
+            this.mMinute = c.get(Calendar.MINUTE);
+
+            validacaoMinutos(this.btHorainicio);
+            validacaoMinutos(this.btHoraFim);
+            this.btDate.setText(mDay + "/" + mMonth + "/" + mYear);
+            this.formTaskModel.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
+            this.formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
+        }
+    }
 
 
-
-    //  CALENDÁRIO E RELÓGIO
 
 
 
@@ -281,6 +290,9 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         datePickerDialog.setAccentColor(getResources().getColor(R.color.primary));
     }
 
+    /**
+     * TIME PICKER PARA VERSÕES SUPERIORES A HONEYCOMB (11)
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void relogioPickerDialog() {
         Calendar relogioDefaul = Calendar.getInstance();
@@ -297,22 +309,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         timePickerDialog.setAccentColor(getActivity().getResources().getColor(R.color.primary));
     }
 
-    private void loadDateCurrent() {
-        if (mYear == 0) {
-            Calendar c = Calendar.getInstance();
-            this.mYear = c.get(Calendar.YEAR);
-            this.mMonth = c.get(Calendar.MONTH);
-            this.mDay = c.get(Calendar.DAY_OF_MONTH);
-            this.mHour = c.get(Calendar.HOUR_OF_DAY);
-            this.mMinute = c.get(Calendar.MINUTE);
-
-            validacaoMinutos(this.btHorainicio);
-            validacaoMinutos(this.btHoraFim);
-            this.btDate.setText(mDay + "/" + mMonth + "/" + mYear);
-            this.formTaskModel.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
-            this.formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
-        }
-    }
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {
@@ -344,6 +340,11 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
         this.btUpdateButtonHoras = null;
     }
+
+
+
+
+
 
 
 
@@ -404,16 +405,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
 
 
-
-    private void validacaoMinutos(Button bt) {
-        if (mMinute < 10) {
-            bt.setText(this.mHour + ":" + "0"+this.mMinute);
-        } else {
-            bt.setText(this.mHour + ":" + this.mMinute);
-        }
-    }
-
-
     /**
      * Validação e preenchimento do formulario
      * @return true se estiver tudo ok....false se algum campo estiver incorreto
@@ -441,8 +432,10 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         if (formTaskModel.getStartTime() != null) {
+            btHorainicio.setError(null);
             requestBody.put("start_time", formTaskModel.getStartTime());
         } else {
+            btHorainicio.setError(getContext().getString(R.string.activity_home_button_horas_inicio_error));
             return false;
         }
 
@@ -453,8 +446,10 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         if (this.etNomeAtividade.getText().toString().length() >4 ) {
+            etNomeAtividade.setError(null);
             requestBody.put("name", this.etNomeAtividade.getText().toString());
         } else {
+            etNomeAtividade.setError(getContext().getString(R.string.activity_home_edit_text_nome_atividade_error));
             return false;
         }
 
@@ -467,6 +462,24 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
 
+    /**
+     * Limpa os campos do formulario
+     */
+    private void clearFilderForm() {
+        etNomeAtividade.getText().clear();
+        etDescricaoAtividade.getText().clear();
+        loadDateCurrent();
+        loadDisplayAllHoursWork();
+
+    }
+
+    private void validacaoMinutos(Button bt) {
+        if (mMinute < 10) {
+            bt.setText(this.mHour + ":" + "0"+this.mMinute);
+        } else {
+            bt.setText(this.mHour + ":" + this.mMinute);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -491,6 +504,5 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         HomeExitDialogFragment exitDialogFragment = new HomeExitDialogFragment();
         FragmentManager fm = getSupportFragmentManager();
         exitDialogFragment.show(fm, "HomeExitDialogFragment");
-//        super.onBackPressed();
     }
 }

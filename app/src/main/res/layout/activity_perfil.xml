@@ -60,62 +60,7 @@
                 android:textColor="@color/blue_text_button_dialog_fragment"
                 android:text="Alterar a senha"/>
 
-
-
-
-
-
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/activity_perfil_text_view_alterar_senha"-->
-                <!--android:gravity="center_horizontal"-->
-                <!--android:layout_marginRight="100dp"-->
-                <!--android:textSize="16sp"-->
-                <!--android:textStyle="bold"-->
-                <!--android:layout_marginLeft="5dp"/>-->
-
-            <!--<EditText android:id="@+id/activity_perfil_edit_text_senha_atual"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="@string/activity_perfil_campo_senha_atual"-->
-                <!--android:inputType="textPassword"-->
-                <!--android:textStyle="italic"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:layout_marginRight="100dp"-->
-                <!--android:layout_marginLeft="5dp"/>-->
-
-            <!--<EditText android:id="@+id/activity_perfil_edit_text_senha_nova"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="@string/activity_perfil_campo_senha_nova"-->
-                <!--android:inputType="textPassword"-->
-                <!--android:textStyle="italic"-->
-                <!--android:layout_marginRight="100dp"-->
-                <!--android:layout_marginLeft="5dp"/>-->
-
-            <!--<EditText android:id="@+id/activity_perfil_edit_text_senha_nova_repetir"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="@string/activity_perfil_campo_senha_nova_repetir"-->
-                <!--android:inputType="textPassword"-->
-                <!--android:textStyle="italic"-->
-                <!--android:layout_marginRight="100dp"-->
-                <!--android:layout_marginLeft="5dp"/>-->
-
         </LinearLayout>
-
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/activity_perfil_floating_button_alterar"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/ic_edit"-->
-            <!--android:layout_gravity="bottom|end"-->
-            <!--app:elevation="6dp"-->
-            <!--android:layout_marginRight="16dp"-->
-            <!--android:layout_marginBottom="16dp"-->
-            <!--app:pressedTranslationZ="12dp"-->
-            <!--app:backgroundTint="@color/primary"/>-->
 
     </LinearLayout>
 

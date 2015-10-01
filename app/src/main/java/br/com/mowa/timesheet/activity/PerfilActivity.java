@@ -3,11 +3,9 @@ package br.com.mowa.timesheet.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,9 +18,9 @@ import org.json.JSONObject;
 import java.util.List;
 
 import br.com.mowa.timesheet.dialog.PerfilAlterarSenhaDialogFragment;
+import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.ProjectModel;
 import br.com.mowa.timesheet.model.UserModel;
-import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseProject;
@@ -31,12 +29,7 @@ import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class PerfilActivity extends BaseActivity {
-    private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-//    private FloatingActionButton btAlterarSenha;
-    private EditText editSenhaNova;
-    private EditText editSenhaAtual;
-    private EditText editSenhaRepetir;
     private UserModel user;
     private CallJsonNetwork callJson;
     private UserModel userModel;
@@ -54,18 +47,11 @@ public class PerfilActivity extends BaseActivity {
         setContentView(R.layout.activity_perfil);
 
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
-
-
-        // Load Toolbar e Navigation Drawer
-        this.mToolbar = (Toolbar) findViewById(R.id.activity_perfil_toolbar);
-        if (this.mToolbar != null) {
-            setSupportActionBar(this.mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        this.callJson = new CallJsonNetwork();
 
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_perfil_fragment_container);
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_perfil_drawer_layout);
-        drawerFragment.setUp(this.mDrawerLayout, this.mToolbar);
+        drawerFragment.setUp(this.mDrawerLayout, createToolbar(R.id.activity_perfil_toolbar));
 
         this.tvNome = (TextView) findViewById(R.id.activity_perfil_text_view_nome);
         this.tvEmail = (TextView) findViewById(R.id.activity_perfil_text_view_email);
@@ -73,16 +59,6 @@ public class PerfilActivity extends BaseActivity {
 
         this.listViewProjetos = (ListView) findViewById(R.id.activity_perfil_list_view_projetos);
 
-//        this.editSenhaAtual = (EditText) findViewById(R.id.activity_perfil_edit_text_senha_atual);
-//        this.editSenhaNova = (EditText) findViewById(R.id.activity_perfil_edit_text_senha_nova);
-//        this.editSenhaRepetir = (EditText) findViewById(R.id.activity_perfil_edit_text_senha_nova_repetir);
-//        this.btAlterarSenha = (FloatingActionButton) findViewById(R.id.activity_perfil_floating_button_alterar);
-//        this.btAlterarSenha.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                snack(btAlterarSenha, getResources().getString(R.string.activity_perfil_button_floationg_msg_senha_alterada));
-//            }
-//        });
 
 
         this.btAlterarSenha = (Button) findViewById(R.id.activity_perfil_button_alterar_senha);
@@ -97,8 +73,16 @@ public class PerfilActivity extends BaseActivity {
 
 
 
+        loadProfileUser();
+        loadProjectInUser();
 
-        this.callJson = new CallJsonNetwork();
+    }
+
+
+    /**
+     * Chamada REST (GET) no usuario logado, conversão para o objeto UserModel e preenchimento dos campos na activity
+     */
+    private void loadProfileUser() {
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_USERS_ID + this.user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -117,7 +101,13 @@ public class PerfilActivity extends BaseActivity {
 
             }
         });
+    }
 
+
+    /**
+     * Chamada REST (GET) nos projetos do usuario logado, conversão e Listagem no Listview customizado com adapter
+     */
+    private void loadProjectInUser() {
         this.callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -138,7 +128,6 @@ public class PerfilActivity extends BaseActivity {
 
             }
         });
-
     }
 
 }

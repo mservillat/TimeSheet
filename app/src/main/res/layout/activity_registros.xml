@@ -14,36 +14,53 @@
         android:id="@+id/activity_registros_toolbar"
         layout="@layout/include_toolbar"/>
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/activity_registros_swipe_to_refresh"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv"
+                android:scrollbars="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
 
-                        <ListView android:id="@+id/activity_registros_list_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
 
-                    </LinearLayout>
+        </LinearLayout>
+        <!--<android.support.v4.widget.SwipeRefreshLayout-->
+            <!--android:id="@+id/activity_registros_swipe_to_refresh"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-                </HorizontalScrollView>
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical">-->
 
-            </LinearLayout>
+                <!--<HorizontalScrollView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content">-->
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<ListView android:id="@+id/activity_registros_list_view"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="match_parent"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</HorizontalScrollView>-->
+
+            <!--</LinearLayout>-->
+
+        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
     </LinearLayout>
 
