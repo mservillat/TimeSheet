@@ -32,8 +32,13 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
 
     @Override
     public void onBindViewHolder(ItemViewHolder itemViewHolder, int i) {
-        itemViewHolder.name1.setText(list.get(i).getProject());
-        itemViewHolder.name2.setText(list.get(i).getName());
+        itemViewHolder.projeto.setText(list.get(i).getProject());
+        itemViewHolder.tarefa.setText(list.get(i).getName());
+        itemViewHolder.dataInicio.setText(list.get(i).getStart_time());
+        itemViewHolder.dataTermino.setText(list.get(i).getEnd_time());
+        itemViewHolder.quantidadeHoras.setText(list.get(i).getTime().toString());
+
+
     }
 
     @Override
@@ -48,14 +53,20 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
-        TextView name1;
-        TextView name2;
+        TextView projeto;
+        TextView tarefa;
+        TextView dataInicio;
+        TextView dataTermino;
+        TextView quantidadeHoras;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
-            name1 = (TextView) itemView.findViewById(R.id.name1L);
-            name2 = (TextView) itemView.findViewById(R.id.name2L);
+            projeto = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_projeto);
+            tarefa = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_tarefa);
+            dataInicio = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_data_inicial);
+            dataTermino = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_data_termino);
+            quantidadeHoras = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_quantidade_horas);
 
         }
     }

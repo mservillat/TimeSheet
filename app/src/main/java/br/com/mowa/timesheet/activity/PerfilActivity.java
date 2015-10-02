@@ -1,5 +1,6 @@
 package br.com.mowa.timesheet.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -40,12 +41,15 @@ public class PerfilActivity extends BaseActivity {
     private ListView listViewProjetos;
     private List<String> listProjectString;
     private Button btAlterarSenha;
+    private ProgressDialog progress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
+        this.progress = createProgressDialog("Loading", "carregando informações do usuário", true, true);
+        this.progress.show();
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         this.callJson = new CallJsonNetwork();
 
@@ -72,9 +76,8 @@ public class PerfilActivity extends BaseActivity {
         });
 
 
-
-        loadProfileUser();
         loadProjectInUser();
+        loadProfileUser();
 
     }
 
@@ -91,6 +94,7 @@ public class PerfilActivity extends BaseActivity {
                     tvNome.setText(userModel.getName());
                     tvEmail.setText(userModel.getUserName());
                     tvSituacao.setText((userModel.isActivite() == true ? "true" : "false"));
+                    progress.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

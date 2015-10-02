@@ -10,31 +10,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <include
+
+        <include
         android:id="@+id/activity_registros_toolbar"
         layout="@layout/include_toolbar"/>
 
+        <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/activity_registros_swipe_to_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv"
-                android:scrollbars="vertical"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
 
-
-
-        </LinearLayout>
-        <!--<android.support.v4.widget.SwipeRefreshLayout-->
-            <!--android:id="@+id/activity_registros_swipe_to_refresh"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+        </android.support.v4.widget.SwipeRefreshLayout>
 
             <!--<LinearLayout-->
                 <!--android:layout_width="match_parent"-->
@@ -59,8 +59,6 @@
                 <!--</HorizontalScrollView>-->
 
             <!--</LinearLayout>-->
-
-        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
     </LinearLayout>
 

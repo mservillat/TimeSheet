@@ -142,7 +142,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void closeDrawer() {
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(Gravity.START);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
     }
 
@@ -169,5 +169,7 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, context.MODE_PRIVATE);
         return sharedPreferences.getString(preferenceName, defaultValue);
     }
+
+
 
 }

@@ -78,6 +78,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         jsonNetwork = new CallJsonNetwork();
+        parseProject = new ParseProject();
 
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
@@ -132,10 +133,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-        loadDateCurrent();
-        loadDisplayAllHoursWork();
-
-
 
         //Request lista de projetos e carrega na view spinner
         this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
@@ -148,37 +145,10 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-        parseProject = new ParseProject();
-        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    listaDeProjetosObjProject = parseProject.parseJsonToProjectEntity(response);
-                    listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, listaDeProjetosString);
-                    spinner.setAdapter(adapter);
-                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
-                        }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
+        loadListSpinnerProject();
+        loadDateCurrent();
+        loadDisplayAllHoursWork();
 
 
         //Components (Floating Button enviar)
@@ -219,35 +189,6 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     /**
      *
-     * Faz a chamada rest nas tarefas (task) do usuario logado, soma as horas trabalhadas e apresenta no TextView "QuantidadeDEHoras"
-     *
-     */
-    private void loadDisplayAllHoursWork() {
-        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray data = response.getJSONArray("data");
-                    JSONObject jsonObject = data.getJSONObject(0);
-                    Long time = jsonObject.optLong("time");
-                    tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
-                    progress.dismiss();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }
-
-
-    /**
-     *
      * Carrega as variaveis int de data e hora para a hora atual, e seta nos buttons da activity e formulario.
      */
     private void loadDateCurrent() {
@@ -266,6 +207,72 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             this.formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
         }
     }
+
+
+
+    /**
+     *
+     * Faz a chamada rest nas tarefas (task) do usuario logado, soma as horas trabalhadas e apresenta no TextView "QuantidadeDEHoras"
+     *
+     */
+    private void loadDisplayAllHoursWork() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray data = response.getJSONArray("data");
+                    JSONObject jsonObject = data.getJSONObject(0);
+                    Long time = jsonObject.optLong("time");
+                    tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
+                    tvQuantidadeDeHoras.refreshDrawableState();
+                    progress.dismiss();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
+
+
+    private void loadListSpinnerProject() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    listaDeProjetosObjProject = parseProject.parseJsonToProjectEntity(response);
+                    listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, listaDeProjetosString);
+                    spinner.setAdapter(adapter);
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
 
 
 
@@ -466,10 +473,12 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
      * Limpa os campos do formulario
      */
     private void clearFilderForm() {
+        this.formTaskModel = new FormTaskModel();
         etNomeAtividade.getText().clear();
         etDescricaoAtividade.getText().clear();
         loadDateCurrent();
         loadDisplayAllHoursWork();
+        loadListSpinnerProject();
 
     }
 

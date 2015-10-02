@@ -1,8 +1,10 @@
 package br.com.mowa.timesheet.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ListView;
@@ -32,45 +34,56 @@ public class RegistrosActivity extends BaseActivity {
     private List<TaskModel> listTaskModel;
     private CallJsonNetwork callJson;
     private SwipeRefreshLayout swipeLayout;
+    private LinearLayoutManager layoutManager;
+    private ProgressDialog progress;
+    private RecyclerView recycler;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registros);
 
+        this.progress = createProgressDialog("Loading", "carregando lista de tarefas", true, true);
+        this.progress.show();
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_registros_drawer_layout);
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_registros_fragment_navigation_drawer_container);
         navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_registros_toolbar));
 
-//        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
-//        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
-//        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
+        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
+        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
+        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
 
 
 //        listView = (ListView) findViewById(R.id.activity_registros_list_view);
         parseTask = new ParseTask();
         callJson = new CallJsonNetwork();
-        callRefreshRegistros();
+        loadRegistros();
 
     }
 
-
-    private void callRefreshRegistros() {
+    /**
+     * Chamada GET em todas as tarefas do usuário logado
+     * adapta a lista em um recyclerView
+     */
+    private void loadRegistros() {
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     listTaskModel = parseTask.jsonObjectToTaskEntity(response);
                     list = RegistrosTableItem.builderList(listTaskModel);
-                    RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
-                    RegistrosRecyclerviewAdapter recy = new RegistrosRecyclerviewAdapter(list);
-                    toast("recycler create");
-                    rv.setAdapter(recy);
+                    recycler = (RecyclerView) findViewById(R.id.rv);
+                    layoutManager = new LinearLayoutManager(getActivity());
+                    recycler.setLayoutManager(layoutManager);
+                    recycler.setAnimation(null);
+                    recycler.setHasFixedSize(true);
+                    RegistrosRecyclerviewAdapter adapter = new RegistrosRecyclerviewAdapter(list);
+                    recycler.setAdapter(adapter);
+                    progress.dismiss();
 //                    listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
-//                    stopRefresh();
+                    stopRefresh();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d("walkyTeste", "on Response");
 
             }
         }, new Response.ErrorListener() {
@@ -81,12 +94,16 @@ public class RegistrosActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Interface OnRefreshListener do SwipeRefreshLayout
+     * @return
+     */
     private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
         return new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (IsConnectionNetworkAvailable.isNetworkAvailable(getContext())) {
-                    callRefreshRegistros();
+                    loadRegistros();
                 } else {
                     toast("erro - verifique sua conexão");
                     stopRefresh();
@@ -96,6 +113,9 @@ public class RegistrosActivity extends BaseActivity {
         };
     }
 
+    /**
+     * Metodo para cancelar o swipeRefresh
+     */
     private void stopRefresh() {
         if (swipeLayout.isRefreshing()) {
             swipeLayout.setRefreshing(false);

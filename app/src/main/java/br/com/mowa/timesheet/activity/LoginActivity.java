@@ -28,13 +28,14 @@ public class LoginActivity extends BaseActivity {
     private Button btLogin;
     private UserModel user;
     private ProgressDialog progress;
+    private CallJsonNetwork callJson;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+        this.callJson = new CallJsonNetwork();
         this.editEmail = (EditText)findViewById(R.id.activity_login_edit_text_email);
         this.editSenha = (EditText)findViewById(R.id.activity_login_edit_text_senha);
         this.btLogin = (Button) findViewById(R.id.activity_login_botao_entrar);
@@ -56,7 +57,6 @@ public class LoginActivity extends BaseActivity {
             btLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    btLogin.setEnabled(false);
                     progress.show();
                     JSONObject requestBody = new JSONObject();
                     try {
@@ -72,40 +72,55 @@ public class LoginActivity extends BaseActivity {
                         e.printStackTrace();
                     }
 
-                    CallJsonNetwork callJson = new CallJsonNetwork();
-                    callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_SESSIONS, requestBody, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                String username = response.getString("username");
-                                String id = response.getString("user_id");
-                                String token = response.getString("token");
-                                user = new UserModel(username, id, token);
+                    logar(requestBody);
 
-                                SharedPreferencesUtil.setUserInSharedPreferences(user);
-
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                progress.dismiss();
-                                startActivity(intent);
-                                finish();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            toast(getResources().getString(R.string.activity_login_toast_usuario_ou_senha_invalido));
-                            btLogin.setEnabled(true);
-                        }
-                    });
                 }
             });
         }
 
     }
 
+
+    /**
+     * Metodo que faz a chamada POST PARA criar a sessão
+     * @param requestBody Json com usuario e senha digitado
+     */
+    private void logar(JSONObject requestBody) {
+        callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_SESSIONS, requestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String username = response.getString("username");
+                    String id = response.getString("user_id");
+                    String token = response.getString("token");
+                    user = new UserModel(username, id, token);
+
+                    SharedPreferencesUtil.setUserInSharedPreferences(user);
+
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    progress.dismiss();
+                    startActivity(intent);
+                    finish();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                toast(getResources().getString(R.string.activity_login_toast_usuario_ou_senha_invalido));
+                btLogin.setEnabled(true);
+            }
+        });
+    }
+
+
+    /**
+     * Verifica se o email é valido
+     * @param email email digitado pelo usuário
+     * @return caso o email seja valido o retorno será true
+     */
     private boolean isValidEmail(String email) {
         Pattern emailPattern = Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
@@ -123,6 +138,12 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+
+    /**
+     * Verifica se a senha é valida (a senha deve ter mais de 5 digitos)
+     * @param password senha digitada pelo usuário
+     * @return caso a senha seja valida o retorno será true
+     */
     private boolean isValidPassword(String password) {
         if (password.length() >5 ) {
             Pattern passwordPattern = Pattern.compile("[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789]*");
