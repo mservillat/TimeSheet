@@ -16,12 +16,12 @@ import br.com.mowa.timesheet.timesheet.R;
  * Created by walky on 9/23/15.
  */
 public class ProjetosDetalhesUserListAdapter extends BaseAdapter {
-    private List<TaskModel.ObjectDisplayUserAndTotalHours> list;
+    private List<TaskModel> list;
     private Context context;
     private LayoutInflater inflater;
 
 
-    public ProjetosDetalhesUserListAdapter(Context context, List<TaskModel.ObjectDisplayUserAndTotalHours> list) {
+    public ProjetosDetalhesUserListAdapter(Context context, List<TaskModel> list) {
         this.list = list;
         this.context = context;
         this.inflater = LayoutInflater.from(this.context);
@@ -54,7 +54,7 @@ public class ProjetosDetalhesUserListAdapter extends BaseAdapter {
         } else {
             holder = (HolderDetalhes) convertView.getTag();
         }
-        TaskModel.ObjectDisplayUserAndTotalHours item = list.get(position);
+        TaskModel item = list.get(position);
         holder.name.setText(item.getName());
         holder.time.setText(item.getTimeDisplay());
 

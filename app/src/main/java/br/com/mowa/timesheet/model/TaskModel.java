@@ -16,6 +16,7 @@ public class TaskModel {
     private UserModel user;
     private ProjectModel project;
     private Long time;
+    private String timeDisplay;
 
 
     public String getId() {
@@ -82,39 +83,24 @@ public class TaskModel {
         this.time = time;
     }
 
-
-    /**
-     * Objeto Task apenas com as informações "nome do usuario" e "total de horas" trabalhadas no projeto selecionado
-     * Essa classe é usada na avitivity "ProjetosActivity"
-     */
-    public static class ObjectDisplayUserAndTotalHours {
-        private String name;
-        private String timeDisplay;
-        private Long timeMillis;
-
-        public String getName() {
-            return name;
-        }
-
-        public String getTimeDisplay() {
-            return timeDisplay;
-        }
+    public String getTimeDisplay() {
+        return timeDisplay;
     }
 
     /**
-     * Converte e soma as horas de uma lista de tarefas (do mesmo user e mesmo projeto) em um model para ser usado no adapter
+     *  Calcula as horas de uma lista de tarefas (do mesmo user e mesmo projeto) para ser usado no adapter
      * @param listTask Lista de tarefas (tasks) do mesmo projeto e do mesmo usuário
-     * @return Objeto que será usado no adapter para mostrar nome do usuário e quantidade de horas em um devido projeto
+     * @return taskModel com o atributo timeDisplay contendo a quantidade de horas de todas as task de um usuário especifico
      */
-    public static ObjectDisplayUserAndTotalHours builderListTaskToObjectDisplay(List<TaskModel> listTask) {
-        List<ObjectDisplayUserAndTotalHours> list = new ArrayList<>();
-        ObjectDisplayUserAndTotalHours item = new ObjectDisplayUserAndTotalHours();
+    public TaskModel calculateHoursWorks(List<TaskModel> listTask) {
+        List<TaskModel> list = new ArrayList<>();
+        TaskModel item = new TaskModel();
         for (int i = 0; i < listTask.size(); i++) {
             TaskModel taskModel = listTask.get(i);
-            if (item.timeMillis == null){
-                item.timeMillis = taskModel.getTime();
+            if (item.time == null){
+                item.time = taskModel.getTime();
             } else {
-                item.timeMillis = item.timeMillis + taskModel.getTime();
+                item.time = item.time + taskModel.getTime();
             }
 
             if (item.name == null) {
@@ -122,7 +108,7 @@ public class TaskModel {
             }
         }
 
-        item.timeDisplay = String.format("%d hr, %d min", TimeUnit.MILLISECONDS.toHours(item.timeMillis), TimeUnit.MILLISECONDS.toMinutes(item.timeMillis));
+        item.timeDisplay = String.format("%d hr, %d min", TimeUnit.MILLISECONDS.toHours(item.time), TimeUnit.MILLISECONDS.toMinutes(item.time));
 
         return item;
     }

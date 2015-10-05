@@ -36,9 +36,9 @@ public class ProjetosActivity extends BaseActivity {
     private CallJsonNetwork callJson;
     private UserModel user;
     private ProjectModel project;
-    private List<TaskModel.ObjectDisplayUserAndTotalHours> listDetalhesUser;
-    private List<TaskModel> taskEntities;
+    private List<TaskModel> listDetalhesUser;
     private ProgressDialog progress;
+    private TaskModel taskModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,12 +52,14 @@ public class ProjetosActivity extends BaseActivity {
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_projetos_fragment_container);
         navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_projetos_toolbar));
 
+        this.taskModel = new TaskModel();
         this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
         this.listViewProjetos = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);
         this.parseProject = new ParseProject();
         this.callJson = new CallJsonNetwork();
         loadListproject();
     }
+
 
 
     /**
@@ -121,7 +123,7 @@ public class ProjetosActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     ParseTask parseTask = new ParseTask();
                     try {
-                        TaskModel.ObjectDisplayUserAndTotalHours item = TaskModel.builderListTaskToObjectDisplay(parseTask.jsonObjectToTaskEntity(response));
+                        TaskModel item = taskModel.calculateHoursWorks(parseTask.jsonObjectToTaskEntity(response));
                         listDetalhesUser.add(item);
 
                         ProjetosDetalhesUserListAdapter adapter = new ProjetosDetalhesUserListAdapter(getActivity(), listDetalhesUser);

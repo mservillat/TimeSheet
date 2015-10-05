@@ -240,7 +240,10 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
 
-
+    /**
+     * Chamada Get em todos os projetos,
+     * carrega a lista de projetos em um spinner
+     */
     private void loadListSpinnerProject() {
         jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
             @Override

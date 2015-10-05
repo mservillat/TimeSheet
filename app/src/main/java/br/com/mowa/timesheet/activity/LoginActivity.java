@@ -3,9 +3,11 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.regex.Pattern;
 
+import br.com.mowa.timesheet.dialog.LoginEsqueciASenhaDialogFragment;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
@@ -29,6 +32,7 @@ public class LoginActivity extends BaseActivity {
     private UserModel user;
     private ProgressDialog progress;
     private CallJsonNetwork callJson;
+    private TextView tvEsqueceuASenha;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,18 @@ public class LoginActivity extends BaseActivity {
                 }
             });
         }
+
+        this.tvEsqueceuASenha = (TextView) findViewById(R.id.activity_login_text_view_esqueceu_senha);
+        this.tvEsqueceuASenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginEsqueciASenhaDialogFragment esqueceuASenhaDialog = new LoginEsqueciASenhaDialogFragment();
+                FragmentManager fm = getSupportFragmentManager();
+                esqueceuASenhaDialog.show(fm, "EsqueceuASenhaDialog");
+            }
+        });
+
+
 
     }
 

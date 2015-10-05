@@ -20,7 +20,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="login_botao_entrar">entrar</string>
+    <string name="login_botao_entrar">ENTRAR</string>
     <string name="title_activity_home">HomeActivity</string>
 
 
@@ -68,6 +68,8 @@
     <string name="dialog_fragment_perfil_set_error_caractere_invalido">caractere inválido</string>
     <string name="dialog_fragment_perfil_set_error_minimo_caractere">a senha deve ter no minimo 6 digitos</string>
     <string name="activity_home_button_horas_inicio_error">hora de inicio</string>
+    <string name="dialog_fragment_login_esqueceu_senha_text_view">Digite seu email</string>
+    <string name="dialog_fragment_login_button_enviar_senha">ENVIAR</string>
 
 
 </resources>
