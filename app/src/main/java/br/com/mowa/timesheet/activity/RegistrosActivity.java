@@ -3,10 +3,10 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.android.volley.Response;
@@ -25,7 +25,6 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
-import br.com.mowa.timesheet.utils.IsConnectionNetworkAvailable;
 
 public class RegistrosActivity extends BaseActivity {
     private ListView listView;
@@ -33,7 +32,7 @@ public class RegistrosActivity extends BaseActivity {
     private ParseTask parseTask;
     private List<TaskModel> listTaskModel;
     private CallJsonNetwork callJson;
-    private SwipeRefreshLayout swipeLayout;
+//    private SwipeRefreshLayout swipeLayout;
     private LinearLayoutManager layoutManager;
     private ProgressDialog progress;
     private RecyclerView recycler;
@@ -48,9 +47,9 @@ public class RegistrosActivity extends BaseActivity {
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_registros_fragment_navigation_drawer_container);
         navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_registros_toolbar));
 
-        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
-        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
-        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
+//        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
+//        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
+//        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
 
 
 //        listView = (ListView) findViewById(R.id.activity_registros_list_view);
@@ -76,11 +75,12 @@ public class RegistrosActivity extends BaseActivity {
                     recycler.setLayoutManager(layoutManager);
                     recycler.setAnimation(null);
                     recycler.setHasFixedSize(true);
-                    RegistrosRecyclerviewAdapter adapter = new RegistrosRecyclerviewAdapter(list);
+                    RegistrosRecyclerviewAdapter adapter = new RegistrosRecyclerviewAdapter(list, interfaceOnClick());
                     recycler.setAdapter(adapter);
                     progress.dismiss();
+
 //                    listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
-                    stopRefresh();
+//                    stopRefresh();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -94,31 +94,47 @@ public class RegistrosActivity extends BaseActivity {
         });
     }
 
+
     /**
-     * Interface OnRefreshListener do SwipeRefreshLayout
+     * Caso um item do Recycler seja clicado, esse metodo será chamado;
      * @return
      */
-    private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
-        return new SwipeRefreshLayout.OnRefreshListener() {
+    private RegistrosRecyclerviewAdapter.ClickRecycler interfaceOnClick() {
+        return new RegistrosRecyclerviewAdapter.ClickRecycler() {
             @Override
-            public void onRefresh() {
-                if (IsConnectionNetworkAvailable.isNetworkAvailable(getContext())) {
-                    loadRegistros();
-                } else {
-                    toast("erro - verifique sua conexão");
-                    stopRefresh();
-                }
-
+            public void onClickIntemRecycler(View view, int position) {
+                RegistrosTableItem r = list.get(position);
+                toast(r.getName());
             }
         };
     }
 
+
+    /**
+     * Interface OnRefreshListener do SwipeRefreshLayout
+     * @return
+     */
+//    private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
+//        return new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                if (IsConnectionNetworkAvailable.isNetworkAvailable(getContext())) {
+//                    loadRegistros();
+//                } else {
+//                    toast("erro - verifique sua conexão");
+//                    stopRefresh();
+//                }
+//
+//            }
+//        };
+//    }
+
     /**
      * Metodo para cancelar o swipeRefresh
      */
-    private void stopRefresh() {
-        if (swipeLayout.isRefreshing()) {
-            swipeLayout.setRefreshing(false);
-        }
-    }
+//    private void stopRefresh() {
+//        if (swipeLayout.isRefreshing()) {
+//            swipeLayout.setRefreshing(false);
+//        }
+//    }
 }

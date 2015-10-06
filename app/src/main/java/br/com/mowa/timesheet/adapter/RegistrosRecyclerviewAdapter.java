@@ -1,5 +1,6 @@
 package br.com.mowa.timesheet.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mowa.timesheet.TimeSheetApplication;
 import br.com.mowa.timesheet.timesheet.R;
 
 /**
@@ -16,10 +19,14 @@ import br.com.mowa.timesheet.timesheet.R;
  */
 public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<RegistrosRecyclerviewAdapter.ItemViewHolder> {
     private List<RegistrosTableItem> list;
+    private ClickRecycler clickRecycler;
+    private ArrayList<Integer> selected = new ArrayList<>();
+    private Context context;
 
-
-    public RegistrosRecyclerviewAdapter(List<RegistrosTableItem> list) {
+    public RegistrosRecyclerviewAdapter(List<RegistrosTableItem> list, ClickRecycler clickRecycler) {
         this.list = list;
+        this.clickRecycler = clickRecycler;
+        this.context = TimeSheetApplication.getAppContext();
     }
 
 
@@ -31,7 +38,32 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder itemViewHolder, int i) {
+    public void onBindViewHolder(final ItemViewHolder itemViewHolder, final int i) {
+        if (!selected.contains(i)) {
+            itemViewHolder.cv.setCardBackgroundColor(context.getResources().getColor(R.color.white));
+        } else {
+            itemViewHolder.cv.setCardBackgroundColor(context.getResources().getColor(R.color.pink));
+        }
+
+
+        itemViewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                itemViewHolder.cv.setCardBackgroundColor(context.getResources().getColor(R.color.pink));
+                if (selected.isEmpty()) {
+                    selected.add(i);
+                } else {
+                    int oldSelected = selected.get(0);
+                    selected.clear();
+                    selected.add(i);
+                    notifyItemChanged(oldSelected);
+                }
+
+
+                clickRecycler.onClickIntemRecycler(v, i);
+                return false;
+            }
+        });
         itemViewHolder.projeto.setText(list.get(i).getProject());
         itemViewHolder.tarefa.setText(list.get(i).getName());
         itemViewHolder.dataInicio.setText(list.get(i).getStart_time());
@@ -39,7 +71,9 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
         itemViewHolder.quantidadeHoras.setText(list.get(i).getTime().toString());
 
 
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -51,6 +85,8 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+
+
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView projeto;
@@ -58,6 +94,7 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
         TextView dataInicio;
         TextView dataTermino;
         TextView quantidadeHoras;
+        View container;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -67,7 +104,11 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
             dataInicio = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_data_inicial);
             dataTermino = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_data_termino);
             quantidadeHoras = (TextView) itemView.findViewById(R.id.activity_registros_recycler_view_table_text_view_campo_valor_quantidade_horas);
-
+            container = itemView;
         }
+    }
+
+    public interface ClickRecycler {
+        void onClickIntemRecycler(View view, int position);
     }
 }
