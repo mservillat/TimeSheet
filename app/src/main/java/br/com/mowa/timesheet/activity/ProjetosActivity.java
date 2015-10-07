@@ -36,9 +36,10 @@ public class ProjetosActivity extends BaseActivity {
     private CallJsonNetwork callJson;
     private UserModel user;
     private ProjectModel project;
-    private List<TaskModel> listDetalhesUser;
+    private List<TaskModel> listDetalhesUser = new ArrayList<>();
     private ProgressDialog progress;
     private TaskModel taskModel;
+    private int quantidadeDeErros;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,7 +113,8 @@ public class ProjetosActivity extends BaseActivity {
      */
     private void loadUsersInProjectAndAllHours(int position) {
         project = listProjectModel.get(position);
-        listDetalhesUser = new ArrayList<>();
+        listDetalhesUser.clear();
+        quantidadeDeErros = 0;
         listViewDetalhes.setAdapter(null);
 
         for (int i = 0; i < project.getUsers().size(); i++) {
@@ -133,11 +135,16 @@ public class ProjetosActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    quantidadeDeErros += 1;
+                    if (quantidadeDeErros == project.getUsers().size()) {
+                        toastCurto("Status code: " + String.valueOf(error.networkResponse.statusCode));
+                        progress.dismiss();
+                    }
                 }
             });
         }

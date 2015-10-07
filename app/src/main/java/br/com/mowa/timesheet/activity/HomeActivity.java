@@ -221,8 +221,15 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray data = response.getJSONArray("data");
-                    JSONObject jsonObject = data.getJSONObject(0);
-                    Long time = jsonObject.optLong("time");
+                    Long time = null;
+                    for (int i = 0; i < data.length(); i++) {
+                        JSONObject jsonObject = data.getJSONObject(i);
+                        if (time == null) {
+                            time = jsonObject.optLong("time");
+                        } else {
+                            time = time + jsonObject.optLong("time");
+                        }
+                    }
                     tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
                     tvQuantidadeDeHoras.refreshDrawableState();
                     progress.dismiss();
@@ -245,7 +252,7 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
      * carrega a lista de projetos em um spinner
      */
     private void loadListSpinnerProject() {
-        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT_USER_ID + user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

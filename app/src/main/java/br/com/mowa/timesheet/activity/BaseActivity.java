@@ -70,4 +70,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void toast(int msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
+
+    protected void toastCurto(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
 }

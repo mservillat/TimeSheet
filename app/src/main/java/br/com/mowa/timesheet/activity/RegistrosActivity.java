@@ -6,6 +6,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -21,10 +24,12 @@ import br.com.mowa.timesheet.adapter.RegistrosRecyclerviewAdapter;
 import br.com.mowa.timesheet.adapter.RegistrosTableItem;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.TaskModel;
+import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class RegistrosActivity extends BaseActivity {
     private ListView listView;
@@ -36,6 +41,7 @@ public class RegistrosActivity extends BaseActivity {
     private LinearLayoutManager layoutManager;
     private ProgressDialog progress;
     private RecyclerView recycler;
+    private UserModel user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,7 @@ public class RegistrosActivity extends BaseActivity {
 
         this.progress = createProgressDialog("Loading", "carregando lista de tarefas", true, true);
         this.progress.show();
+        this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_registros_drawer_layout);
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_registros_fragment_navigation_drawer_container);
         navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_registros_toolbar));
@@ -64,7 +71,7 @@ public class RegistrosActivity extends BaseActivity {
      * adapta a lista em um recyclerView
      */
     private void loadRegistros() {
-        callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK, new Response.Listener<JSONObject>() {
+        callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -77,6 +84,7 @@ public class RegistrosActivity extends BaseActivity {
                     recycler.setHasFixedSize(true);
                     RegistrosRecyclerviewAdapter adapter = new RegistrosRecyclerviewAdapter(list, interfaceOnClick());
                     recycler.setAdapter(adapter);
+                    registerForContextMenu(recycler);
                     progress.dismiss();
 
 //                    listView.setAdapter(new RegistrosTableAdapter(getActivity(), list));
@@ -96,7 +104,7 @@ public class RegistrosActivity extends BaseActivity {
 
 
     /**
-     * Caso um item do Recycler seja clicado, esse metodo será chamado;
+     * Caso um item do Recycler seja clicado, esse metodo da interface será chamado;
      * @return
      */
     private RegistrosRecyclerviewAdapter.ClickRecycler interfaceOnClick() {
@@ -107,6 +115,18 @@ public class RegistrosActivity extends BaseActivity {
                 toast(r.getName());
             }
         };
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_registros_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 
 

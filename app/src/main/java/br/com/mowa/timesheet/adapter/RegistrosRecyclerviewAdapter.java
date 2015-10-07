@@ -64,6 +64,19 @@ public class RegistrosRecyclerviewAdapter extends RecyclerView.Adapter<Registros
                 return false;
             }
         });
+
+        itemViewHolder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!selected.isEmpty()) {
+                    int oldSelected = selected.get(0);
+                    selected.clear();
+                    notifyItemChanged(oldSelected);
+                }
+            }
+        });
+
+
         itemViewHolder.projeto.setText(list.get(i).getProject());
         itemViewHolder.tarefa.setText(list.get(i).getName());
         itemViewHolder.dataInicio.setText(list.get(i).getStart_time());
