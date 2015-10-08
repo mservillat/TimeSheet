@@ -4,8 +4,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,7 +24,6 @@ import br.com.mowa.timesheet.model.ProjectModel;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
-import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.parse.ParseUser;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
@@ -112,26 +111,42 @@ public class PerfilActivity extends BaseActivity {
      * Chamada REST (GET) nos projetos do usuario logado, conversão e Listagem no Listview customizado com adapter
      */
     private void loadProjectInUser() {
-        this.callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    ParseProject parse = new ParseProject();
-                    listProjectModel = parse.parseJsonToProjectEntity(response);
-                    listProjectString = parse.parseListProjectEntityToString(listProjectModel);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listProjectString);
-                    listViewProjetos.setAdapter(adapter);
+        List<ProjectModel> list = SharedPreferencesUtil.getListProjectFromSharedPreferences();
+        for (int i =0; i < list.size(); i++) {
+            Log.d("walkyTeste", list.get(i).getName().toString());
+        }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-            }
-        });
+
+
+
+
+
+
+//        ParseProject parse = new ParseProject();
+//        listProjectString = parse.parseListProjectEntityToString(listProjectModel);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listProjectString);
+//        listViewProjetos.setAdapter(adapter);
+//        this.callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    ParseProject parse = new ParseProject();
+//                    listProjectModel = parse.parseJsonToProjectEntity(response);
+//                    listProjectString = parse.parseListProjectEntityToString(listProjectModel);
+//                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listProjectString);
+//                    listViewProjetos.setAdapter(adapter);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
     }
 
 }

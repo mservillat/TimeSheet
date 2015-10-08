@@ -53,7 +53,7 @@ public class HomeExitDialogFragment extends DialogFragment implements View.OnCli
     public void onClick(View view) {
         if (view.getId() == R.id.dialog_fragment_home_exit_button_sim) {
             if (DELETE_SHARED_PREFERENCE) {
-                SharedPreferencesUtil.deleteSharedPreferences();
+                SharedPreferencesUtil.deleteSharedPreferencesUser(SharedPreferencesUtil.KEY_USER_LOGIN_PREFERENCE_USERNAME);
             }
             this.mActivity.finish();
 

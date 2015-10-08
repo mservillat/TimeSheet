@@ -2,14 +2,10 @@ package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,7 +31,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.FormTaskModel;
 import br.com.mowa.timesheet.model.ProjectModel;
@@ -46,14 +41,18 @@ import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
-public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+/**
+ * Created by walky on 10/8/15.
+ */
+public class NewTaskActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+    private DrawerLayout mDrawerLayout;
+    private NavigationDrawerFragment mDrawerFragment;
     private FormTaskModel formTaskModel = new FormTaskModel();
     private List<ProjectModel> listaDeProjetosObjProject;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private List<String> listaDeProjetosString;
     private TextView tvQuantidadeDeHoras;
     private CallJsonNetwork jsonNetwork;
-    private DrawerLayout mDrawerLayout;
     private ParseProject parseProject;
     private ProgressDialog progress;
     private JSONObject requestBody;
@@ -68,10 +67,13 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
     private Button btDate;
     private Button btHoraFim;
 
+
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_new_task_activity);
+
         this.progress = createProgressDialog("Loading", "calculando horas trabalhadas", true, true);
         this.progress.show();
 
@@ -80,109 +82,105 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         jsonNetwork = new CallJsonNetwork();
         parseProject = new ParseProject();
 
-
-        this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
-        drawerFragment.setUp(mDrawerLayout, createToolbar(R.id.activity_home_toolbar));
-
-//        // Component TextView Quantidade de horas na semana
-        this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.activity_home_text_view_horas_semanais);
-//
-//
-//        // Component EditText nome e descricao atividade
-//        this.etNomeAtividade = (EditText) findViewById(R.id.activity_home_edit_text_nome_atividade);
-//        this.etDescricaoAtividade = (EditText) findViewById(R.id.activity_home_edit_text_descricao_atividade);
-//
-//
-//        // Components (DATA e HORA)
-//        this.btDate = (Button) findViewById(R.id.activity_home_button_data_inicio);
-//        this.btDate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (Build.VERSION.SDK_INT >= 11) {
-//                    calendarioPickerDialog();
-//                } else {
-//                    calendarioPickerDialogVersaoInferior();
-//                }
-//            }
-//        });
-//
-//        this.btHorainicio = (Button) findViewById(R.id.activity_home_button_horas_inicio);
-//        this.btHorainicio.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btUpdateButtonHoras = btHorainicio;
-//                if (Build.VERSION.SDK_INT >= 11) {
-//                    relogioPickerDialog();
-//                } else {
-//                    relogioPickerDialogVersaoInferior();
-//                }
-//            }
-//        });
-//
-//        this.btHoraFim = (Button) findViewById(R.id.activity_home_button_horas_fim);
-//        this.btHoraFim.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btUpdateButtonHoras = btHoraFim;
-//                if (Build.VERSION.SDK_INT >= 11) {
-//                    relogioPickerDialog();
-//                } else {
-//                    relogioPickerDialogVersaoInferior();
-//                }
-//            }
-//        });
-//
-//
-//        //Request lista de projetos e carrega na view spinner
-//        this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
-//        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
-//        this.btSpinner.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                spinner.performClick();
-//
-//            }
-//        });
+        this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_new_task_drawer_layout);
+        this.mDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_new_task_fragment_navigation_drawer_container);
+        mDrawerFragment.setUp(mDrawerLayout, createToolbar(R.id.activity_new_task_toolbar));
 
 
-//        loadListSpinnerProject();
-//        loadDateCurrent();
-        loadDisplayAllHoursWork();
+        //        // Component EditText nome e descricao atividade
+        this.etNomeAtividade = (EditText) findViewById(R.id.activity_home_edit_text_nome_atividade);
+        this.etDescricaoAtividade = (EditText) findViewById(R.id.activity_home_edit_text_descricao_atividade);
 
 
-        //Components (Floating Button enviar)
-//        this.btEnviar = (FloatingActionButton) findViewById(R.id.activity_home_floating_button_enviar);
-//        this.btEnviar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    if(buildForm()) {
-//
-//
-//                        progress.show();
-//                        jsonNetwork.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
-//                            @Override
-//                            public void onResponse(JSONObject response) {
-//                                clearFilderForm();
-//                                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
-//                            }
-//                        }, new Response.ErrorListener() {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//                                toast(error.getMessage());
-//                            }
-//                        });
-//                    } else {
-//                        toast("Algum campo não foi preenchido corretamente");
-//                    }
-//                } catch (JSONException e) {
-//
-//                }
-//
-//
-//            }
-//        });
+//         Components (DATA e HORA)
+        this.btDate = (Button) findViewById(R.id.activity_home_button_data_inicio);
+        this.btDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 11) {
+                    calendarioPickerDialog();
+                } else {
+                    calendarioPickerDialogVersaoInferior();
+                }
+            }
+        });
+
+        this.btHorainicio = (Button) findViewById(R.id.activity_home_button_horas_inicio);
+        this.btHorainicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btUpdateButtonHoras = btHorainicio;
+                if (Build.VERSION.SDK_INT >= 11) {
+                    relogioPickerDialog();
+                } else {
+                    relogioPickerDialogVersaoInferior();
+                }
+            }
+        });
+
+        this.btHoraFim = (Button) findViewById(R.id.activity_home_button_horas_fim);
+        this.btHoraFim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btUpdateButtonHoras = btHoraFim;
+                if (Build.VERSION.SDK_INT >= 11) {
+                    relogioPickerDialog();
+                } else {
+                    relogioPickerDialogVersaoInferior();
+                }
+            }
+        });
+
+
+        //Request lista de projetos e carrega na view spinner
+        this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
+        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
+        this.btSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner.performClick();
+
+            }
+        });
+
+
+        loadListSpinnerProject();
+        loadDateCurrent();
+
+
+//        Components (Floating Button enviar)
+        this.btEnviar = (FloatingActionButton) findViewById(R.id.activity_home_floating_button_enviar);
+        this.btEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if(buildForm()) {
+
+
+                        progress.show();
+                        jsonNetwork.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                clearFilderForm();
+                                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                toast(error.getMessage());
+                            }
+                        });
+                    } else {
+                        toast("Algum campo não foi preenchido corretamente");
+                    }
+                } catch (JSONException e) {
+
+                }
+
+
+            }
+        });
+
 
     }
 
@@ -501,28 +499,4 @@ public class HomeActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.activity_home_menu_action_exit) {
-            SharedPreferencesUtil.deleteSharedPreferencesUser(SharedPreferencesUtil.KEY_USER_LOGIN_PREFERENCE_USERNAME);
-            Intent intent = new Intent(this, LoginActivity.class);
-            getActivity().finish();
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        HomeExitDialogFragment exitDialogFragment = new HomeExitDialogFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        exitDialogFragment.show(fm, "HomeExitDialogFragment");
-    }
 }

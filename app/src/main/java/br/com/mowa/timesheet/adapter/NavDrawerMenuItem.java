@@ -26,6 +26,7 @@ public class NavDrawerMenuItem {
         list.add(new NavDrawerMenuItem("Perfil", R.mipmap.ic_launcher));
         list.add(new NavDrawerMenuItem("Registros", R.mipmap.ic_launcher));
         list.add(new NavDrawerMenuItem("Projetos", R.mipmap.ic_launcher));
+        list.add(new NavDrawerMenuItem("Nova tarefa", R.mipmap.ic_launcher));
 
 
         return list;

@@ -1,0 +1,39 @@
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/activity_new_task_drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include android:id="@+id/activity_new_task_toolbar"
+            layout="@layout/include_toolbar"/>
+
+        <include layout="@layout/activity_home_container"/>
+
+    </LinearLayout>
+
+    <br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout
+        android:id="@+id/activity_new_task_scrimInsets"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:elevation="8dp"
+        android:fitsSystemWindows="true"
+        app:insetForeground="#4000">
+
+        <fragment
+            android:id="@+id/activity_new_task_fragment_navigation_drawer_container"
+            android:layout_width="@dimen/width_navigation_drawer"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:layout="@layout/fragment_navigation_drawer"
+            android:name="br.com.mowa.timesheet.fragment.NavigationDrawerFragment" />
+    </br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout>
+
+</android.support.v4.widget.DrawerLayout>

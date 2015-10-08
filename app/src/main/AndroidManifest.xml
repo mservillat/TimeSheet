@@ -55,6 +55,16 @@
                 <!--android:name="android.support.PARENT_ACTIVITY"-->
                 <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
+        <activity
+            android:name="br.com.mowa.timesheet.activity.NewTaskActivity"
+            android:label="@string/title_activity_new_Task"
+            android:theme="@style/AppTheme.NavDrawer"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+            <!--android:noHistory="true">-->
+            <!--<meta-data-->
+            <!--android:name="android.support.PARENT_ACTIVITY"-->
+            <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
+        </activity>
     </application>
 
 </manifest>

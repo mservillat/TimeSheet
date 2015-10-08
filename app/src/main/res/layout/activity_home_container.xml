@@ -17,54 +17,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-            <!-- Conteudo da tela-->
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/activity_home_card_view_horas_semanais"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginBottom="8dp"
-                card_view:cardElevation="12dp"
-                card_view:cardCornerRadius="8dp"
-                card_view:cardBackgroundColor="@color/white">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Total de minutos"
-                        android:textColor="@color/white"
-                        android:textSize="26sp"
-                        android:paddingBottom="16dp"
-                        android:gravity="center"
-                        android:paddingTop="16dp"
-                        android:background="@color/background_title"/>
-
-                    <TextView
-                        android:id="@+id/activity_home_text_view_horas_semanais"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text=""
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:textColor="@color/primary"
-                        android:textSize="40sp"
-                        android:paddingBottom="16dp"/>
-
-
-                </LinearLayout>
-
-
-            </android.support.v7.widget.CardView>
-
             <android.support.v7.widget.CardView
                 android:id="@+id/activity_home_card_view_formulario"
                 android:layout_gravity="center"
