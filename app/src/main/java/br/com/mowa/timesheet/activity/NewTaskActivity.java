@@ -23,13 +23,11 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.FormTaskModel;
@@ -74,7 +72,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task_activity);
 
-        this.progress = createProgressDialog("Loading", "calculando horas trabalhadas", true, true);
+        this.progress = createProgressDialog("Loading", "carregando formulario", true, true);
         this.progress.show();
 
 
@@ -176,12 +174,8 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                 } catch (JSONException e) {
 
                 }
-
-
             }
         });
-
-
     }
 
 
@@ -213,36 +207,6 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
      * Faz a chamada rest nas tarefas (task) do usuario logado, soma as horas trabalhadas e apresenta no TextView "QuantidadeDEHoras"
      *
      */
-    private void loadDisplayAllHoursWork() {
-        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray data = response.getJSONArray("data");
-                    Long time = null;
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject jsonObject = data.getJSONObject(i);
-                        if (time == null) {
-                            time = jsonObject.optLong("time");
-                        } else {
-                            time = time + jsonObject.optLong("time");
-                        }
-                    }
-                    tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
-                    tvQuantidadeDeHoras.refreshDrawableState();
-                    progress.dismiss();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }
 
 
     /**
@@ -263,6 +227,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
+                            progress.dismiss();
                         }
 
                         @Override
@@ -486,7 +451,6 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         etNomeAtividade.getText().clear();
         etDescricaoAtividade.getText().clear();
         loadDateCurrent();
-        loadDisplayAllHoursWork();
         loadListSpinnerProject();
 
     }

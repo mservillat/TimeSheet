@@ -113,6 +113,14 @@ public class TaskModel {
         return item;
     }
 
+    public String calculateHoursWorks() {
+        if (time != null) {
+            this.timeDisplay = String.format("%d min", TimeUnit.MILLISECONDS.toMinutes(this.time));
+            return this.timeDisplay;
+        } else {
+            return null;
+        }
+    }
 
 }
 

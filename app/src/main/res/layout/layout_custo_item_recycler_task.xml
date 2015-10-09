@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_item_recycler_task_container"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="72dp">
+
+
+    <FrameLayout android:id="@+id/layout_item_recycler_task_frame_layout"
+        android:layout_width="72dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/layout_item_recycler_task_image_view"
+            android:layout_width="72dp"
+            android:layout_height="72dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/layout_item_recycler_task_circle_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/letter_icon2"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#FF000000"/>
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/layout_item_recycler_task_text_view_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/layout_item_recycler_task_frame_layout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:textSize="14sp"
+        android:layout_toEndOf="@+id/layout_item_recycler_task_text_view_title"
+        android:text="subtitle"
+        android:textColor="@color/gray_subtitle" />
+
+    <TextView
+        android:id="@+id/layout_item_recycler_task_text_view_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/layout_item_recycler_task_frame_layout"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:text="Title"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/layout_item_recycler_task_text_view_horas"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="horas"
+        android:textSize="14sp"
+        android:textColor="@color/gray_subtitle"/>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/layout_item_recycler_task_frame_layout"/>
+
+
+</RelativeLayout>
