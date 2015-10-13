@@ -14,7 +14,7 @@
         <include android:id="@+id/activity_new_task_toolbar"
             layout="@layout/include_toolbar"/>
 
-        <include layout="@layout/activity_home_container"/>
+        <include layout="@layout/include_activity_new_task_container"/>
 
     </LinearLayout>
 
