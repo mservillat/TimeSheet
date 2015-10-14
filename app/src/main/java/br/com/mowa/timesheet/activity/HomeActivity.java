@@ -3,12 +3,14 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -42,6 +44,8 @@ public class HomeActivity extends BaseActivity {
     private ParseTask parseTask;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
+    private TextView tvIrParaTasks;
+    private FloatingActionButton floatingButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,14 +64,31 @@ public class HomeActivity extends BaseActivity {
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
         drawerFragment.setUp(mDrawerLayout, createToolbar(R.id.activity_home_toolbar));
 
-        this.recyclerView = (RecyclerView) findViewById(R.id.activity_home_recycler);
+        this.recyclerView = (RecyclerView) findViewById(R.id.include_activity_home_recycler);
         this.layoutManager = new LinearLayoutManager(getActivity());
         this.recyclerView.setLayoutManager(layoutManager);
         this.recyclerView.setHasFixedSize(true);
 
-        this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.activity_home_text_view_horas_semanais);
-        loadDisplayUltumateTasks();
+        this.tvIrParaTasks = (TextView) findViewById(R.id.include_activity_home_text_view_ir_para);
+        this.tvIrParaTasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), RegistrosActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+            }
+        });
+        this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.include_activity_home_text_view_horas_semanais);
+        loadDisplayUltimateTasks();
         loadDisplayAllHoursWork();
+
+
+        this.floatingButton = (FloatingActionButton) findViewById(R.id.include_activity_home_floating_button_new_task);
+        this.floatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), NewTaskActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+            }
+        });
+
 
 
 
@@ -119,7 +140,7 @@ public class HomeActivity extends BaseActivity {
 
 
 
-    private void loadDisplayUltumateTasks() {
+    private void loadDisplayUltimateTasks() {
         jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -143,7 +164,6 @@ public class HomeActivity extends BaseActivity {
             }
         });
     }
-
 
 
     @Override

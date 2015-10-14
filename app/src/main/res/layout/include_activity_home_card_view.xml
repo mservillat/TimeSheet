@@ -16,11 +16,12 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
-                android:id="@+id/activity_home_card_view_horas_semanais"
+                android:id="@+id/include_activity_home_card_view_horas_semanais"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 card_view:cardElevation="8dp"
                 card_view:cardCornerRadius="1dp"
+                android:layout_margin="8dp"
                 card_view:cardBackgroundColor="@color/white">
 
                 <LinearLayout
@@ -35,10 +36,10 @@
                         android:layout_marginBottom="24dp">
 
                         <TextView
-                            android:id="@+id/activity_home_text_view_titulo_horas_semanais"
+                            android:id="@+id/include_activity_home_text_view_titulo_horas_semanais"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/activity_home_text_view_title_total_horas"
+                            android:text="@string/include_activity_home_text_view_title_total_horas"
                             android:gravity="center|left"
                             android:paddingLeft="16dp"
                             android:paddingBottom="12dp"
@@ -47,13 +48,13 @@
                             android:textColor="@color/primary"/>
 
                         <TextView
-                            android:id="@+id/activity_home_text_view_subtitle_horas_semanais"
+                            android:id="@+id/include_activity_home_text_view_subtitle_horas_semanais"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="16dp"
                             android:textSize="14dp"
                             android:textColor="@color/gray_subtitle"
-                            android:text="@string/activity_home_text_view_subtitle_horas_semanais" />
+                            android:text="@string/include_activity_home_text_view_subtitle_horas_semanais" />
 
                     </LinearLayout>
 
@@ -63,7 +64,7 @@
                         android:layout_marginBottom="24dp">
 
                         <TextView
-                            android:id="@+id/activity_home_text_view_horas_semanais"
+                            android:id="@+id/include_activity_home_text_view_horas_semanais"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -91,11 +92,12 @@
 
 
             <android.support.v7.widget.CardView
-                android:id="@+id/activity_home_card_view_ultimas_tarefas"
+                android:id="@+id/include_activity_home_card_view_ultimas_tarefas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 card_view:cardElevation="8dp"
                 card_view:cardCornerRadius="1dp"
+                android:layout_margin="8dp"
                 card_view:cardBackgroundColor="@color/white">
 
                 <LinearLayout
@@ -116,7 +118,7 @@
                             android:layout_alignParentLeft="true"
                             android:paddingLeft="16dp"
                             android:textSize="24sp"
-                            android:text="@string/activity_home_text_view_title_ultimas_tarefas"
+                            android:text="@string/include_activity_home_text_view_title_ultimas_tarefas"
                             android:textColor="@color/primary"/>
 
                     </RelativeLayout>
@@ -127,7 +129,7 @@
                         android:layout_marginBottom="16dp">
 
                         <android.support.v7.widget.RecyclerView
-                            android:id="@+id/activity_home_recycler"
+                            android:id="@+id/include_activity_home_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
@@ -138,21 +140,16 @@
                         android:padding="8dp">
 
                         <TextView
+                            android:id="@+id/include_activity_home_text_view_ir_para"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_marginLeft="16dp"
                             android:textSize="20sp"
+                            android:clickable="true"
                             android:gravity="center|center_vertical"
-                            android:text="@string/activity_home_text_view_ir_para_tarefas"
+                            android:text="@string/include_activity_home_text_view_ir_para_tarefas"
                             android:textColor="@color/primary"/>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:src="@drawable/ic_keyboard_arrow_down_black"
-                            android:layout_marginRight="30dp"/>
                     </RelativeLayout>
 
                 </LinearLayout>
@@ -162,17 +159,17 @@
     </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/activity_home_floating_button_new_task"
+        android:id="@+id/include_activity_home_floating_button_new_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_check"
-        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_add_white_24dp"
+        android:layout_gravity="end|bottom"
         app:elevation="6dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         app:pressedTranslationZ="12dp"
         app:borderWidth="0dp"
-        app:backgroundTint="@color/primary"/>
+        app:backgroundTint="@color/laranja_mowa"/>
 
 
 </FrameLayout>

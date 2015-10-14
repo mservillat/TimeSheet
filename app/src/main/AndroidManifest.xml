@@ -59,7 +59,7 @@
             android:name="br.com.mowa.timesheet.activity.NewTaskActivity"
             android:label="@string/title_activity_new_Task"
             android:theme="@style/AppTheme.NavDrawer"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustPan">
             <!--android:noHistory="true">-->
             <!--<meta-data-->
             <!--android:name="android.support.PARENT_ACTIVITY"-->

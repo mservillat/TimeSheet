@@ -53,10 +53,10 @@
     <string name="activity_home_text_view_title_comentarios">Comentários</string>
     <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
     <string name="activity_home_menu_action_sair">logoff</string>
-    <string name="activity_home_text_view_title_total_horas">Total de horas</string>
-    <string name="activity_home_text_view_subtitle_horas_semanais">Horas trabalhadas durante a semana</string>
-    <string name="activity_home_text_view_title_ultimas_tarefas">Ultimas Tarefas</string>
-    <string name="activity_home_text_view_ir_para_tarefas">Ir para tarefas</string>
+    <string name="include_activity_home_text_view_title_total_horas">Total de horas</string>
+    <string name="include_activity_home_text_view_subtitle_horas_semanais">Horas trabalhadas durante a semana</string>
+    <string name="include_activity_home_text_view_title_ultimas_tarefas">Ultimas Tarefas</string>
+    <string name="include_activity_home_text_view_ir_para_tarefas">Ir para tarefas</string>
 
     <!-- Activity Registros-->
     <string name="title_activity_registros">Registros de tarefas</string>
@@ -72,6 +72,11 @@
     <string name="activity_home_button_horas_inicio_error">hora de inicio</string>
     <string name="dialog_fragment_login_esqueceu_senha_text_view">Digite seu email</string>
     <string name="dialog_fragment_login_button_enviar_senha">ENVIAR</string>
+
+
+
+
+    <!--  Activity New Task-->
     <string name="title_activity_new_Task">New Task</string>
 
 

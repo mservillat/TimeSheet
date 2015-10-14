@@ -22,5 +22,6 @@
     <color name="laranja_mowa">#FF5722</color>
     <color name="pink">#FF80AB</color>
     <color name="blue_text_button_dialog_fragment">#2196F3</color>
+    <color name="white_in_primary">#E1F5FE</color>
 
 </resources>

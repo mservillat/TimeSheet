@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -55,15 +54,15 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     private ProgressDialog progress;
     private JSONObject requestBody;
     private UserModel user;
-    private Button btUpdateButtonHoras;
-    private EditText etDescricaoAtividade;
+    private TextView etUpdateEditTextHours;
+    private EditText etComment;
     private ImageButton btSpinner;
     private Spinner spinner;
-    private EditText etNomeAtividade;
+    private EditText etNameTask;
     private FloatingActionButton btEnviar;
-    private Button btHorainicio;
-    private Button btDate;
-    private Button btHoraFim;
+    private TextView etStartHours;
+    private TextView etDate;
+    private TextView etEndHours;
 
 
 
@@ -86,13 +85,13 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
 
         //        // Component EditText nome e descricao atividade
-        this.etNomeAtividade = (EditText) findViewById(R.id.activity_home_edit_text_nome_atividade);
-        this.etDescricaoAtividade = (EditText) findViewById(R.id.activity_home_edit_text_descricao_atividade);
+        this.etNameTask = (EditText) findViewById(R.id.include_activity_new_task_edit_text_title);
+        this.etComment = (EditText) findViewById(R.id.include_activity_new_task_edit_text_comment);
 
 
 //         Components (DATA e HORA)
-        this.btDate = (Button) findViewById(R.id.activity_home_button_data_inicio);
-        this.btDate.setOnClickListener(new View.OnClickListener() {
+        this.etDate = (TextView) findViewById(R.id.include_activity_new_task_text_view_date);
+        this.etDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= 11) {
@@ -103,11 +102,11 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             }
         });
 
-        this.btHorainicio = (Button) findViewById(R.id.activity_home_button_horas_inicio);
-        this.btHorainicio.setOnClickListener(new View.OnClickListener() {
+        this.etStartHours = (TextView) findViewById(R.id.include_activity_new_task_text_view_start_hours);
+        this.etStartHours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btUpdateButtonHoras = btHorainicio;
+                etUpdateEditTextHours = etStartHours;
                 if (Build.VERSION.SDK_INT >= 11) {
                     relogioPickerDialog();
                 } else {
@@ -116,11 +115,11 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             }
         });
 
-        this.btHoraFim = (Button) findViewById(R.id.activity_home_button_horas_fim);
-        this.btHoraFim.setOnClickListener(new View.OnClickListener() {
+        this.etEndHours = (TextView) findViewById(R.id.include_activity_new_task_text_view_end_hours);
+        this.etEndHours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btUpdateButtonHoras = btHoraFim;
+                etUpdateEditTextHours = etEndHours;
                 if (Build.VERSION.SDK_INT >= 11) {
                     relogioPickerDialog();
                 } else {
@@ -130,16 +129,16 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         });
 
 
-        //Request lista de projetos e carrega na view spinner
-        this.spinner = (Spinner) findViewById(R.id.activity_home_spinner_projeto);
-        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
-        this.btSpinner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinner.performClick();
-
-            }
-        });
+//        Request lista de projetos e carrega na view spinner
+        this.spinner = (Spinner) findViewById(R.id.include_activity_new_task_spinner_project);
+//        this.btSpinner = (ImageButton) findViewById(R.id.activity_home_button_spinner);
+//        this.btSpinner.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                spinner.performClick();
+//
+//            }
+//        });
 
 
         loadListSpinnerProject();
@@ -192,9 +191,9 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             this.mHour = c.get(Calendar.HOUR_OF_DAY);
             this.mMinute = c.get(Calendar.MINUTE);
 
-            validacaoMinutos(this.btHorainicio);
-            validacaoMinutos(this.btHoraFim);
-            this.btDate.setText(mDay + "/" + mMonth + "/" + mYear);
+            validacaoMinutos(this.etStartHours);
+            validacaoMinutos(this.etEndHours);
+            this.etDate.setText(mDay + "/" + mMonth + "/" + mYear);
             this.formTaskModel.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
             this.formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
         }
@@ -300,7 +299,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         this.mMonth = monthOfYear;
         this.mDay = dayOfMonth;
 
-        this.btDate.setText(mDay + "/" + (mMonth + 1) + "/" + year);
+        this.etDate.setText(mDay + "/" + (mMonth + 1) + "/" + year);
         this.formTaskModel.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
     }
 
@@ -310,16 +309,16 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         this.mHour = hourOfDay;
         this.mMinute = minute;
 
-        if (btUpdateButtonHoras == btHorainicio) {
-            validacaoMinutos(btUpdateButtonHoras);
+        if (etUpdateEditTextHours == etStartHours) {
+            validacaoMinutos(etUpdateEditTextHours);
             this.formTaskModel.setStart_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
-        if(btUpdateButtonHoras == btHoraFim) {
-            validacaoMinutos(btUpdateButtonHoras);
+        if(etUpdateEditTextHours == etEndHours) {
+            validacaoMinutos(etUpdateEditTextHours);
             this.formTaskModel.setEnd_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
 
-        this.btUpdateButtonHoras = null;
+        this.etUpdateEditTextHours = null;
     }
 
 
@@ -347,7 +346,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                 mMonth = monthOfYear;
                 mDay = dayOfMonth;
 
-                btDate.setText(mDay + "/" + (mMonth + 1) + "/" + mYear);
+                etDate.setText(mDay + "/" + (mMonth + 1) + "/" + mYear);
                 formTaskModel.setDate(year, mMonth, mDay, mHour, mMinute);
             }
         }, calendarDefault.get(Calendar.YEAR), calendarDefault.get(Calendar.MONTH), calendarDefault.get(Calendar.DAY_OF_MONTH));
@@ -368,16 +367,16 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                 mHour = hourOfDay;
                 mMinute = minute;
 
-                if (btUpdateButtonHoras == btHorainicio) {
-                    validacaoMinutos(btUpdateButtonHoras);
+                if (etUpdateEditTextHours == etStartHours) {
+                    validacaoMinutos(etUpdateEditTextHours);
                     formTaskModel.setStart_time(mYear, mMonth, mDay, mHour, mMinute);
                 }
-                if(btUpdateButtonHoras == btHoraFim) {
-                    validacaoMinutos(btUpdateButtonHoras);
+                if(etUpdateEditTextHours == etEndHours) {
+                    validacaoMinutos(etUpdateEditTextHours);
                     formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
                 }
 
-                btUpdateButtonHoras = null;
+                etUpdateEditTextHours = null;
             }
         }, calendarDefault.get(Calendar.HOUR_OF_DAY), calendarDefault.get(Calendar.MINUTE), true);
 
@@ -413,10 +412,10 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         }
 
         if (formTaskModel.getStartTime() != null) {
-            btHorainicio.setError(null);
+            etStartHours.setError(null);
             requestBody.put("start_time", formTaskModel.getStartTime());
         } else {
-            btHorainicio.setError(getContext().getString(R.string.activity_home_button_horas_inicio_error));
+            etStartHours.setError(getContext().getString(R.string.activity_home_button_horas_inicio_error));
             return false;
         }
 
@@ -426,15 +425,15 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             return false;
         }
 
-        if (this.etNomeAtividade.getText().toString().length() >4 ) {
-            etNomeAtividade.setError(null);
-            requestBody.put("name", this.etNomeAtividade.getText().toString());
+        if (this.etNameTask.getText().toString().length() >4 ) {
+            etNameTask.setError(null);
+            requestBody.put("name", this.etNameTask.getText().toString());
         } else {
-            etNomeAtividade.setError(getContext().getString(R.string.activity_home_edit_text_nome_atividade_error));
+            etNameTask.setError(getContext().getString(R.string.activity_home_edit_text_nome_atividade_error));
             return false;
         }
 
-        requestBody.put("comments", this.etDescricaoAtividade.getText().toString());
+        requestBody.put("comments", this.etComment.getText().toString());
         formTaskModel.calculaTime();
         requestBody.put("time", formTaskModel.getTime());
 
@@ -448,14 +447,14 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
      */
     private void clearFilderForm() {
         this.formTaskModel = new FormTaskModel();
-        etNomeAtividade.getText().clear();
-        etDescricaoAtividade.getText().clear();
+        etNameTask.getText().clear();
+        etComment.getText().clear();
         loadDateCurrent();
         loadListSpinnerProject();
 
     }
 
-    private void validacaoMinutos(Button bt) {
+    private void validacaoMinutos(TextView bt) {
         if (mMinute < 10) {
             bt.setText(this.mHour + ":" + "0"+this.mMinute);
         } else {

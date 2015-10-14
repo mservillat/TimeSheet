@@ -53,6 +53,7 @@ public class SharedPreferencesUtil {
      */
     public static void setUserInSharedPreferences(UserModel user) {
         SharedPreferences.Editor editor= getSharedPreferenceEdit(KEY_USER_LOGIN_PREFERENCE_USERNAME);
+        editor.clear();
         editor.putString("username", user.getUserName());
         editor.putString("id", user.getId());
         editor.putString("token", user.getToken());
