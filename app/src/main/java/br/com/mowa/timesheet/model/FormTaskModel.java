@@ -15,7 +15,7 @@ public class FormTaskModel {
     private UserModel user;
     private String project;
     private Long time;
-
+    private static final int tempoMaximoTask = 86300000;
 
 
     private Long timeIncialMilissegundos;
@@ -49,8 +49,14 @@ public class FormTaskModel {
         this.timeFinalMilissegundos = calendar.getTimeInMillis();
     }
 
-    public void calculaTime() {
+    public boolean calculaTime() {
         this.time = (this.timeFinalMilissegundos - this.timeIncialMilissegundos);
+        if (this.time <= tempoMaximoTask && this.time > 0) {
+            return true;
+        } else {
+            this.time = null;
+            return false;
+        }
     }
 
 

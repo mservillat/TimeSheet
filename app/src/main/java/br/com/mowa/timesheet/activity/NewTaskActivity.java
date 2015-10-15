@@ -433,9 +433,16 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             return false;
         }
 
+
+        if (formTaskModel.calculaTime()) {
+            requestBody.put("time", formTaskModel.getTime());
+        } else {
+            toast("tempo da tarefa muito longo ou negativo");
+            return false;
+        }
+
         requestBody.put("comments", this.etComment.getText().toString());
-        formTaskModel.calculaTime();
-        requestBody.put("time", formTaskModel.getTime());
+
 
 
         return true;

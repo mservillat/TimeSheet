@@ -101,11 +101,11 @@
                     android:id="@+id/include_activity_new_task_img_start_hours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_time_black" />
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:src="@drawable/ic_start_time" />
 
                 <TextView
                     android:id="@+id/include_activity_new_task_text_view_start_hours"
@@ -144,9 +144,11 @@
                     android:id="@+id/include_activity_new_task_img_end_hours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_time"/>
+                    android:src="@drawable/ic_end_time"/>
 
                 <TextView
                     android:id="@+id/include_activity_new_task_text_view_end_hours"

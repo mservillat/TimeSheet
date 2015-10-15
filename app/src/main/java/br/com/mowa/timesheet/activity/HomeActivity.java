@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import br.com.mowa.timesheet.adapter.RegistrosRecyclerviewAdapter;
+import br.com.mowa.timesheet.adapter.TasksRecyclerviewAdapter;
 import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.TaskModel;
@@ -73,7 +73,7 @@ public class HomeActivity extends BaseActivity {
         this.tvIrParaTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), RegistrosActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                startActivity(new Intent(getContext(), TasksActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
             }
         });
         this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.include_activity_home_text_view_horas_semanais);
@@ -150,7 +150,7 @@ public class HomeActivity extends BaseActivity {
                     for(int i = 0; i < 2; i++) {
                         list.add(listTask.get(i));
                     }
-                    RegistrosRecyclerviewAdapter adapter = new RegistrosRecyclerviewAdapter(list, null);
+                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(list, null);
                     recyclerView.setAdapter(adapter);
                     registerForContextMenu(recyclerView);
                 } catch (JSONException e) {

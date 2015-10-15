@@ -15,13 +15,23 @@
             android:id="@+id/layout_item_recycler_task_image_view"
             android:layout_width="72dp"
             android:layout_height="72dp"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/layout_item_recycler_task_circle_image"
+        <ImageView
+            android:id="@+id/layout_item_recycler_image_view_icon_circle"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:src="@drawable/letter_icon2" />
+            android:src="@drawable/circle_pink"/>
+        <TextView
+            android:id="@+id/layout_item_recycler_task_text_view_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+
     </FrameLayout>
 
 

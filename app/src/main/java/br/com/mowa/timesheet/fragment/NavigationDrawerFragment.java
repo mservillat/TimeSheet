@@ -22,7 +22,7 @@ import br.com.mowa.timesheet.activity.HomeActivity;
 import br.com.mowa.timesheet.activity.NewTaskActivity;
 import br.com.mowa.timesheet.activity.PerfilActivity;
 import br.com.mowa.timesheet.activity.ProjetosActivity;
-import br.com.mowa.timesheet.activity.RegistrosActivity;
+import br.com.mowa.timesheet.activity.TasksActivity;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuAdapter;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuItem;
 import br.com.mowa.timesheet.timesheet.R;
@@ -67,8 +67,8 @@ public class NavigationDrawerFragment extends Fragment {
 
                         break;
                     case 2:
-                        if (!("br.com.mowa.timesheet.activity.RegistrosActivity".equals(getActivity().getLocalClassName()))) {
-                            Intent intentTwo = new Intent(getContext(), RegistrosActivity.class);
+                        if (!("br.com.mowa.timesheet.activity.TasksActivity".equals(getActivity().getLocalClassName()))) {
+                            Intent intentTwo = new Intent(getContext(), TasksActivity.class);
                             intentTwo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             closeDrawer();
                             startActivity(intentTwo);
