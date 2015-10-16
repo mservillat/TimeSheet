@@ -3,6 +3,8 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mowa.timesheet.adapter.ProjectRecyclerviewAdapter;
 import br.com.mowa.timesheet.adapter.ProjetosDetalhesUserListAdapter;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.ProjectModel;
@@ -28,7 +31,7 @@ import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 
-public class ProjetosActivity extends BaseActivity {
+public class ProjectsActivity extends BaseActivity {
     private ParseProject parseProject;
     private List<ProjectModel> listProjectModel;
     private ListView listViewProjetos;
@@ -40,11 +43,13 @@ public class ProjetosActivity extends BaseActivity {
     private ProgressDialog progress;
     private TaskModel taskModel;
     private int quantidadeDeErros;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_projetos);
+        setContentView(R.layout.activity_projects);
 
         this.progress = createProgressDialog("Loading", "carregando lista de Projetos", true, true);
         this.progress.show();
@@ -53,9 +58,15 @@ public class ProjetosActivity extends BaseActivity {
         NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_projetos_fragment_container);
         navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_projetos_toolbar));
 
-        this.taskModel = new TaskModel();
-        this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
-        this.listViewProjetos = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);
+//        this.taskModel = new TaskModel();
+//        this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
+//        this.listViewProjetos = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);
+        this.layoutManager = new LinearLayoutManager(this);
+        this.recyclerView = (RecyclerView) findViewById(R.id.activity_projects_recycler_view);
+        this.recyclerView.setLayoutManager(layoutManager);
+        this.recyclerView.setHasFixedSize(true);
+
+
         this.parseProject = new ParseProject();
         this.callJson = new CallJsonNetwork();
         loadListproject();
@@ -71,8 +82,11 @@ public class ProjetosActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    builderListViewProject(response);
-
+                    listProjectModel = parseProject.parseJsonToProjectEntity(response);
+                    ProjectRecyclerviewAdapter adapter = new ProjectRecyclerviewAdapter(listProjectModel);
+                    recyclerView.setAdapter(adapter);
+                    registerForContextMenu(recyclerView);
+                    progress.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

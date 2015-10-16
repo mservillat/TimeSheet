@@ -13,27 +13,51 @@
         <include android:id="@+id/activity_projetos_toolbar"
             layout="@layout/include_toolbar"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/activity_projetos_list_view_projetos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Detalhes do Projeto"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_projects_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-            <ListView
-                android:id="@+id/activity_projetos_list_view_detalhes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+    </LinearLayout>
 
-        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<ListView-->
+                <!--android:id="@+id/activity_projetos_list_view_projetos"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Detalhes do Projeto"/>-->
+
+            <!--<ListView-->
+                <!--android:id="@+id/activity_projetos_list_view_detalhes"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"/>-->
+
+        <!--</LinearLayout>-->
 
     </LinearLayout>
 

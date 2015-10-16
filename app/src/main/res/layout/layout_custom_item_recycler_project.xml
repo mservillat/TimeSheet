@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_item_recycler_project_container"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="72dp">
+
+
+    <FrameLayout android:id="@+id/layout_item_recycler_project_frame_layout"
+        android:layout_width="72dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/layout_item_recycler_project_image_view"
+            android:layout_width="72dp"
+            android:layout_height="72dp"/>
+        <ImageView
+            android:id="@+id/layout_item_recycler_project_image_view_icon_circle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/circle_pink"/>
+        <TextView
+            android:id="@+id/layout_item_recycler_project_text_view_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/layout_item_recycler_project_text_view_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/layout_item_recycler_project_frame_layout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:textSize="14sp"
+        android:layout_toEndOf="@+id/layout_item_recycler_task_text_view_title"
+        android:text="subtitle"
+        android:textColor="@color/gray_subtitle" />
+
+    <TextView
+        android:id="@+id/layout_item_recycler_project_text_view_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/layout_item_recycler_project_frame_layout"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:text="Title"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/layout_item_recycler_project_text_view_situacao"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="horas"
+        android:textSize="14sp"
+        android:textColor="@color/gray_subtitle"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"/>
+
+</RelativeLayout>

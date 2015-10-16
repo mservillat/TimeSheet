@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.AnimationsUtil;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class HomeActivity extends BaseActivity {
@@ -46,18 +48,26 @@ public class HomeActivity extends BaseActivity {
     private LinearLayoutManager layoutManager;
     private TextView tvIrParaTasks;
     private FloatingActionButton floatingButton;
+    private CardView cardViewHoras;
+    private CardView cardUltimasTarefas;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         this.progress = createProgressDialog("Loading", "calculando horas trabalhadas", true, true);
-        this.progress.show();
+//        this.progress.show();
 
 
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         this.jsonNetwork = new CallJsonNetwork();
         this.parseTask = new ParseTask();
+
+
+        this.cardViewHoras = (CardView) findViewById(R.id.include_activity_home_card_view_horas_semanais);
+        AnimationsUtil.animateCard(cardViewHoras);
+        this.cardUltimasTarefas = (CardView) findViewById(R.id.include_activity_home_card_view_ultimas_tarefas);
+        AnimationsUtil.animateCard(cardUltimasTarefas);
 
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
@@ -82,6 +92,7 @@ public class HomeActivity extends BaseActivity {
 
 
         this.floatingButton = (FloatingActionButton) findViewById(R.id.include_activity_home_floating_button_new_task);
+        AnimationsUtil.animateFloatingButton(floatingButton);
         this.floatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

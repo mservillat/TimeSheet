@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.AnimationsUtil;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 /**
@@ -63,6 +65,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     private TextView etStartHours;
     private TextView etDate;
     private TextView etEndHours;
+    private FrameLayout frameLayoutContainer;
 
 
 
@@ -74,6 +77,8 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         this.progress = createProgressDialog("Loading", "carregando formulario", true, true);
         this.progress.show();
 
+        this.frameLayoutContainer = (FrameLayout) findViewById(R.id.include_activity_new_task_frame_layout_container);
+        AnimationsUtil.animateFrameLayout(frameLayoutContainer);
 
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         jsonNetwork = new CallJsonNetwork();

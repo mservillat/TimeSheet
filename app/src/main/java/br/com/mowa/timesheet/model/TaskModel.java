@@ -17,6 +17,7 @@ public class TaskModel {
     private ProjectModel project;
     private Long time;
     private String timeDisplay;
+    public boolean selectd = false;
 
 
     public String getId() {
@@ -86,6 +87,7 @@ public class TaskModel {
     public String getTimeDisplay() {
         return timeDisplay;
     }
+
 
     /**
      *  Calcula as horas de uma lista de tarefas (do mesmo user e mesmo projeto) para ser usado no adapter

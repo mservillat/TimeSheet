@@ -1,5 +1,6 @@
 package br.com.mowa.timesheet.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mowa.timesheet.TimeSheetApplication;
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.AnimationsUtil;
@@ -20,22 +21,21 @@ import br.com.mowa.timesheet.utils.IconCircleColor;
  */
 public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecyclerviewAdapter.ItemViewHolder> {
     private List<TaskModel> list;
-    private ClickRecycler clickRecycler;
-    private ArrayList<Integer> selected = new ArrayList<>();
+    private ClickRecyclerTask clickRecyclerTask;
     private IconCircleColor iconCircleColor;
-    private int previousPosition = 0;
-    private boolean parAndImpa;
+    private Context context;
 
-    public TasksRecyclerviewAdapter(List<TaskModel> list, ClickRecycler clickRecycler) {
+    public TasksRecyclerviewAdapter(List<TaskModel> list, ClickRecyclerTask clickRecyclerTask) {
         this.list = list;
-        this.clickRecycler = clickRecycler;
+        this.clickRecyclerTask = clickRecyclerTask;
         this.iconCircleColor = new IconCircleColor();
+        this.context = TimeSheetApplication.getAppContext();
     }
 
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_custo_item_recycler_task, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_custom_item_recycler_task, viewGroup, false);
         ItemViewHolder itemViewHolder = new ItemViewHolder(v);
         return itemViewHolder;
     }
@@ -45,7 +45,14 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
         itemViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickRecycler.onClickIntemRecycler(i);
+                clickRecyclerTask.onClickIntemRecycler(i);
+            }
+        });
+        itemViewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                clickRecyclerTask.onLongClickItemRecycler(i);
+                return false;
             }
         });
 
@@ -55,18 +62,14 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
         itemViewHolder.iconTextLetter.setText(list.get(i).getName().substring(0, 1).toUpperCase());
         itemViewHolder.imgIconCircle.setImageResource(iconCircleColor.sortColor());
 
-
-
-        if (i > previousPosition) {
-            parAndImpa = i % 2 == 0 ? true : false;
-            AnimationsUtil.animate(itemViewHolder, true, parAndImpa);
+        if (list.get(i).selectd == true) {
+            itemViewHolder.container.setBackgroundColor(context.getResources().getColor(R.color.gray));
         } else {
-            AnimationsUtil.animate(itemViewHolder, false, parAndImpa);
+            itemViewHolder.container.setBackgroundColor(context.getResources().getColor(R.color.white));
         }
 
-            previousPosition = previousPosition;
 
-
+        AnimationsUtil.animate(itemViewHolder);
     }
 
 
@@ -98,13 +101,14 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
             dataInicio = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_subtitle);
             quantidadeHoras = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_horas);
             iconTextLetter = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_icon);
-            imgIconCircle = (ImageView) itemView.findViewById(R.id.layout_item_recycler_image_view_icon_circle);
+            imgIconCircle = (ImageView) itemView.findViewById(R.id.layout_item_recycler_task_image_view_icon_circle);
             container = itemView;
 
         }
     }
 
-    public interface ClickRecycler {
+    public interface ClickRecyclerTask {
         void onClickIntemRecycler(int position);
+        void onLongClickItemRecycler(int position);
     }
 }

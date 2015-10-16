@@ -3,14 +3,9 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
 import com.android.volley.Response;
@@ -75,13 +70,9 @@ public class TasksActivity extends BaseActivity {
             public void onResponse(JSONObject response) {
                 try {
                     listTaskModel = parseTask.jsonObjectToTaskEntity(response);
-                    recycler = (RecyclerView) findViewById(R.id.rv);
+                    recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
                     layoutManager = new LinearLayoutManager(getActivity());
                     recycler.setLayoutManager(layoutManager);
-                    DefaultItemAnimator animator = new DefaultItemAnimator();
-                    animator.setMoveDuration(1000);
-                    animator.setChangeDuration(1000);
-                    recycler.setItemAnimator(animator);
                     recycler.setHasFixedSize(true);
                     TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(listTaskModel, interfaceOnClick());
                     recycler.setAdapter(adapter);
@@ -106,27 +97,35 @@ public class TasksActivity extends BaseActivity {
      * Caso um item do Recycler seja clicado, esse metodo da interface será chamado;
      * @return
      */
-    private TasksRecyclerviewAdapter.ClickRecycler interfaceOnClick() {
-        return new TasksRecyclerviewAdapter.ClickRecycler() {
+    private TasksRecyclerviewAdapter.ClickRecyclerTask interfaceOnClick() {
+        return new TasksRecyclerviewAdapter.ClickRecyclerTask() {
             @Override
             public void onClickIntemRecycler(int position) {
-                TaskModel r = listTaskModel.get(position);
-                toast(r.getName());
+                listTaskModel.get(position).selectd = false;
+                recycler.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onLongClickItemRecycler(int position) {
+                TaskModel rr = listTaskModel.get(position);
+                toast(rr.getTimeDisplay());
+                listTaskModel.get(position).selectd = true;
+                recycler.getAdapter().notifyDataSetChanged();
             }
         };
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_registros_context, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        return super.onContextItemSelected(item);
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.menu_registros_context, menu);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        return super.onContextItemSelected(item);
+//    }
 
 
     /**

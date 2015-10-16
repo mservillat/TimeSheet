@@ -26,6 +26,7 @@ public class ParseProject {
             project.setName(object.optString("name"));
             project.setActivite(object.optBoolean("activite"));
             project.setDone(object.optBoolean("done"));
+            project.setStartDate(object.optString("start_date"));
 
 
             JSONArray arrayUser = object.getJSONArray("users");

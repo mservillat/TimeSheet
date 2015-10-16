@@ -10,7 +10,7 @@ import java.util.List;
 public class ProjectModel {
     private String id;
     private String name;
-    private Date startDate;
+    private String startDate;
     private Date endDate;
     private List<UserModel> users = new ArrayList<>();
     private boolean activite;
@@ -24,11 +24,11 @@ public class ProjectModel {
         this.name = name;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public String getStartDate() {
+        return startDate.substring(0, 20);
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
@@ -67,6 +67,8 @@ public class ProjectModel {
     public String getId() {return id; }
 
     public void setId(String id) {this.id = id; }
+
+
 
     @Override
     public String toString() {

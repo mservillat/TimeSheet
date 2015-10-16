@@ -23,8 +23,10 @@
     <color name="pink">#FF80AB</color>
     <color name="blue_text_button_dialog_fragment">#2196F3</color>
     <color name="white_in_primary">#E1F5FE</color>
-    <color name="pink_circle">#F06292</color>
+    <color name="pink_circle">#E040FB</color>
     <color name="bright_yellow">#CDDC39</color>
     <color name="green_circle">#76FF03</color>
     <color name="indigo_circle">#304FFE</color>
+    <color name="blue_circle">#64B5F6</color>
+    <color name="red_circle">#F44336</color>
 </resources>

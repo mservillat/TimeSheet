@@ -21,7 +21,7 @@ import java.util.List;
 import br.com.mowa.timesheet.activity.HomeActivity;
 import br.com.mowa.timesheet.activity.NewTaskActivity;
 import br.com.mowa.timesheet.activity.PerfilActivity;
-import br.com.mowa.timesheet.activity.ProjetosActivity;
+import br.com.mowa.timesheet.activity.ProjectsActivity;
 import br.com.mowa.timesheet.activity.TasksActivity;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuAdapter;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuItem;
@@ -77,8 +77,8 @@ public class NavigationDrawerFragment extends Fragment {
 
                         break;
                     case 3:
-                        if (!("br.com.mowa.timesheet.activity.ProjetosActivity".equals(getActivity().getLocalClassName()))){
-                            Intent intentThree = new Intent(getContext(), ProjetosActivity.class);
+                        if (!("br.com.mowa.timesheet.activity.ProjectsActivity".equals(getActivity().getLocalClassName()))){
+                            Intent intentThree = new Intent(getContext(), ProjectsActivity.class);
                             intentThree.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             closeDrawer();
                             startActivity(intentThree);
