@@ -10,12 +10,9 @@
         <item name="colorAccent">@color/accent</item>
         <!-- Cor para o efeito ripple -->
         <item name="colorControlHighlight">@color/control_highlight</item>
-    </style>
 
-    <!-- Tema para o Nav Drawer. -->
-    <style name="AppTheme.NavDrawer" parent="AppTheme">
-        <!-- Habilita o overlay mode na action bar -->
-        <item name="windowActionBarOverlay">true</item>
+
+
     </style>
 
 

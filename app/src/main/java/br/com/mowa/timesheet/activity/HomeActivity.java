@@ -34,7 +34,6 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
-import br.com.mowa.timesheet.utils.AnimationsUtil;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class HomeActivity extends BaseActivity {
@@ -56,7 +55,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         this.progress = createProgressDialog("Loading", "calculando horas trabalhadas", true, true);
-//        this.progress.show();
+        this.progress.show();
 
 
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
@@ -65,9 +64,7 @@ public class HomeActivity extends BaseActivity {
 
 
         this.cardViewHoras = (CardView) findViewById(R.id.include_activity_home_card_view_horas_semanais);
-        AnimationsUtil.animateCard(cardViewHoras);
         this.cardUltimasTarefas = (CardView) findViewById(R.id.include_activity_home_card_view_ultimas_tarefas);
-        AnimationsUtil.animateCard(cardUltimasTarefas);
 
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
@@ -92,7 +89,6 @@ public class HomeActivity extends BaseActivity {
 
 
         this.floatingButton = (FloatingActionButton) findViewById(R.id.include_activity_home_floating_button_new_task);
-        AnimationsUtil.animateFloatingButton(floatingButton);
         this.floatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

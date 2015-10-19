@@ -11,7 +11,6 @@ import java.util.List;
 
 import br.com.mowa.timesheet.model.ProjectModel;
 import br.com.mowa.timesheet.timesheet.R;
-import br.com.mowa.timesheet.utils.AnimationsUtil;
 import br.com.mowa.timesheet.utils.IconCircleColor;
 
 /**
@@ -40,8 +39,6 @@ public class ProjectRecyclerviewAdapter extends RecyclerView.Adapter<ProjectRecy
         holder.iconTextLetter.setText(list.get(position).getName().substring(0, 1).toUpperCase());
         holder.imgIconCircle.setImageResource(iconCircleColor.sortColor());
 
-
-        AnimationsUtil.animate(holder);
 
     }
 

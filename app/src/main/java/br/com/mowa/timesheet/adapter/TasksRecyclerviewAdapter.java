@@ -13,7 +13,6 @@ import java.util.List;
 import br.com.mowa.timesheet.TimeSheetApplication;
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.timesheet.R;
-import br.com.mowa.timesheet.utils.AnimationsUtil;
 import br.com.mowa.timesheet.utils.IconCircleColor;
 
 /**
@@ -68,8 +67,6 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
             itemViewHolder.container.setBackgroundColor(context.getResources().getColor(R.color.white));
         }
 
-
-        AnimationsUtil.animate(itemViewHolder);
     }
 
 

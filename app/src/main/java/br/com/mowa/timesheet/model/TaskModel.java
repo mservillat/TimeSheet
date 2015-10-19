@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by walky on 9/22/15.
  */
-public class TaskModel {
+public class TaskModel{
     private String id;
     private String name;
     private String startTime;

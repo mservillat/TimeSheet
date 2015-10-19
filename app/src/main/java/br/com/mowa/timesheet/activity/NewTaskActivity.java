@@ -11,14 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -32,12 +31,12 @@ import java.util.List;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.FormTaskModel;
 import br.com.mowa.timesheet.model.ProjectModel;
+import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.timesheet.R;
-import br.com.mowa.timesheet.utils.AnimationsUtil;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 /**
@@ -50,7 +49,6 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     private List<ProjectModel> listaDeProjetosObjProject;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private List<String> listaDeProjetosString;
-    private TextView tvQuantidadeDeHoras;
     private CallJsonNetwork jsonNetwork;
     private ParseProject parseProject;
     private ProgressDialog progress;
@@ -58,15 +56,14 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     private UserModel user;
     private TextView etUpdateEditTextHours;
     private EditText etComment;
-    private ImageButton btSpinner;
     private Spinner spinner;
     private EditText etNameTask;
     private FloatingActionButton btEnviar;
     private TextView etStartHours;
     private TextView etDate;
     private TextView etEndHours;
-    private FrameLayout frameLayoutContainer;
-
+    private boolean isEditTask;
+    private TaskModel taskEditObject;
 
 
     @Override
@@ -74,11 +71,19 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task_activity);
 
+        Gson gson = new Gson();
+        taskEditObject = gson.fromJson(getIntent().getStringExtra("taskEdit"), TaskModel.class);
+        if (taskEditObject != null) {
+            isEditTask = true;
+        } else {
+            isEditTask = false;
+        }
+
+
+
         this.progress = createProgressDialog("Loading", "carregando formulario", true, true);
         this.progress.show();
 
-        this.frameLayoutContainer = (FrameLayout) findViewById(R.id.include_activity_new_task_frame_layout_container);
-        AnimationsUtil.animateFrameLayout(frameLayoutContainer);
 
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         jsonNetwork = new CallJsonNetwork();
@@ -152,34 +157,22 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
 //        Components (Floating Button enviar)
         this.btEnviar = (FloatingActionButton) findViewById(R.id.activity_home_floating_button_enviar);
-        this.btEnviar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(buildForm()) {
+        actionFloatingButton(!isEditTask);
 
 
-                        progress.show();
-                        jsonNetwork.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                clearFilderForm();
-                                snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                toast(error.getMessage());
-                            }
-                        });
-                    } else {
-                        toast("Algum campo não foi preenchido corretamente");
-                    }
-                } catch (JSONException e) {
 
-                }
-            }
-        });
+        if (isEditTask) {
+            this.etNameTask.setText(taskEditObject.getName());
+            this.etDate.setText(taskEditObject.getTimeDisplay());
+            this.etStartHours.setText(taskEditObject.getStartTime());
+            this.etEndHours.setText(taskEditObject.getEndTime());
+            this.etComment.setText(taskEditObject.getComments());
+            disableAndEnableFilder(false);
+
+        }
+
+
+
     }
 
 
@@ -252,6 +245,50 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     }
 
 
+
+
+    private void actionFloatingButton(boolean isWhatsAction) {
+        if (isWhatsAction) {
+            this.btEnviar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if(buildForm()) {
+
+
+                            progress.show();
+                            jsonNetwork.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    clearFilderForm();
+                                    snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    toast(error.getMessage());
+                                }
+                            });
+                        } else {
+                            toast("Algum campo não foi preenchido corretamente");
+                        }
+                    } catch (JSONException e) {
+
+                    }
+                }
+            });
+        } else {
+            this.btEnviar.setImageResource(R.drawable.ic_edit_white);
+            this.btEnviar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    disableAndEnableFilder(true);
+                    actionFloatingButton(isEditTask);
+                    btEnviar.setImageResource(R.drawable.ic_check);
+                }
+            });
+        }
+    }
 
 
 
@@ -473,5 +510,15 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             bt.setText(this.mHour + ":" + this.mMinute);
         }
     }
+
+    private void disableAndEnableFilder(boolean isEnable) {
+        this.etNameTask.setEnabled(isEnable);
+        this.etDate.setEnabled(isEnable);
+        this.etStartHours.setEnabled(isEnable);
+        this.etEndHours.setEnabled(isEnable);
+        this.spinner.setEnabled(isEnable);
+        this.etComment.setEnabled(isEnable);
+    }
+
 
 }

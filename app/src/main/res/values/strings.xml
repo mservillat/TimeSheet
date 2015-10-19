@@ -78,6 +78,11 @@
 
     <!--  Activity New Task-->
     <string name="title_activity_new_Task">New Task</string>
+    <string name="menu_context_tasks_activity_action_edit">editar</string>
+    <string name="menu_context_tasks_activity_action_delete">delete</string>
+    <string name="activity_tasks_action_mode_title_selected_task">Selecione as Tarefas</string>
+    <string name="activity_tasks_action_mode_subtitle_selected_one_task">task selecionada</string>
+    <string name="activity_tasks_action_mode_subtitle_selected_tasks">tasks selecionadas</string>
 
 
 </resources>

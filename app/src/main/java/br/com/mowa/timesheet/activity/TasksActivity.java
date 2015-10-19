@@ -1,19 +1,26 @@
 package br.com.mowa.timesheet.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mowa.timesheet.adapter.TasksRecyclerviewAdapter;
@@ -36,6 +43,7 @@ public class TasksActivity extends BaseActivity {
     private ProgressDialog progress;
     private RecyclerView recycler;
     private UserModel user;
+    private ActionMode actionMode;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,15 +109,105 @@ public class TasksActivity extends BaseActivity {
         return new TasksRecyclerviewAdapter.ClickRecyclerTask() {
             @Override
             public void onClickIntemRecycler(int position) {
-                listTaskModel.get(position).selectd = false;
-                recycler.getAdapter().notifyDataSetChanged();
+                TaskModel task = listTaskModel.get(position);
+                List<TaskModel> list = getSelectedTasks();
+                if (list.size() > 0 ) {
+                    if (task.selectd) {
+                        task.selectd = false;
+                    } else {
+                        task.selectd =true;
+                    }
+
+                    if (list.size() == 0) {
+                        actionMode.finish();
+                        actionMode = null;
+                    } else {
+                        updateActionModeTitle();
+                    }
+
+                    recycler.getAdapter().notifyDataSetChanged();
+
+                } else {
+                    Intent intent = new Intent(TasksActivity.this, NewTaskActivity.class);
+                    Gson gson = new Gson();
+                    intent.putExtra("taskEdit", gson.toJson(task));
+                    startActivity(intent);
+                }
+
+
             }
 
             @Override
             public void onLongClickItemRecycler(int position) {
-                TaskModel rr = listTaskModel.get(position);
-                toast(rr.getTimeDisplay());
+                if (actionMode == null) {
+                    actionMode = startSupportActionMode(getActionModeCallback());
+                }
                 listTaskModel.get(position).selectd = true;
+                recycler.getAdapter().notifyDataSetChanged();
+                updateActionModeTitle();
+            }
+        };
+    }
+
+
+
+    private void updateActionModeTitle(){
+        if (actionMode != null) {
+            actionMode.setTitle(R.string.activity_tasks_action_mode_title_selected_task);
+            actionMode.setSubtitle(null);
+            List<TaskModel> list = getSelectedTasks();
+            if (list.size() == 1) {
+                actionMode.setSubtitle(" 1 " + getContext().getResources().getString(R.string.activity_tasks_action_mode_subtitle_selected_one_task));
+            } else {
+                actionMode.setSubtitle(list.size() + " " + getContext().getResources().getString(R.string.activity_tasks_action_mode_subtitle_selected_tasks));
+            }
+        }
+
+    }
+
+
+    private List<TaskModel> getSelectedTasks() {
+        List<TaskModel> list = new ArrayList<>();
+        for (TaskModel task : listTaskModel) {
+            if (task.selectd) {
+                list.add(task);
+            }
+        }
+        return list;
+    }
+
+
+
+    private ActionMode.Callback getActionModeCallback() {
+        return new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = getActivity().getMenuInflater();
+                inflater.inflate(R.menu.menu_context_tasks_activity, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                List<TaskModel> selectedTasks = getSelectedTasks();
+                if (item.getItemId() == R.id.menu_context_tasks_action_delete) {
+                    toast("Deletando " + selectedTasks.size());
+                }
+                mode.finish();
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                actionMode = null;
+                for (TaskModel task : listTaskModel) {
+                    task.selectd = false;
+                }
                 recycler.getAdapter().notifyDataSetChanged();
             }
         };
