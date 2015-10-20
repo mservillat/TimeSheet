@@ -153,11 +153,11 @@ public class HomeActivity extends BaseActivity {
             public void onResponse(JSONObject response) {
                 List<TaskModel> list = new ArrayList<>();
                 try {
-                    List<TaskModel> listTask = parseTask.jsonObjectToTaskEntity(response);
+                    List<TaskModel> listTask = parseTask.jsonObjectToTaskModel(response);
                     for(int i = 0; i < 2; i++) {
                         list.add(listTask.get(i));
                     }
-                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(list, null);
+                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(list);
                     recyclerView.setAdapter(adapter);
                     registerForContextMenu(recyclerView);
                 } catch (JSONException e) {

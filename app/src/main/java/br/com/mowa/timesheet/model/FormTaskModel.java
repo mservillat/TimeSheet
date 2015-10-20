@@ -32,7 +32,19 @@ public class FormTaskModel {
 
     }
 
-    public void setStart_time(int year, int month, int day, int hour, int minute) {
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setStartTime(int year, int month, int day, int hour, int minute) {
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute, 00);
@@ -41,7 +53,7 @@ public class FormTaskModel {
 
     }
 
-    public void setEnd_time(int year, int month, int day, int hour, int minute) {
+    public void setEndTime(int year, int month, int day, int hour, int minute) {
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute, 00);
@@ -57,6 +69,20 @@ public class FormTaskModel {
             this.time = null;
             return false;
         }
+    }
+
+    public boolean verificaStartAndEndTime() {
+        if (this.startTime == null) {
+            return false;
+        }
+        if (this.endTime == null) {
+            return false;
+        }
+        if (this.date == null) {
+            return false;
+        }
+
+        return true;
     }
 
 

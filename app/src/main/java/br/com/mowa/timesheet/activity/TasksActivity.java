@@ -77,7 +77,7 @@ public class TasksActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listTaskModel = parseTask.jsonObjectToTaskEntity(response);
+                    listTaskModel = parseTask.jsonObjectToTaskModel(response);
                     recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
                     layoutManager = new LinearLayoutManager(getActivity());
                     recycler.setLayoutManager(layoutManager);
@@ -131,6 +131,7 @@ public class TasksActivity extends BaseActivity {
                     Intent intent = new Intent(TasksActivity.this, NewTaskActivity.class);
                     Gson gson = new Gson();
                     intent.putExtra("taskEdit", gson.toJson(task));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 }
 

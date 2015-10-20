@@ -139,7 +139,7 @@ public class ProjectsActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     ParseTask parseTask = new ParseTask();
                     try {
-                        TaskModel item = taskModel.calculateHoursWorks(parseTask.jsonObjectToTaskEntity(response));
+                        TaskModel item = taskModel.calculateHoursWorks(parseTask.jsonObjectToTaskModel(response));
                         listDetalhesUser.add(item);
 
                         ProjetosDetalhesUserListAdapter adapter = new ProjetosDetalhesUserListAdapter(getActivity(), listDetalhesUser);

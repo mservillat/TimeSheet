@@ -70,6 +70,7 @@
     <string name="dialog_fragment_perfil_set_error_caractere_invalido">caractere inválido</string>
     <string name="dialog_fragment_perfil_set_error_minimo_caractere">a senha deve ter no minimo 6 digitos</string>
     <string name="activity_home_button_horas_inicio_error">hora de inicio</string>
+    <string name="activity_home_button_horas_fim_error">hora de inicio</string>
     <string name="dialog_fragment_login_esqueceu_senha_text_view">Digite seu email</string>
     <string name="dialog_fragment_login_button_enviar_senha">ENVIAR</string>
 
@@ -83,6 +84,7 @@
     <string name="activity_tasks_action_mode_title_selected_task">Selecione as Tarefas</string>
     <string name="activity_tasks_action_mode_subtitle_selected_one_task">task selecionada</string>
     <string name="activity_tasks_action_mode_subtitle_selected_tasks">tasks selecionadas</string>
+    <string name="activity_home_button_date_error">Data</string>
 
 
 </resources>

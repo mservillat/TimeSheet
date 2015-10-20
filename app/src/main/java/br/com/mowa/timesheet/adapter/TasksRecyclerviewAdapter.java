@@ -23,6 +23,7 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
     private ClickRecyclerTask clickRecyclerTask;
     private IconCircleColor iconCircleColor;
     private Context context;
+    private boolean isActionClick = true;
 
     public TasksRecyclerviewAdapter(List<TaskModel> list, ClickRecyclerTask clickRecyclerTask) {
         this.list = list;
@@ -30,6 +31,14 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
         this.iconCircleColor = new IconCircleColor();
         this.context = TimeSheetApplication.getAppContext();
     }
+
+    public TasksRecyclerviewAdapter(List<TaskModel> list) {
+        this.list = list;
+        this.iconCircleColor = new IconCircleColor();
+        this.context = TimeSheetApplication.getAppContext();
+        this.isActionClick = false;
+    }
+
 
 
     @Override
@@ -44,22 +53,28 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
         itemViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickRecyclerTask.onClickIntemRecycler(i);
+                if (isActionClick) {
+                    clickRecyclerTask.onClickIntemRecycler(i);
+                }
             }
         });
         itemViewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                clickRecyclerTask.onLongClickItemRecycler(i);
+                if (isActionClick) {
+                    clickRecyclerTask.onLongClickItemRecycler(i);
+                }
+
                 return false;
             }
         });
 
         itemViewHolder.tarefa.setText(list.get(i).getName());
-        itemViewHolder.dataInicio.setText(list.get(i).getStartTime());
+        itemViewHolder.dataInicio.setText(list.get(i).getStartTimeString().substring(0, 10));
         itemViewHolder.quantidadeHoras.setText(list.get(i).calculateHoursWorks());
         itemViewHolder.iconTextLetter.setText(list.get(i).getName().substring(0, 1).toUpperCase());
         itemViewHolder.imgIconCircle.setImageResource(iconCircleColor.sortColor());
+        itemViewHolder.projeto.setText(list.get(i).getProject().getName());
 
         if (list.get(i).selectd == true) {
             itemViewHolder.container.setBackgroundColor(context.getResources().getColor(R.color.gray));
@@ -95,10 +110,11 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
         public ItemViewHolder(View itemView) {
             super(itemView);
             tarefa = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_title);
-            dataInicio = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_subtitle);
+            dataInicio = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_date);
             quantidadeHoras = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_horas);
             iconTextLetter = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_icon);
             imgIconCircle = (ImageView) itemView.findViewById(R.id.layout_item_recycler_task_image_view_icon_circle);
+            projeto = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_project);
             container = itemView;
 
         }

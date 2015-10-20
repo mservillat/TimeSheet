@@ -10,14 +10,16 @@ import java.util.concurrent.TimeUnit;
 public class TaskModel{
     private String id;
     private String name;
-    private String startTime;
-    private String endTime;
+    private String startTimeString;
+    private String endTimeString;
     private String comments;
     private UserModel user;
     private ProjectModel project;
     private Long time;
     private String timeDisplay;
+    private String dateString;
     public boolean selectd = false;
+
 
 
     public String getId() {
@@ -36,20 +38,20 @@ public class TaskModel{
         this.name = name;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getStartTimeString() {
+        return startTimeString;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setStartTimeString(String startTimeString) {
+        this.startTimeString = startTimeString;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getEndTimeString() {
+        return endTimeString;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setEndTimeString(String endTimeString) {
+        this.endTimeString = endTimeString;
     }
 
     public String getComments() {
@@ -84,9 +86,22 @@ public class TaskModel{
         this.time = time;
     }
 
+
     public String getTimeDisplay() {
         return timeDisplay;
     }
+
+    public String getDateString() {
+        return dateString.substring(0,10);
+    }
+
+
+    public void setDateStringAndCalendar(String dateString) {
+        this.dateString = dateString;
+    }
+
+
+
 
 
     /**

@@ -2,6 +2,7 @@ package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -63,6 +64,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     private TextView etDate;
     private TextView etEndHours;
     private boolean isEditTask;
+    private boolean isEditTaskDate;
     private TaskModel taskEditObject;
 
 
@@ -75,8 +77,10 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         taskEditObject = gson.fromJson(getIntent().getStringExtra("taskEdit"), TaskModel.class);
         if (taskEditObject != null) {
             isEditTask = true;
+            isEditTaskDate = true;
         } else {
             isEditTask = false;
+            isEditTaskDate = false;
         }
 
 
@@ -162,11 +166,19 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
 
         if (isEditTask) {
+            Calendar dateEdit;
             this.etNameTask.setText(taskEditObject.getName());
-            this.etDate.setText(taskEditObject.getTimeDisplay());
-            this.etStartHours.setText(taskEditObject.getStartTime());
-            this.etEndHours.setText(taskEditObject.getEndTime());
+            this.formTaskModel.setName(taskEditObject.getName());
+
+            this.etDate.setText(taskEditObject.getDateString());
+            this.formTaskModel.setDate(taskEditObject.getDateString());
+
+            this.etStartHours.setText(taskEditObject.getStartTimeString());
+            this.formTaskModel.setStartTime(taskEditObject.getStartTimeString());
+            this.etEndHours.setText(taskEditObject.getEndTimeString());
+            this.formTaskModel.setEndTime(taskEditObject.getEndTimeString());
             this.etComment.setText(taskEditObject.getComments());
+            formTaskModel.setComments(taskEditObject.getComments());
             disableAndEnableFilder(false);
 
         }
@@ -193,7 +205,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             validacaoMinutos(this.etEndHours);
             this.etDate.setText(mDay + "/" + mMonth + "/" + mYear);
             this.formTaskModel.setDate(this.mYear, this.mMonth, this.mDay, mHour, mMinute);
-            this.formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
+            this.formTaskModel.setEndTime(mYear, mMonth, mDay, mHour, mMinute);
         }
     }
 
@@ -229,7 +241,6 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
-
                         }
                     });
                 } catch (JSONException e) {
@@ -254,21 +265,39 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                 public void onClick(View v) {
                     try {
                         if(buildForm()) {
-
-
                             progress.show();
-                            jsonNetwork.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    clearFilderForm();
-                                    snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    toast(error.getMessage());
-                                }
-                            });
+
+
+                            if (!isEditTask) {
+                                jsonNetwork.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_TASK, requestBody, new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        clearFilderForm();
+                                        snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        toast(error.getMessage());
+                                    }
+                                });
+                            } else {
+                                jsonNetwork.callJsonObjectPut(VolleySingleton.URL_PUT_TASK_ID + taskEditObject.getId(), requestBody, new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+//                                        snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                                        Intent intent = new Intent(NewTaskActivity.this, TasksActivity.class);
+                                        intent.addFlags(intent.FLAG_ACTIVITY_NO_HISTORY);
+                                        startActivity(intent);
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        toast(error.getMessage());
+                                    }
+                                });
+                            }
                         } else {
                             toast("Algum campo não foi preenchido corretamente");
                         }
@@ -334,6 +363,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {
+        clearDateTimeEdit();
         Calendar tDefaul = Calendar.getInstance();
         tDefaul.set(year, mMonth, mDay, mHour, mMinute);
 
@@ -348,16 +378,17 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
     @Override
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
+        clearDateTimeEdit();
         this.mHour = hourOfDay;
         this.mMinute = minute;
 
         if (etUpdateEditTextHours == etStartHours) {
             validacaoMinutos(etUpdateEditTextHours);
-            this.formTaskModel.setStart_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
+            this.formTaskModel.setStartTime(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
         if(etUpdateEditTextHours == etEndHours) {
             validacaoMinutos(etUpdateEditTextHours);
-            this.formTaskModel.setEnd_time(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
+            this.formTaskModel.setEndTime(this.mYear, this.mMonth, this.mDay, this.mHour, this.mMinute);
         }
 
         this.etUpdateEditTextHours = null;
@@ -411,11 +442,11 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
                 if (etUpdateEditTextHours == etStartHours) {
                     validacaoMinutos(etUpdateEditTextHours);
-                    formTaskModel.setStart_time(mYear, mMonth, mDay, mHour, mMinute);
+                    formTaskModel.setStartTime(mYear, mMonth, mDay, mHour, mMinute);
                 }
                 if(etUpdateEditTextHours == etEndHours) {
                     validacaoMinutos(etUpdateEditTextHours);
-                    formTaskModel.setEnd_time(mYear, mMonth, mDay, mHour, mMinute);
+                    formTaskModel.setEndTime(mYear, mMonth, mDay, mHour, mMinute);
                 }
 
                 etUpdateEditTextHours = null;
@@ -434,37 +465,20 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
      */
     private boolean buildForm() throws JSONException {
         requestBody = new JSONObject();
+        Boolean isOk = true;
+
+        isOk = validDateAndTime(requestBody);
 
         if (formTaskModel.getProject() != null) {
             requestBody.put("project", formTaskModel.getProject());
         } else {
-            return false;
+            isOk = false;
         }
 
         if (user.getId() != null) {
             requestBody.put("user", user.getId());
         } else {
-            return false;
-        }
-
-        if (formTaskModel.getDate() != null) {
-            requestBody.put("date", formTaskModel.getDate());
-        } else {
-            return false;
-        }
-
-        if (formTaskModel.getStartTime() != null) {
-            etStartHours.setError(null);
-            requestBody.put("start_time", formTaskModel.getStartTime());
-        } else {
-            etStartHours.setError(getContext().getString(R.string.activity_home_button_horas_inicio_error));
-            return false;
-        }
-
-        if (formTaskModel.getEndTime() != null) {
-            requestBody.put("end_time", formTaskModel.getEndTime());
-        } else {
-            return false;
+            isOk = false;
         }
 
         if (this.etNameTask.getText().toString().length() >4 ) {
@@ -472,22 +486,25 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             requestBody.put("name", this.etNameTask.getText().toString());
         } else {
             etNameTask.setError(getContext().getString(R.string.activity_home_edit_text_nome_atividade_error));
-            return false;
+            isOk = false;
         }
 
 
-        if (formTaskModel.calculaTime()) {
+        if (isEditTaskDate) {
+            requestBody.put("time", taskEditObject.getTime());
+        } else if (formTaskModel.verificaStartAndEndTime()){
+            formTaskModel.calculaTime();
             requestBody.put("time", formTaskModel.getTime());
         } else {
-            toast("tempo da tarefa muito longo ou negativo");
-            return false;
+            toast("Data ou hora invalido");
+            isOk = false;
         }
 
         requestBody.put("comments", this.etComment.getText().toString());
 
 
 
-        return true;
+        return isOk;
     }
 
 
@@ -520,5 +537,54 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         this.etComment.setEnabled(isEnable);
     }
 
+    private void clearDateTimeEdit() {
+        if(isEditTaskDate) {
+            isEditTaskDate = false;
+            etDate.setText("data");
+            etStartHours.setText("inicio");
+            etEndHours.setText("fim");
+            formTaskModel.setDate(null);
+            formTaskModel.setStartTime(null);
+            formTaskModel.setEndTime(null);
+        }
+    }
 
+    private boolean validDateAndTime(JSONObject requestBody) throws JSONException {
+        boolean isOk = true;
+        if (formTaskModel.getDate() != null) {
+            requestBody.put("date", formTaskModel.getDate());
+        } else {
+            etDate.setError(getContext().getString(R.string.activity_home_button_date_error));
+            isOk = false;
+        }
+
+        if (formTaskModel.getStartTime() != null) {
+            etStartHours.setError(null);
+            requestBody.put("start_time", formTaskModel.getStartTime());
+        } else {
+            etStartHours.setError(getContext().getString(R.string.activity_home_button_horas_inicio_error));
+            isOk = false;
+        }
+
+        if (formTaskModel.getEndTime() != null) {
+            requestBody.put("end_time", formTaskModel.getEndTime());
+        } else {
+            etEndHours.setError(getContext().getString(R.string.activity_home_button_horas_fim_error));
+            isOk = false;
+        }
+
+        return isOk;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (taskEditObject != null) {
+            Intent intent = new Intent(NewTaskActivity.this, TasksActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+            super.onBackPressed();
+        }
+
+        super.onBackPressed();
+    }
 }

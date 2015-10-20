@@ -16,7 +16,7 @@ import br.com.mowa.timesheet.model.UserModel;
  */
 public class ParseTask {
 
-    public List<TaskModel> jsonObjectToTaskEntity(JSONObject response) throws JSONException {
+    public List<TaskModel> jsonObjectToTaskModel(JSONObject response) throws JSONException {
         List<TaskModel> list = new ArrayList<>();
         JSONArray array = response.getJSONArray("data");
         for (int i = 0; i < array.length(); i ++) {
@@ -25,9 +25,10 @@ public class ParseTask {
             taskModel.setId(object.optString("id"));
             taskModel.setName(object.optString("name"));
             taskModel.setComments(object.optString("comments"));
-            taskModel.setStartTime(object.optString("start_time"));
-            taskModel.setEndTime(object.optString("end_time"));
+            taskModel.setStartTimeString(object.optString("start_time"));
+            taskModel.setEndTimeString(object.optString("end_time"));
             taskModel.setTime(object.optLong("time"));
+            taskModel.setDateStringAndCalendar(object.optString("date"));
 
             // User
             JSONObject objectUser = object.getJSONObject("user");
