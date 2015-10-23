@@ -19,10 +19,12 @@ import br.com.mowa.timesheet.utils.IconCircleColor;
 public class ProjectRecyclerviewAdapter extends RecyclerView.Adapter<ProjectRecyclerviewAdapter.ItemViewHolder> {
     private List<ProjectModel> list;
     private IconCircleColor iconCircleColor;
+    private ClickRecyclerProject clickRecycler;
 
-    public ProjectRecyclerviewAdapter(List<ProjectModel> list) {
+    public ProjectRecyclerviewAdapter(List<ProjectModel> list, ClickRecyclerProject clickRecyclerProject) {
         this.list = list;
         this.iconCircleColor = new IconCircleColor();
+        this.clickRecycler = clickRecyclerProject;
     }
 
     @Override
@@ -32,9 +34,16 @@ public class ProjectRecyclerviewAdapter extends RecyclerView.Adapter<ProjectRecy
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(ItemViewHolder holder, final int position) {
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickRecycler.onClickItemRecycler(position);
+            }
+        });
+
         holder.projectName.setText(list.get(position).getName());
-        holder.dataInicio.setText(list.get(position).getStartDate());
+        holder.description.setText(list.get(position).getDescription().substring(0,16) + "...");
         holder.situacao.setText(list.get(position).isActivite()? "Ativo" : "Finalizado");
         holder.iconTextLetter.setText(list.get(position).getName().substring(0, 1).toUpperCase());
         holder.imgIconCircle.setImageResource(iconCircleColor.sortColor());
@@ -52,21 +61,25 @@ public class ProjectRecyclerviewAdapter extends RecyclerView.Adapter<ProjectRecy
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView projectName;
-        TextView dataInicio;
         TextView situacao;
         TextView iconTextLetter;
         ImageView imgIconCircle;
+        TextView description;
         public View container;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
 
             projectName = (TextView) itemView.findViewById(R.id.layout_item_recycler_project_text_view_title);
-            dataInicio = (TextView) itemView.findViewById(R.id.layout_item_recycler_project_text_view_subtitle);
+            description = (TextView) itemView.findViewById(R.id.layout_item_recycler_project_text_view_description);
             situacao = (TextView) itemView.findViewById(R.id.layout_item_recycler_project_text_view_situacao);
             iconTextLetter = (TextView) itemView.findViewById(R.id.layout_item_recycler_project_text_view_icon);
             imgIconCircle = (ImageView) itemView.findViewById(R.id.layout_item_recycler_project_image_view_icon_circle);
             container = itemView.findViewById(R.id.layout_item_recycler_project_container);
         }
+    }
+
+    public interface ClickRecyclerProject {
+        void onClickItemRecycler(int position);
     }
 }

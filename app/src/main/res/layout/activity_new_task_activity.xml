@@ -1,39 +1,276 @@
-<android.support.v4.widget.DrawerLayout
-    android:id="@+id/activity_new_task_drawer_layout"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
+
+
+
+    <include android:id="@+id/activity_new_task_toolbar"
+        layout="@layout/include_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include android:id="@+id/activity_new_task_toolbar"
-            layout="@layout/include_toolbar"/>
+        <FrameLayout
+            android:id="@+id/include_activity_new_task_frame_layout_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
-        <include layout="@layout/include_activity_new_task_container"/>
+            <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/include_activity_new_task_img_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/ic_create_black_24dp" />
+
+                    <EditText
+                        android:id="@+id/include_activity_new_task_edit_text_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:textSize="16sp"
+                        android:layout_toRightOf="@+id/include_activity_new_task_img_title"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"
+                        android:hint="titulo"
+                        android:inputType="text"/>
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/include_activity_new_task_img_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/ic_today_black_24dp"/>
+
+                    <TextView
+                        android:id="@+id/include_activity_new_task_text_view_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="47dp"
+                        android:textSize="16sp"
+                        android:layout_toRightOf="@+id/include_activity_new_task_img_date"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"
+                        android:hint="data"
+                        android:gravity="left|center"
+                        android:background="@color/white"
+                        android:clickable="true"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/black"
+                        android:layout_alignBottom="@+id/include_activity_new_task_text_view_date"
+                        android:elevation="1dp"
+                        android:layout_toRightOf="@+id/include_activity_new_task_img_date"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"/>
+                </RelativeLayout>
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/include_activity_new_task_img_start_hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:src="@drawable/ic_start_time" />
+
+                    <TextView
+                        android:id="@+id/include_activity_new_task_text_view_start_hours"
+                        android:layout_width="match_parent"
+                        android:layout_height="47dp"
+                        android:textSize="16sp"
+                        android:gravity="left|center"
+                        android:layout_toRightOf="@id/include_activity_new_task_img_start_hours"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"
+                        android:hint="hora inicio"
+                        android:clickable="true"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/black"
+                        android:layout_alignBottom="@+id/include_activity_new_task_text_view_start_hours"
+                        android:elevation="1dp"
+                        android:layout_toRightOf="@+id/include_activity_new_task_img_start_hours"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"/>
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/include_activity_new_task_img_end_hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/ic_end_time"/>
+
+                    <TextView
+                        android:id="@+id/include_activity_new_task_text_view_end_hours"
+                        android:layout_width="match_parent"
+                        android:layout_height="47dp"
+                        android:textSize="16sp"
+                        android:gravity="left|center"
+                        android:layout_toRightOf="@id/include_activity_new_task_img_end_hours"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"
+                        android:hint="hora fim"
+                        android:clickable="true"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/black"
+                        android:layout_alignBottom="@+id/include_activity_new_task_text_view_end_hours"
+                        android:elevation="1dp"
+                        android:layout_toRightOf="@+id/include_activity_new_task_img_end_hours"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"/>
+                </RelativeLayout>
+
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/include_activity_new_task_img_project"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/ic_content_paste_black_24dp"/>
+
+                    <Spinner
+                        android:id="@+id/include_activity_new_task_spinner_project"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:textSize="16sp"
+                        android:layout_toRightOf="@id/include_activity_new_task_img_project"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"
+                        android:hint="projeto"
+                        android:popupBackground="@color/gray"/>
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/include_activity_new_task_img_comment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/ic_comment_black_24dp"/>
+
+                    <EditText
+                        android:id="@+id/include_activity_new_task_edit_text_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:textSize="16sp"
+                        android:layout_toRightOf="@id/include_activity_new_task_img_comment"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="16dp"
+                        android:inputType="textImeMultiLine"
+                        android:hint="comentário"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/activity_home_floating_button_enviar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_check"
+                android:layout_gravity="bottom|end"
+                app:elevation="6dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                app:pressedTranslationZ="12dp"
+                app:borderWidth="0dp"
+                app:backgroundTint="@color/laranja_mowa"/>
+        </FrameLayout>
+
 
     </LinearLayout>
 
-    <br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout
-        android:id="@+id/activity_new_task_scrimInsets"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:elevation="8dp"
-        android:fitsSystemWindows="true"
-        app:insetForeground="#4000">
-
-        <fragment
-            android:id="@+id/activity_new_task_fragment_navigation_drawer_container"
-            android:layout_width="@dimen/width_navigation_drawer"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:layout="@layout/fragment_navigation_drawer"
-            android:name="br.com.mowa.timesheet.fragment.NavigationDrawerFragment" />
-    </br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout>
-
-</android.support.v4.widget.DrawerLayout>
+</LinearLayout>

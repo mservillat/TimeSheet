@@ -3,7 +3,6 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mowa.timesheet.adapter.TasksRecyclerviewAdapter;
-import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
@@ -52,9 +50,9 @@ public class TasksActivity extends BaseActivity {
         this.progress = createProgressDialog("Loading", "carregando lista de tarefas", true, true);
         this.progress.show();
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_registros_drawer_layout);
-        NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_registros_fragment_navigation_drawer_container);
-        navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_registros_toolbar));
+
+
+        createToolbar(R.id.activity_registros_toolbar);
 
 //        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
 //        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
@@ -254,4 +252,10 @@ public class TasksActivity extends BaseActivity {
 //            swipeLayout.setRefreshing(false);
 //        }
 //    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
 }

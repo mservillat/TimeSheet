@@ -14,7 +14,7 @@
         <item name="android:windowTranslucentStatus">true</item>
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:statusBarColor">@color/laranja_mowa</item>
         <item name="windowActionModeOverlay">true</item>
 
     </style>

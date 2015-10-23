@@ -2,11 +2,10 @@ package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,7 +28,6 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.FormTaskModel;
 import br.com.mowa.timesheet.model.ProjectModel;
 import br.com.mowa.timesheet.model.TaskModel;
@@ -44,8 +42,6 @@ import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
  * Created by walky on 10/8/15.
  */
 public class NewTaskActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
-    private DrawerLayout mDrawerLayout;
-    private NavigationDrawerFragment mDrawerFragment;
     private FormTaskModel formTaskModel = new FormTaskModel();
     private List<ProjectModel> listaDeProjetosObjProject;
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -93,9 +89,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         jsonNetwork = new CallJsonNetwork();
         parseProject = new ParseProject();
 
-        this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_new_task_drawer_layout);
-        this.mDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_new_task_fragment_navigation_drawer_container);
-        mDrawerFragment.setUp(mDrawerLayout, createToolbar(R.id.activity_new_task_toolbar));
+        createToolbar(R.id.activity_new_task_toolbar);
 
 
         //        // Component EditText nome e descricao atividade
@@ -179,7 +173,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             this.formTaskModel.setEndTime(taskEditObject.getEndTimeString());
             this.etComment.setText(taskEditObject.getComments());
             formTaskModel.setComments(taskEditObject.getComments());
-            disableAndEnableFilder(false);
+            disableAndEnableField(false);
 
         }
 
@@ -227,7 +221,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listaDeProjetosObjProject = parseProject.parseJsonToProjectEntity(response);
+                    listaDeProjetosObjProject = parseProject.parseJsonToProjectModel(response);
                     listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
                     SharedPreferencesUtil.setListProjectInSharedPreferences(listaDeProjetosObjProject);
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, listaDeProjetosString);
@@ -285,11 +279,8 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                                 jsonNetwork.callJsonObjectPut(VolleySingleton.URL_PUT_TASK_ID + taskEditObject.getId(), requestBody, new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
-//                                        snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
-                                        Intent intent = new Intent(NewTaskActivity.this, TasksActivity.class);
-                                        intent.addFlags(intent.FLAG_ACTIVITY_NO_HISTORY);
-                                        startActivity(intent);
-
+                                        snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                                        disableAndEnableField(false);
                                     }
                                 }, new Response.ErrorListener() {
                                     @Override
@@ -311,7 +302,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             this.btEnviar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    disableAndEnableFilder(true);
+                    disableAndEnableField(true);
                     actionFloatingButton(isEditTask);
                     btEnviar.setImageResource(R.drawable.ic_check);
                 }
@@ -528,7 +519,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         }
     }
 
-    private void disableAndEnableFilder(boolean isEnable) {
+    private void disableAndEnableField(boolean isEnable) {
         this.etNameTask.setEnabled(isEnable);
         this.etDate.setEnabled(isEnable);
         this.etStartHours.setEnabled(isEnable);
@@ -577,14 +568,8 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     }
 
     @Override
-    public void onBackPressed() {
-        if (taskEditObject != null) {
-            Intent intent = new Intent(NewTaskActivity.this, TasksActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(intent);
-            super.onBackPressed();
-        }
-
-        super.onBackPressed();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 }

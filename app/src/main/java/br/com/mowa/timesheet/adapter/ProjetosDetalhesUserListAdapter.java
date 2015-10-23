@@ -11,6 +11,7 @@ import java.util.List;
 
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.UtilsTime;
 
 /**
  * Created by walky on 9/23/15.
@@ -44,26 +45,27 @@ public class ProjetosDetalhesUserListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        HolderDetalhes holder = null;
+        Holder holder = null;
         if (convertView == null) {
-            holder = new HolderDetalhes();
-            convertView = this.inflater.inflate(R.layout.adapter_projetos_detalhes_user, parent, false);
+            holder = new Holder();
+            convertView = this.inflater.inflate(R.layout.layout_custom_item_projetos_adapter_perfil, parent, false);
             convertView.setTag(holder);
-            holder.name = (TextView) convertView.findViewById(R.id.adapter_projetos_detalhes_user_text_view_name);
-            holder.time = (TextView) convertView.findViewById(R.id.adapter_projetos_detalhes_user_text_view_time);
+            holder.name = (TextView) convertView.findViewById(R.id.layout_item_projetos_adapter_perfil_text_name);
+            holder.time = (TextView) convertView.findViewById(R.id.layout_item_projetos_adapter_perfil_text_hours);
         } else {
-            holder = (HolderDetalhes) convertView.getTag();
+            holder = (Holder) convertView.getTag();
         }
         TaskModel item = list.get(position);
         holder.name.setText(item.getName());
-        holder.time.setText(item.getTimeDisplay());
+        holder.time.setText(UtilsTime.longMillisToString(item.getTime()));
+
 
 
         return convertView;
     }
 
 
-    static class HolderDetalhes{
+    static class Holder {
         TextView name;
         TextView time;
     }

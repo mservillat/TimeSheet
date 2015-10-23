@@ -85,6 +85,11 @@
     <string name="activity_tasks_action_mode_subtitle_selected_one_task">task selecionada</string>
     <string name="activity_tasks_action_mode_subtitle_selected_tasks">tasks selecionadas</string>
     <string name="activity_home_button_date_error">Data</string>
+    <string name="activity_project_details">Project Details</string>
+    <string name="activity_project_details_text_title_time_total">Tempo Total</string>
+    <string name="activity_project_details_text_title_attendees">Participantes</string>
+    <string name="activity_project_details_text_title_time_attendees">Tempo por participantes</string>
+    <string name="activity_perfil_text_title_projetos_andamento">Projetos em andamento</string>
 
 
 </resources>

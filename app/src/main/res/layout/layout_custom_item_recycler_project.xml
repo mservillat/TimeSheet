@@ -36,7 +36,7 @@
 
 
     <TextView
-        android:id="@+id/layout_item_recycler_project_text_view_subtitle"
+        android:id="@+id/layout_item_recycler_project_text_view_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/layout_item_recycler_project_frame_layout"
@@ -45,7 +45,7 @@
         android:layout_marginBottom="16dp"
         android:textSize="14sp"
         android:layout_toEndOf="@+id/layout_item_recycler_task_text_view_title"
-        android:text="subtitle"
+        android:text="description"
         android:textColor="@color/gray_subtitle" />
 
     <TextView
@@ -65,7 +65,7 @@
         android:layout_height="72dp"
         android:layout_alignParentRight="true"
         android:gravity="center"
-        android:text="horas"
+        android:text="ativo"
         android:textSize="14sp"
         android:textColor="@color/gray_subtitle"/>
 

@@ -40,6 +40,7 @@ public class ParseTask {
             JSONObject objectProject = object.getJSONObject("project");
             ProjectModel projectModel = new ProjectModel();
             projectModel.setName(objectProject.optString("name"));
+            projectModel.setDescription(objectProject.optString("description"));
             taskModel.setProject(projectModel);
 
 

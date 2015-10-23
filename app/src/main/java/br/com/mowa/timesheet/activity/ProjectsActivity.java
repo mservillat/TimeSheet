@@ -1,10 +1,11 @@
 package br.com.mowa.timesheet.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +23,6 @@ import java.util.List;
 
 import br.com.mowa.timesheet.adapter.ProjectRecyclerviewAdapter;
 import br.com.mowa.timesheet.adapter.ProjetosDetalhesUserListAdapter;
-import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
 import br.com.mowa.timesheet.model.ProjectModel;
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.model.UserModel;
@@ -45,6 +46,7 @@ public class ProjectsActivity extends BaseActivity {
     private int quantidadeDeErros;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
+    public static final String KEY_INTENT_PUT_EXTRA_PROJECT_DETAILS = "PROJECT_DETAILS";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,9 +56,7 @@ public class ProjectsActivity extends BaseActivity {
         this.progress = createProgressDialog("Loading", "carregando lista de Projetos", true, true);
         this.progress.show();
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_projetos_drawer_layout);
-        NavigationDrawerFragment navDraFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_projetos_fragment_container);
-        navDraFragment.setUp(drawerLayout, createToolbar(R.id.activity_projetos_toolbar));
+        createToolbar(R.id.activity_projetos_toolbar);
 
 //        this.taskModel = new TaskModel();
 //        this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
@@ -82,8 +82,8 @@ public class ProjectsActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listProjectModel = parseProject.parseJsonToProjectEntity(response);
-                    ProjectRecyclerviewAdapter adapter = new ProjectRecyclerviewAdapter(listProjectModel);
+                    listProjectModel = parseProject.parseJsonToProjectModel(response);
+                    ProjectRecyclerviewAdapter adapter = new ProjectRecyclerviewAdapter(listProjectModel, getClickProject());
                     recyclerView.setAdapter(adapter);
                     registerForContextMenu(recyclerView);
                     progress.dismiss();
@@ -107,7 +107,7 @@ public class ProjectsActivity extends BaseActivity {
      * @throws JSONException
      */
     private void builderListViewProject(JSONObject response) throws JSONException {
-        this.listProjectModel = parseProject.parseJsonToProjectEntity(response);
+        this.listProjectModel = parseProject.parseJsonToProjectModel(response);
         ArrayAdapter<ProjectModel> adapter = new ArrayAdapter<>(this , android.R.layout.simple_list_item_1, listProjectModel);
         this.listViewProjetos.setAdapter(adapter);
         this.progress.dismiss();
@@ -164,4 +164,22 @@ public class ProjectsActivity extends BaseActivity {
         }
     }
 
+    private ProjectRecyclerviewAdapter.ClickRecyclerProject getClickProject() {
+        return new ProjectRecyclerviewAdapter.ClickRecyclerProject() {
+            @Override
+            public void onClickItemRecycler(int position) {
+                Intent intent = new Intent(ProjectsActivity.this, ProjectDetailsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                Gson gson = new Gson();
+                intent.putExtra(KEY_INTENT_PUT_EXTRA_PROJECT_DETAILS, gson.toJson(listProjectModel.get(position)));
+                startActivity(intent);
+            }
+        };
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
 }

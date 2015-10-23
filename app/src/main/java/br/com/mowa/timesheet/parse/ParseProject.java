@@ -15,7 +15,7 @@ import br.com.mowa.timesheet.model.UserModel;
  */
 public class ParseProject {
 
-    public List<ProjectModel> parseJsonToProjectEntity(JSONObject response) throws JSONException {
+    public List<ProjectModel> parseJsonToProjectModel(JSONObject response) throws JSONException {
         List<ProjectModel> list = new ArrayList<>();
         JSONArray jsonArray = response.getJSONArray("data");
         for (int i = 0; i < jsonArray.length(); i++ ) {
@@ -27,6 +27,7 @@ public class ParseProject {
             project.setActivite(object.optBoolean("activite"));
             project.setDone(object.optBoolean("done"));
             project.setStartDate(object.optString("start_date"));
+            project.setDescription(object.optString("description"));
 
 
             JSONArray arrayUser = object.getJSONArray("users");

@@ -59,7 +59,6 @@ public class NavigationDrawerFragment extends Fragment {
                     case 1:
                         if (!("br.com.mowa.timesheet.activity.PerfilActivity".equals(getActivity().getLocalClassName()))) {
                             Intent intenteOne = new Intent(getContext(), PerfilActivity.class);
-                            intenteOne.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             closeDrawer();
                             startActivity(intenteOne);
                         }
@@ -69,7 +68,6 @@ public class NavigationDrawerFragment extends Fragment {
                     case 2:
                         if (!("br.com.mowa.timesheet.activity.TasksActivity".equals(getActivity().getLocalClassName()))) {
                             Intent intentTwo = new Intent(getContext(), TasksActivity.class);
-                            intentTwo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             closeDrawer();
                             startActivity(intentTwo);
                         }
@@ -79,7 +77,6 @@ public class NavigationDrawerFragment extends Fragment {
                     case 3:
                         if (!("br.com.mowa.timesheet.activity.ProjectsActivity".equals(getActivity().getLocalClassName()))){
                             Intent intentThree = new Intent(getContext(), ProjectsActivity.class);
-                            intentThree.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             closeDrawer();
                             startActivity(intentThree);
                         }
@@ -89,7 +86,6 @@ public class NavigationDrawerFragment extends Fragment {
                     case 4:
                         if (!("br.com.mowa.timesheet.activity.NewTaskActivity".equals(getActivity().getLocalClassName()))){
                             Intent intentFour = new Intent(getContext(), NewTaskActivity.class);
-                            intentFour.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             closeDrawer();
                             startActivity(intentFour);
                         }

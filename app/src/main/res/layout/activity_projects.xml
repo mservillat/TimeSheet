@@ -1,17 +1,11 @@
-<android.support.v4.widget.DrawerLayout android:id="@+id/activity_projetos_drawer_layout"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include android:id="@+id/activity_projetos_toolbar"
-            layout="@layout/include_toolbar"/>
+    <include android:id="@+id/activity_projetos_toolbar"
+        layout="@layout/include_toolbar"/>
 
 
     <LinearLayout
@@ -26,59 +20,4 @@
 
     </LinearLayout>
 
-
-
-
-
-
-
-
-
-
-
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical">-->
-
-            <!--<ListView-->
-                <!--android:id="@+id/activity_projetos_list_view_projetos"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"/>-->
-
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Detalhes do Projeto"/>-->
-
-            <!--<ListView-->
-                <!--android:id="@+id/activity_projetos_list_view_detalhes"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"/>-->
-
-        <!--</LinearLayout>-->
-
-    </LinearLayout>
-
-    <!-- Menu Lateral -->
-    <br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout
-        android:id="@+id/activity_projetos_scrim_insets"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:elevation="8dp"
-        android:fitsSystemWindows="true"
-        app:insetForeground="#4000">
-
-        <fragment
-            android:id="@+id/activity_projetos_fragment_container"
-            android:layout_width="@dimen/width_navigation_drawer"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:layout="@layout/fragment_navigation_drawer"
-            android:name="br.com.mowa.timesheet.fragment.NavigationDrawerFragment" />
-
-    </br.com.mowa.timesheet.utils.ScrimInsetsFrameLayout>
-
-</android.support.v4.widget.DrawerLayout>
+</LinearLayout>

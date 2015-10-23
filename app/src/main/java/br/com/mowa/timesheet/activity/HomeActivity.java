@@ -62,14 +62,13 @@ public class HomeActivity extends BaseActivity {
         this.jsonNetwork = new CallJsonNetwork();
         this.parseTask = new ParseTask();
 
-
         this.cardViewHoras = (CardView) findViewById(R.id.include_activity_home_card_view_horas_semanais);
         this.cardUltimasTarefas = (CardView) findViewById(R.id.include_activity_home_card_view_ultimas_tarefas);
 
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
-        drawerFragment.setUp(mDrawerLayout, createToolbar(R.id.activity_home_toolbar));
+        drawerFragment.setUp(mDrawerLayout, createToolbarHome(R.id.activity_home_toolbar));
 
         this.recyclerView = (RecyclerView) findViewById(R.id.include_activity_home_recycler);
         this.layoutManager = new LinearLayoutManager(getActivity());

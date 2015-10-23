@@ -21,6 +21,14 @@ public class TaskModel{
     public boolean selectd = false;
 
 
+    public TaskModel(){
+
+    }
+
+    public TaskModel(String name, Long time) {
+        this.name = name;
+        this.time = time;
+    }
 
     public String getId() {
         return id;

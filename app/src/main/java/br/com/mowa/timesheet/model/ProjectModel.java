@@ -15,6 +15,7 @@ public class ProjectModel {
     private List<UserModel> users = new ArrayList<>();
     private boolean activite;
     private boolean done;
+    private String description;
 
     public String getName() {
         return name;
@@ -68,7 +69,13 @@ public class ProjectModel {
 
     public void setId(String id) {this.id = id; }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public String toString() {

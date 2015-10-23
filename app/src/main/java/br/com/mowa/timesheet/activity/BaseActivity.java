@@ -60,12 +60,20 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param id do include toolbar do xml
      * @return objeto Toolbar  (provavelmente usado posteriormente para criar o Navigation Drawer)
      */
+    protected Toolbar createToolbarHome(int id) {
+        Toolbar toolbar = (Toolbar) findViewById(id);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        return toolbar;
+    }
+
     protected Toolbar createToolbar(int id) {
         Toolbar toolbar = (Toolbar) findViewById(id);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         return toolbar;
     }
+
 
     protected void toast(int msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
@@ -74,4 +82,5 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void toastCurto(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
+
 }

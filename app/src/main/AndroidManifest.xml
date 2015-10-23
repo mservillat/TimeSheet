@@ -24,49 +24,45 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="br.com.mowa.timesheet.activity.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
+
         <activity
             android:name="br.com.mowa.timesheet.activity.PerfilActivity"
             android:label="@string/activity_perfil_title"
             android:theme="@style/AppTheme">
-            <!--android:noHistory="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
+
         <activity
             android:name="br.com.mowa.timesheet.activity.TasksActivity"
             android:label="@string/title_activity_registros"
             android:theme="@style/AppTheme">
-            <!--android:noHistory="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
+
         <activity
             android:name="br.com.mowa.timesheet.activity.ProjectsActivity"
             android:label="@string/title_activity_projetos"
             android:theme="@style/AppTheme">
-            <!--android:noHistory="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
+
         <activity
             android:name="br.com.mowa.timesheet.activity.NewTaskActivity"
             android:label="@string/title_activity_new_Task"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
-            <!--android:noHistory="true">-->
-            <!--<meta-data-->
-            <!--android:name="android.support.PARENT_ACTIVITY"-->
-            <!--android:value="br.com.mowa.timesheet.activity.HomeActivity"/>-->
         </activity>
+
+        <activity android:name="br.com.mowa.timesheet.activity.ProjectDetailsActivity"
+            android:label="@string/activity_project_details"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
+
     </application>
 
 </manifest>
