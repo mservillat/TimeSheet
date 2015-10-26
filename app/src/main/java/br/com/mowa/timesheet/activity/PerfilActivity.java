@@ -1,12 +1,14 @@
 package br.com.mowa.timesheet.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,10 +39,7 @@ public class PerfilActivity extends BaseActivity {
     private UserModel user;
     private CallJsonNetwork callJson;
     private UserModel userModel;
-    private TextView tvNome;
     private TextView tvEmail;
-    private TextView tvSituacao;
-    private Button btAlterarSenha;
     private ProgressDialog progress;
     private ListView listView;
     private List<ProjectModel> listProject;
@@ -48,6 +47,11 @@ public class PerfilActivity extends BaseActivity {
     private List<TaskModel> listTask;
     private int contador;
     private ProjetosDetalhesUserListAdapter adapter;
+    private FloatingActionButton floatingButton;
+    private TextView tvNameProfile;
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,9 @@ public class PerfilActivity extends BaseActivity {
         this.callJson = new CallJsonNetwork();
         listTask = new ArrayList<>();
         this.listView = (ListView) findViewById(R.id.activity_perfil_list_view);
+        this.tvNameProfile = (TextView) findViewById(R.id.activity_profile_edit_name_profile);
+
+
 
         loadImageProfile();
 
@@ -82,6 +89,21 @@ public class PerfilActivity extends BaseActivity {
 //        });
 
 
+
+        this.floatingButton = (FloatingActionButton) findViewById(R.id.activity_perfil_floating_button_edit);
+        this.floatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PerfilActivity.this, ProfileEditActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
         loadProjectInUser();
         loadProfileUser();
 
@@ -100,6 +122,7 @@ public class PerfilActivity extends BaseActivity {
                     userModel = new ParseUser().jsonObjectToUserEntity(response);
 //                    tvNome.setText(userModel.getName());
                     tvEmail.setText(userModel.getUserName());
+                    tvNameProfile.setText(userModel.getName());
 //                    tvSituacao.setText((userModel.isActivite() == true ? "true" : "false"));
                     progress.dismiss();
                 } catch (JSONException e) {

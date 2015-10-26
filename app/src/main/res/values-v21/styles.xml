@@ -11,11 +11,12 @@
         <!-- Cor para o efeito ripple -->
         <item name="colorControlHighlight">@color/control_highlight</item>
 
-        <item name="android:windowTranslucentStatus">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/laranja_mowa</item>
-        <item name="windowActionModeOverlay">true</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <!--<item name="windowActionModeOverlay">true</item>-->
+        <item name="android:fitsSystemWindows">true</item>
 
     </style>
 

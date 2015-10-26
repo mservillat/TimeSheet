@@ -67,8 +67,8 @@
 
 
     <!-- Dialog Fragment Perfil Alterar senha-->
-    <string name="dialog_fragment_perfil_set_error_caractere_invalido">caractere inválido</string>
-    <string name="dialog_fragment_perfil_set_error_minimo_caractere">a senha deve ter no minimo 6 digitos</string>
+    <string name="activity_profile_edit_caractere_invalido">caractere inválido</string>
+    <string name="activity_profile_edit_set_error_minimum_character">a senha deve ter no minimo 6 digitos</string>
     <string name="activity_home_button_horas_inicio_error">hora de inicio</string>
     <string name="activity_home_button_horas_fim_error">hora de inicio</string>
     <string name="dialog_fragment_login_esqueceu_senha_text_view">Digite seu email</string>
@@ -90,6 +90,12 @@
     <string name="activity_project_details_text_title_attendees">Participantes</string>
     <string name="activity_project_details_text_title_time_attendees">Tempo por participantes</string>
     <string name="activity_perfil_text_title_projetos_andamento">Projetos em andamento</string>
+    <string name="activity_profile_edit_button_alterar_photo">ALTERAR</string>
+    <string name="activity_profile_edit_edit_text_senha_current">Senha atual</string>
+    <string name="activity_profile_edit_edit_text_senha_new">Nova senha</string>
+    <string name="activity_profile_edit_edit_text_senha_confirm">Confirmar senha</string>
+    <string name="activity_profile_edit">Profile edit</string>
+    <string name="activity_profile_edit_password_changed_success">Senha alterada com sucesso</string>
 
 
 </resources>
