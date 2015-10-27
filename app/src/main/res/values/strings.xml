@@ -96,6 +96,8 @@
     <string name="activity_profile_edit_edit_text_senha_confirm">Confirmar senha</string>
     <string name="activity_profile_edit">Profile edit</string>
     <string name="activity_profile_edit_password_changed_success">Senha alterada com sucesso</string>
+    <string name="activity_profile_menu_action_filter">filtro</string>
+    <string name="activity_profile_menu_action_order">Ordenar</string>
 
 
 </resources>

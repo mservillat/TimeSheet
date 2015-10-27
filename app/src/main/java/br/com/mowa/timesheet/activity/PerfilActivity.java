@@ -166,7 +166,7 @@ public class PerfilActivity extends BaseActivity {
     private void loadImageProfile() {
         ImageView img = (ImageView) findViewById(R.id.img_perfil);
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 12;
+        options.inSampleSize = 16;
         Bitmap blurTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.image_perfil, options);
         BitmapDrawable drawable = new BitmapDrawable(getResources(), blurTemplate);
         if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {

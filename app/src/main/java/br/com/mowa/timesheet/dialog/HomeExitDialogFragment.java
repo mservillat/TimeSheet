@@ -40,6 +40,7 @@ public class HomeExitDialogFragment extends DialogFragment implements View.OnCli
 
         builder.setView(dialogView);
         return builder.create();
+
     }
 
     @Override

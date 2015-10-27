@@ -35,6 +35,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         snackBar.show();
     }
 
+    protected void snackWithButton(View view, String msg, String stringButton) {
+        Snackbar snackBar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
+        snackBar.setAction(stringButton, null);
+        snackBar.setActionTextColor(getResources().getColor(R.color.bright_yellow));
+        View snackBarView = snackBar.getView();
+        snackBarView.setBackgroundColor(getResources().getColor(R.color.primary));
+        snackBar.show();
+    }
+
 
     /**
      *Criação do ProgressDialog

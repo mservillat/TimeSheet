@@ -29,4 +29,5 @@
     <color name="indigo_circle">#304FFE</color>
     <color name="blue_circle">#64B5F6</color>
     <color name="red_circle">#F44336</color>
+    <color name="brur">#A6000000</color>
 </resources>

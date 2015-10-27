@@ -37,4 +37,11 @@ public class CallJsonNetwork {
         this.mRequestQueue.add(request);
     }
 
+
+    public void callJsonObjectDelete(String url, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.DELETE, url, null, responseListener, errorListener);
+
+        mRequestQueue.add(request);
+    }
 }

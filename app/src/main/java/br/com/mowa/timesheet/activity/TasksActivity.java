@@ -3,6 +3,7 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mowa.timesheet.adapter.TasksRecyclerviewAdapter;
+import br.com.mowa.timesheet.dialog.ProfileMenuOrderDialogFragment;
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
@@ -34,7 +36,7 @@ import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 public class TasksActivity extends BaseActivity {
     private ListView listView;
     private ParseTask parseTask;
-    private List<TaskModel> listTaskModel;
+    private List<TaskModel> listOrdered;
     private CallJsonNetwork callJson;
 //    private SwipeRefreshLayout swipeLayout;
     private LinearLayoutManager layoutManager;
@@ -42,6 +44,7 @@ public class TasksActivity extends BaseActivity {
     private RecyclerView recycler;
     private UserModel user;
     private ActionMode actionMode;
+    private List<TaskModel> listFix;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,7 @@ public class TasksActivity extends BaseActivity {
         this.progress = createProgressDialog("Loading", "carregando lista de tarefas", true, true);
         this.progress.show();
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
+
 
 
         createToolbar(R.id.activity_registros_toolbar);
@@ -75,12 +79,13 @@ public class TasksActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listTaskModel = parseTask.jsonObjectToTaskModel(response);
+                    listOrdered = parseTask.jsonObjectToTaskModel(response);
+                    listFix = listOrdered;
                     recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
                     layoutManager = new LinearLayoutManager(getActivity());
                     recycler.setLayoutManager(layoutManager);
                     recycler.setHasFixedSize(true);
-                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(listTaskModel, interfaceOnClick());
+                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(listOrdered, interfaceOnClick());
                     recycler.setAdapter(adapter);
                     registerForContextMenu(recycler);
                     progress.dismiss();
@@ -107,7 +112,7 @@ public class TasksActivity extends BaseActivity {
         return new TasksRecyclerviewAdapter.ClickRecyclerTask() {
             @Override
             public void onClickIntemRecycler(int position) {
-                TaskModel task = listTaskModel.get(position);
+                TaskModel task = listOrdered.get(position);
                 List<TaskModel> list = getSelectedTasks();
                 if (list.size() > 0 ) {
                     if (task.selectd) {
@@ -134,6 +139,7 @@ public class TasksActivity extends BaseActivity {
                 }
 
 
+
             }
 
             @Override
@@ -141,7 +147,7 @@ public class TasksActivity extends BaseActivity {
                 if (actionMode == null) {
                     actionMode = startSupportActionMode(getActionModeCallback());
                 }
-                listTaskModel.get(position).selectd = true;
+                listOrdered.get(position).selectd = true;
                 recycler.getAdapter().notifyDataSetChanged();
                 updateActionModeTitle();
             }
@@ -167,7 +173,7 @@ public class TasksActivity extends BaseActivity {
 
     private List<TaskModel> getSelectedTasks() {
         List<TaskModel> list = new ArrayList<>();
-        for (TaskModel task : listTaskModel) {
+        for (TaskModel task : listOrdered) {
             if (task.selectd) {
                 list.add(task);
             }
@@ -196,6 +202,17 @@ public class TasksActivity extends BaseActivity {
                 List<TaskModel> selectedTasks = getSelectedTasks();
                 if (item.getItemId() == R.id.menu_context_tasks_action_delete) {
                     toast("Deletando " + selectedTasks.size());
+
+                    List<TaskModel> list = getSelectedTasks();
+                    for (int i = 0; i < list.size(); i ++) {
+                        deleteTask(list.get(i));
+
+                    }
+
+
+                    loadRegistros();
+
+
                 }
                 mode.finish();
                 return true;
@@ -204,12 +221,29 @@ public class TasksActivity extends BaseActivity {
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 actionMode = null;
-                for (TaskModel task : listTaskModel) {
+                for (TaskModel task : listOrdered) {
                     task.selectd = false;
                 }
                 recycler.getAdapter().notifyDataSetChanged();
             }
         };
+    }
+
+
+
+    private void deleteTask(TaskModel task) {
+        this.callJson.callJsonObjectDelete(VolleySingleton.URL_DELETE_TASK_ID + task.getId(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
     }
 
 //    @Override
@@ -253,9 +287,41 @@ public class TasksActivity extends BaseActivity {
 //        }
 //    }
 
+
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
         return true;
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.activity_profile_menu_action_order) {
+            ProfileMenuOrderDialogFragment dialog = new ProfileMenuOrderDialogFragment();
+            FragmentManager fm = getSupportFragmentManager();
+            dialog.show(fm, "dialog");
+        } else if(item.getItemId() == R.id.activity_profile_menu_action_filter) {
+
+        }else {
+            onBackPressed();
+        }
+
+        return true;
+    }
+
+
+    
+    public void orderOld() {
+        listOrdered.clear();
+        for(int i = listFix.size() - 1; i >= 0; i --) {
+            listOrdered.add(listFix.get(i));
+        }
+
+        recycler.getAdapter().notifyDataSetChanged();
+    }
+    
+
+
 }
