@@ -28,10 +28,12 @@ import java.util.concurrent.TimeUnit;
 import br.com.mowa.timesheet.adapter.TasksRecyclerviewAdapter;
 import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
 import br.com.mowa.timesheet.fragment.NavigationDrawerFragment;
+import br.com.mowa.timesheet.model.ProjectModel;
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
+import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
@@ -83,6 +85,7 @@ public class HomeActivity extends BaseActivity {
             }
         });
         this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.include_activity_home_text_view_horas_semanais);
+        callProjectInUser();
         loadDisplayUltimateTasks();
         loadDisplayAllHoursWork();
 
@@ -98,6 +101,31 @@ public class HomeActivity extends BaseActivity {
 
 
 
+    }
+
+
+
+
+
+    private void callProjectInUser() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                ParseProject parse = new ParseProject();
+                try {
+                    List<ProjectModel> projectModels = parse.parseJsonToProjectModel(response);
+                    SharedPreferencesUtil.setListProjectInSharedPreferences(projectModels);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
 

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by walky on 9/22/15.
  */
-public class TaskModel{
+public class TaskModel implements Comparable<TaskModel>{
     private String id;
     private String name;
     private String startTimeString;
@@ -145,6 +145,11 @@ public class TaskModel{
         } else {
             return null;
         }
+    }
+
+    @Override
+    public int compareTo(TaskModel another) {
+        return getName().compareTo(another.getName());
     }
 
 }

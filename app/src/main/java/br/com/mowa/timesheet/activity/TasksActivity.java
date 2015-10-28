@@ -21,10 +21,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.mowa.timesheet.adapter.TasksRecyclerviewAdapter;
+import br.com.mowa.timesheet.dialog.ProfileMenuFilterDialogFragment;
 import br.com.mowa.timesheet.dialog.ProfileMenuOrderDialogFragment;
+import br.com.mowa.timesheet.model.ProjectModel;
 import br.com.mowa.timesheet.model.TaskModel;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
@@ -32,6 +35,7 @@ import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
+import br.com.mowa.timesheet.utils.TaskModelCompare;
 
 public class TasksActivity extends BaseActivity {
     private ListView listView;
@@ -45,6 +49,7 @@ public class TasksActivity extends BaseActivity {
     private UserModel user;
     private ActionMode actionMode;
     private List<TaskModel> listFix;
+    private List<TaskModel> listNoChange;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,7 @@ public class TasksActivity extends BaseActivity {
 //        listView = (ListView) findViewById(R.id.activity_registros_list_view);
         parseTask = new ParseTask();
         callJson = new CallJsonNetwork();
+        listFix = new ArrayList<>();
         loadRegistros();
 
     }
@@ -79,8 +85,9 @@ public class TasksActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listOrdered = parseTask.jsonObjectToTaskModel(response);
-                    listFix = listOrdered;
+                    listNoChange = parseTask.jsonObjectToTaskModel(response);
+                    listFix = copyList(listNoChange);
+                    listOrdered = copyList(listNoChange);
                     recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
                     layoutManager = new LinearLayoutManager(getActivity());
                     recycler.setLayoutManager(layoutManager);
@@ -246,6 +253,14 @@ public class TasksActivity extends BaseActivity {
 
     }
 
+
+    private  List<TaskModel> copyList(List<TaskModel> listTask) {
+        List<TaskModel> list = new ArrayList<>();
+        for (TaskModel task: listTask) {
+            list.add(task);
+        }
+        return list;
+    }
 //    @Override
 //    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 //        super.onCreateContextMenu(menu, v, menuInfo);
@@ -303,7 +318,9 @@ public class TasksActivity extends BaseActivity {
             FragmentManager fm = getSupportFragmentManager();
             dialog.show(fm, "dialog");
         } else if(item.getItemId() == R.id.activity_profile_menu_action_filter) {
-
+            ProfileMenuFilterDialogFragment dialog = new ProfileMenuFilterDialogFragment();
+            FragmentManager fm = getSupportFragmentManager();
+            dialog.show(fm, "dialog");
         }else {
             onBackPressed();
         }
@@ -314,14 +331,44 @@ public class TasksActivity extends BaseActivity {
 
     
     public void orderOld() {
-        listOrdered.clear();
-        for(int i = listFix.size() - 1; i >= 0; i --) {
-            listOrdered.add(listFix.get(i));
-        }
+        listOrdered = copyList(listFix);
+        Collections.reverse(listOrdered);
+        recycler.setAdapter(new TasksRecyclerviewAdapter(listOrdered, interfaceOnClick()));
+    }
 
+
+    public void orderName() {
+        Collections.sort(listOrdered);
         recycler.getAdapter().notifyDataSetChanged();
     }
-    
+
+    public void orderRecent() {
+        listOrdered = copyList(listFix);
+        recycler.setAdapter(new TasksRecyclerviewAdapter(listOrdered, interfaceOnClick()));
+    }
+
+    public void orderMoreTime() {
+        Collections.sort(listOrdered, new TaskModelCompare());
+        Collections.reverse(listOrdered);
+        recycler.getAdapter().notifyDataSetChanged();
+    }
+
+    public void orderLessTime() {
+        Collections.sort(listOrdered, new TaskModelCompare());
+        recycler.getAdapter().notifyDataSetChanged();
+    }
+
+    public void filterProject(ProjectModel project) {
+        listOrdered = new ArrayList<>();
+        for (TaskModel task : listFix) {
+            String id = task.getId();
+            if (id == project.getId()) {
+                Log.d("walkyteste", "igual");
+            } else {
+                Log.d("walkyteste", "não iguais");
+            }
+        }
+    }
 
 
 }
