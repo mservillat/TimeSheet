@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -40,7 +41,7 @@ import br.com.mowa.timesheet.utils.TaskModelCompare;
 public class TasksActivity extends BaseActivity {
     private ListView listView;
     private ParseTask parseTask;
-    private List<TaskModel> listOrdered;
+    private List<TaskModel> listDisplay;
     private CallJsonNetwork callJson;
 //    private SwipeRefreshLayout swipeLayout;
     private LinearLayoutManager layoutManager;
@@ -50,6 +51,9 @@ public class TasksActivity extends BaseActivity {
     private ActionMode actionMode;
     private List<TaskModel> listFix;
     private List<TaskModel> listNoChange;
+    private TextView tvFilter;
+    private TextView tvOrder;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +67,8 @@ public class TasksActivity extends BaseActivity {
 
         createToolbar(R.id.activity_registros_toolbar);
 
+        this.tvFilter = (TextView) findViewById(R.id.activity_tasks_text_view_filter);
+        this.tvOrder = (TextView) findViewById(R.id.activity_tasks_text_view_order);
 //        this.swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_registros_swipe_to_refresh);
 //        this.swipeLayout.setOnRefreshListener(OnRefreshListener());
 //        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
@@ -87,12 +93,12 @@ public class TasksActivity extends BaseActivity {
                 try {
                     listNoChange = parseTask.jsonObjectToTaskModel(response);
                     listFix = copyList(listNoChange);
-                    listOrdered = copyList(listNoChange);
+                    listDisplay = copyList(listNoChange);
                     recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
                     layoutManager = new LinearLayoutManager(getActivity());
                     recycler.setLayoutManager(layoutManager);
                     recycler.setHasFixedSize(true);
-                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(listOrdered, interfaceOnClick());
+                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(listDisplay, interfaceOnClick());
                     recycler.setAdapter(adapter);
                     registerForContextMenu(recycler);
                     progress.dismiss();
@@ -119,7 +125,7 @@ public class TasksActivity extends BaseActivity {
         return new TasksRecyclerviewAdapter.ClickRecyclerTask() {
             @Override
             public void onClickIntemRecycler(int position) {
-                TaskModel task = listOrdered.get(position);
+                TaskModel task = listDisplay.get(position);
                 List<TaskModel> list = getSelectedTasks();
                 if (list.size() > 0 ) {
                     if (task.selectd) {
@@ -154,7 +160,7 @@ public class TasksActivity extends BaseActivity {
                 if (actionMode == null) {
                     actionMode = startSupportActionMode(getActionModeCallback());
                 }
-                listOrdered.get(position).selectd = true;
+                listDisplay.get(position).selectd = true;
                 recycler.getAdapter().notifyDataSetChanged();
                 updateActionModeTitle();
             }
@@ -180,7 +186,7 @@ public class TasksActivity extends BaseActivity {
 
     private List<TaskModel> getSelectedTasks() {
         List<TaskModel> list = new ArrayList<>();
-        for (TaskModel task : listOrdered) {
+        for (TaskModel task : listDisplay) {
             if (task.selectd) {
                 list.add(task);
             }
@@ -228,7 +234,7 @@ public class TasksActivity extends BaseActivity {
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 actionMode = null;
-                for (TaskModel task : listOrdered) {
+                for (TaskModel task : listDisplay) {
                     task.selectd = false;
                 }
                 recycler.getAdapter().notifyDataSetChanged();
@@ -331,43 +337,68 @@ public class TasksActivity extends BaseActivity {
 
     
     public void orderOld() {
-        listOrdered = copyList(listFix);
-        Collections.reverse(listOrdered);
-        recycler.setAdapter(new TasksRecyclerviewAdapter(listOrdered, interfaceOnClick()));
+        listDisplay = copyList(listFix);
+        Collections.reverse(listDisplay);
+        recycler.setAdapter(new TasksRecyclerviewAdapter(listDisplay, interfaceOnClick()));
+        tvOrder.setText(getResources().getString(R.string.activity_tasks_text_view_order_old));
     }
 
 
     public void orderName() {
-        Collections.sort(listOrdered);
+        Collections.sort(listDisplay);
         recycler.getAdapter().notifyDataSetChanged();
+        tvOrder.setText(getResources().getString(R.string.activity_tasks_text_view_order_name));
     }
 
     public void orderRecent() {
-        listOrdered = copyList(listFix);
-        recycler.setAdapter(new TasksRecyclerviewAdapter(listOrdered, interfaceOnClick()));
+        listDisplay = copyList(listFix);
+        recycler.setAdapter(new TasksRecyclerviewAdapter(listDisplay, interfaceOnClick()));
+        tvOrder.setText(getResources().getString(R.string.activity_tasks_text_view_order_recent));
     }
 
     public void orderMoreTime() {
-        Collections.sort(listOrdered, new TaskModelCompare());
-        Collections.reverse(listOrdered);
+        Collections.sort(listDisplay, new TaskModelCompare());
+        Collections.reverse(listDisplay);
         recycler.getAdapter().notifyDataSetChanged();
+        tvOrder.setText(getResources().getString(R.string.activity_tasks_text_view_order_more_time));
     }
 
     public void orderLessTime() {
-        Collections.sort(listOrdered, new TaskModelCompare());
+        Collections.sort(listDisplay, new TaskModelCompare());
         recycler.getAdapter().notifyDataSetChanged();
+        tvOrder.setText(getResources().getString(R.string.activity_tasks_text_view_order_less_time));
     }
 
     public void filterProject(ProjectModel project) {
-        listOrdered = new ArrayList<>();
-        for (TaskModel task : listFix) {
-            String id = task.getId();
-            if (id == project.getId()) {
-                Log.d("walkyteste", "igual");
+        listDisplay.clear();
+        for (TaskModel task : listNoChange) {
+            String id = task.getProjectId();
+            if (id.equals(project.getId())) {
+                listDisplay.add(task);
+
             } else {
-                Log.d("walkyteste", "não iguais");
             }
         }
+        if (listDisplay.size() > 0 ) {
+            listFix.clear();
+            listFix = copyList(listDisplay);
+            recycler.setAdapter(new TasksRecyclerviewAdapter(listDisplay, interfaceOnClick()));
+            tvFilter.setText("Projeto: " + project.getName());
+            tvOrder.setText(getResources().getString(R.string.activity_tasks_text_view_order_recent));
+
+        } else {
+            toast("Nenhuma há tarefa desse projeto");
+
+        }
+
+    }
+
+    public void filterAllProject() {
+        listDisplay.clear();
+        listDisplay = copyList(listNoChange);
+        listFix = copyList(listNoChange);
+        recycler.setAdapter(new TasksRecyclerviewAdapter(listDisplay, interfaceOnClick()));
+        tvFilter.setText("Todos os projetos");
     }
 
 

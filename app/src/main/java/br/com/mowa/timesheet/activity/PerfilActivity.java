@@ -95,7 +95,6 @@ public class PerfilActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PerfilActivity.this, ProfileEditActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
@@ -209,11 +208,14 @@ public class PerfilActivity extends BaseActivity {
 
     private void calculateTotalHours(List<TaskModel> list, int ii) {
         Long time = new Long(0);
+        String taskName = list.get(0).getProjectName();
         for (TaskModel task: list) {
             time += task.getTime();
+
+
         }
 
-        listTask.add(new TaskModel("Nome do projeto", time));
+        listTask.add(new TaskModel(taskName, +  time));
 
 
 
@@ -231,4 +233,11 @@ public class PerfilActivity extends BaseActivity {
         onBackPressed();
         return true;
     }
+
+
+
+
+
+
+
 }

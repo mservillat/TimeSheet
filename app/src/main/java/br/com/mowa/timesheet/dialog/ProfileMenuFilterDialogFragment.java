@@ -40,7 +40,8 @@ public class ProfileMenuFilterDialogFragment extends DialogFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TasksActivity activity = (TasksActivity) getActivity();
                 if (listProject.size() == position) {
-
+                    activity.filterAllProject();
+                    dismiss();
                 } else {
                     activity.filterProject(listProject.get(position));
                     dismiss();

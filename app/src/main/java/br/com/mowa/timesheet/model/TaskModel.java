@@ -108,7 +108,13 @@ public class TaskModel implements Comparable<TaskModel>{
         this.dateString = dateString;
     }
 
+    public String getProjectId() {
+        return this.getProject().getId();
+    }
 
+    public String getProjectName() {
+        return this.getProject().getName();
+    }
 
 
 

@@ -153,6 +153,19 @@
                         android:textColor="@color/black"
                         android:text="@string/activity_project_details_text_title_time_attendees"/>
 
+                    <RelativeLayout
+                        android:id="@+id/relative_graphic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/piechart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"/>
+
+                    </RelativeLayout>
+
+
                 </LinearLayout>
 
 

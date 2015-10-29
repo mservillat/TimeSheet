@@ -20,6 +20,50 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:id="@+id/activity_tasks_text_view_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="16dp"
+                    android:textStyle="bold"
+                    android:text="@string/activity_tasks_text_view_filter"/>
+
+
+                <TextView
+                    android:id="@+id/activity_task_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:textSize="14sp"
+                    android:layout_toRightOf="@+id/activity_tasks_text_view_filter"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/activity_tasks_text_view_order_title"/>
+
+
+
+
+                <TextView
+                    android:id="@+id/activity_tasks_text_view_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:textSize="14sp"
+                    android:layout_toRightOf="@+id/activity_task_text_view"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="center_vertical"
+                    android:textStyle="italic"
+                    android:text="@string/activity_tasks_text_view_order_recent"/>
+
+
+
+            </RelativeLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/activity_tasks_recycler_view"
                 android:layout_width="wrap_content"
