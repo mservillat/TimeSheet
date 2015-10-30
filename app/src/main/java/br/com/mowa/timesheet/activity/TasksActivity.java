@@ -134,9 +134,10 @@ public class TasksActivity extends BaseActivity {
                         task.selectd =true;
                     }
 
-                    if (list.size() == 0) {
+                    if (getSelectedTasks().size() == 0) {
                         actionMode.finish();
                         actionMode = null;
+
                     } else {
                         updateActionModeTitle();
                     }
@@ -214,14 +215,12 @@ public class TasksActivity extends BaseActivity {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 List<TaskModel> selectedTasks = getSelectedTasks();
                 if (item.getItemId() == R.id.menu_context_tasks_action_delete) {
-                    toast("Deletando " + selectedTasks.size());
-
+                    snack(recycler, "Deletando");
                     List<TaskModel> list = getSelectedTasks();
                     for (int i = 0; i < list.size(); i ++) {
                         deleteTask(list.get(i));
 
                     }
-
 
                     loadRegistros();
 
@@ -248,15 +247,13 @@ public class TasksActivity extends BaseActivity {
         this.callJson.callJsonObjectDelete(VolleySingleton.URL_DELETE_TASK_ID + task.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                loadRegistros();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
             }
         });
-
     }
 
 
@@ -312,7 +309,7 @@ public class TasksActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        getMenuInflater().inflate(R.menu.menu_tasks, menu);
         return true;
     }
 

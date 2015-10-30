@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +28,6 @@ import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
-import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 /**
  * Created by walky on 10/26/15.
@@ -44,6 +44,8 @@ public class ProfileEditActivity extends BaseActivity {
     private String imageDecodableString;
     private ImageView ivImagePerfil;
     private Button btAlterarImage;
+    private EditText etName;
+    private EditText etEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,10 @@ public class ProfileEditActivity extends BaseActivity {
         createToolbar(R.id.activity_profile_edit_toolbar);
 
 
-        this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
+        Gson gson = new Gson();
+        this.user = gson.fromJson(getIntent().getStringExtra(PerfilActivity.KEY_INTENT_PUT_EXTRA_USER), UserModel.class);
+
+
         this.requestBody = new JSONObject();
         this.callJson = new CallJsonNetwork();
 
@@ -68,6 +73,12 @@ public class ProfileEditActivity extends BaseActivity {
                 loadImageFromGallery();
             }
         });
+
+        this.etName = (EditText) findViewById(R.id.activity_profile_edit_edit_text_name);
+        this.etName.setText(user.getName());
+
+        this.etEmail = (EditText) findViewById(R.id.activity_profile_edit_edit_text_email);
+        this.etEmail.setText(user.getUserName());
 
         this.floatingButton = (FloatingActionButton) findViewById(R.id.activity_profile_edit_floating_button_edit);
         this.floatingButton.setOnClickListener(new View.OnClickListener() {

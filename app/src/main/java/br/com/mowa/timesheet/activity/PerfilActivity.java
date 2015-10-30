@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +51,7 @@ public class PerfilActivity extends BaseActivity {
     private ProjetosDetalhesUserListAdapter adapter;
     private FloatingActionButton floatingButton;
     private TextView tvNameProfile;
+    public static final String KEY_INTENT_PUT_EXTRA_USER = "USER_KEY";
 
 
 
@@ -95,6 +98,9 @@ public class PerfilActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PerfilActivity.this, ProfileEditActivity.class);
+                Gson gson = new Gson();
+                intent.putExtra("KEY_INTENT_PUT_EXTRA_USER", gson.toJson(userModel));
+                Log.d("walkys", " " + userModel.getName());
                 startActivity(intent);
             }
         });

@@ -182,6 +182,30 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     }
 
 
+    private class AsyncTask extends android.os.AsyncTask{
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            finish();
+        }
+    }
+
+
+
+
+
     /**
      *
      * Carrega as variaveis int de data e hora para a hora atual, e seta nos buttons da activity e formulario.
@@ -268,6 +292,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                                     public void onResponse(JSONObject response) {
                                         clearFilderForm();
                                         snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
+                                        progress.dismiss();
                                     }
                                 }, new Response.ErrorListener() {
                                     @Override
@@ -281,6 +306,9 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                                     public void onResponse(JSONObject response) {
                                         snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));
                                         disableAndEnableField(false);
+                                        progress.dismiss();
+                                        new AsyncTask().execute();
+
                                     }
                                 }, new Response.ErrorListener() {
                                     @Override
@@ -484,8 +512,11 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         if (isEditTaskDate) {
             requestBody.put("time", taskEditObject.getTime());
         } else if (formTaskModel.verificaStartAndEndTime()){
-            formTaskModel.calculaTime();
-            requestBody.put("time", formTaskModel.getTime());
+            if (!(formTaskModel.calculaTime())) {
+                isOk = false;
+            } else {
+                requestBody.put("time", formTaskModel.getTime());
+            }
         } else {
             toast("Data ou hora invalido");
             isOk = false;

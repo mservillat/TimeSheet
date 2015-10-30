@@ -136,7 +136,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -156,12 +157,14 @@
                     <RelativeLayout
                         android:id="@+id/relative_graphic"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="16dp">
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/piechart"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"/>
+                            android:layout_height="240dp"/>
 
                     </RelativeLayout>
 

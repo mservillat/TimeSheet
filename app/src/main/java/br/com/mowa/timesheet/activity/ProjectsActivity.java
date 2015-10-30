@@ -169,7 +169,6 @@ public class ProjectsActivity extends BaseActivity {
             @Override
             public void onClickItemRecycler(int position) {
                 Intent intent = new Intent(ProjectsActivity.this, ProjectDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 Gson gson = new Gson();
                 intent.putExtra(KEY_INTENT_PUT_EXTRA_PROJECT_DETAILS, gson.toJson(listProjectModel.get(position)));
                 startActivity(intent);

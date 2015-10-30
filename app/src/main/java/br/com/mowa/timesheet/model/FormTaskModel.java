@@ -63,7 +63,7 @@ public class FormTaskModel {
 
     public boolean calculaTime() {
         this.time = (this.timeFinalMilissegundos - this.timeIncialMilissegundos);
-        if (this.time <= tempoMaximoTask && this.time > 0) {
+        if (this.time <= tempoMaximoTask && this.time > 10) {
             return true;
         } else {
             this.time = null;

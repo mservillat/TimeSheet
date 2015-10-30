@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,9 +51,7 @@ public class ProjectDetailsActivity extends BaseActivity {
     private List<String> listAttendees;
     private String totalHours;
 
-    private RelativeLayout rlGraphic;
-    private float[] yData = { 5, 10, 15, 30, 40 };
-    private String[] xData = { "Sony", "Huawei", "LG", "Apple", "Samsung" };
+    private List<Long> hoursInProjectGraphic = new ArrayList<>();;
     private PieChart mChart;
 
 
@@ -89,7 +86,7 @@ public class ProjectDetailsActivity extends BaseActivity {
 
 
         mChart.setUsePercentValues(true);
-        mChart.setDescription("Smartphones Market Share");
+        mChart.setDescription("");
 
 
         mChart.setDrawHoleEnabled(true);
@@ -110,7 +107,7 @@ public class ProjectDetailsActivity extends BaseActivity {
                     return;
 
                 Toast.makeText(ProjectDetailsActivity.this,
-                        xData[e.getXIndex()] + " = " + e.getVal() + "%", Toast.LENGTH_SHORT).show();
+                        listAttendees.get(e.getXIndex()) + " = " + e.getVal() + "%", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -119,8 +116,6 @@ public class ProjectDetailsActivity extends BaseActivity {
             }
         });
 
-        // add data
-        addData();
 
         // customize legends
         Legend l = mChart.getLegend();
@@ -136,16 +131,16 @@ public class ProjectDetailsActivity extends BaseActivity {
     private void addData() {
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
-        for (int i = 0; i < yData.length; i++)
-            yVals1.add(new Entry(yData[i], i));
+        for (int i = 0; i < hoursInProjectGraphic.size(); i++)
+            yVals1.add(new Entry(hoursInProjectGraphic.get(i), i));
 
         ArrayList<String> xVals = new ArrayList<String>();
 
-        for (int i = 0; i < xData.length; i++)
-            xVals.add(xData[i]);
+        for (int i = 0; i < (listAttendees.size()) ; i++)
+            xVals.add(listAttendees.get(i));
 
         // create pie data set
-        PieDataSet dataSet = new PieDataSet(yVals1, "Market Share");
+        PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(3);
         dataSet.setSelectionShift(5);
 
@@ -228,6 +223,7 @@ public class ProjectDetailsActivity extends BaseActivity {
         this.tvTotalHours.setText(this.totalHours);
         this.listViewAttendees.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, this.listAttendees));
         ListViewUtils.getListViewSize(listViewAttendees);
+        builderListGraphic();
     }
 
     private void loadListAttendees(String attendees) {
@@ -235,6 +231,26 @@ public class ProjectDetailsActivity extends BaseActivity {
             listAttendees.add(attendees);
         }
     }
+
+    private void builderListGraphic() {
+        for(int i = 0; i < listAttendees.size(); i ++) {
+            Long time = new Long(0);
+            for (TaskModel task : listTask) {
+                if (listAttendees.get(i).equals(task.getUserName())) {
+                    time += task.getTime();
+                }
+            }
+            hoursInProjectGraphic.add(time);
+        }
+
+        addData();
+    }
+
+
+
+
+
+
 
 
     @Override

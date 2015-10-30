@@ -116,7 +116,9 @@ public class TaskModel implements Comparable<TaskModel>{
         return this.getProject().getName();
     }
 
-
+    public String getUserName() {
+        return this.user.getName();
+    }
 
     /**
      *  Calcula as horas de uma lista de tarefas (do mesmo user e mesmo projeto) para ser usado no adapter
