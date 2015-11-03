@@ -105,6 +105,8 @@
     <string name="activity_tasks_text_view_order_more_time">Maior tempo</string>
     <string name="activity_tasks_text_view_order_less_time">Menor tempo</string>
     <string name="activity_tasks_text_view_order_name">Nome</string>
+    <string name="fragment_profile_edit_gallery">Galeria</string>
+    <string name="fragment_profile_edit_camera">Camera</string>
 
 
 </resources>

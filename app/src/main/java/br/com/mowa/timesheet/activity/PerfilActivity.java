@@ -55,6 +55,7 @@ public class PerfilActivity extends BaseActivity {
 
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +100,7 @@ public class PerfilActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PerfilActivity.this, ProfileEditActivity.class);
                 Gson gson = new Gson();
-                intent.putExtra("KEY_INTENT_PUT_EXTRA_USER", gson.toJson(userModel));
+                intent.putExtra(KEY_INTENT_PUT_EXTRA_USER, gson.toJson(userModel));
                 Log.d("walkys", " " + userModel.getName());
                 startActivity(intent);
             }

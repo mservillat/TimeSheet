@@ -1,7 +1,10 @@
 package br.com.mowa.timesheet.activity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
@@ -53,6 +56,7 @@ public class TasksActivity extends BaseActivity {
     private List<TaskModel> listNoChange;
     private TextView tvFilter;
     private TextView tvOrder;
+    private BroadcastReceiver mBroadcast;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,13 +78,32 @@ public class TasksActivity extends BaseActivity {
 //        this.swipeLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
 
 
+        this.mBroadcast = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                loadRegistros();
+            }
+        };
+
+
+        registerReceiver(mBroadcast, new IntentFilter(NewTaskActivity.BROADCAST));
+
+
 //        listView = (ListView) findViewById(R.id.activity_registros_list_view);
         parseTask = new ParseTask();
         callJson = new CallJsonNetwork();
         listFix = new ArrayList<>();
         loadRegistros();
 
+
+
     }
+
+
+
+
+
+
 
     /**
      * Chamada GET em todas as tarefas do usuário logado
@@ -148,7 +171,6 @@ public class TasksActivity extends BaseActivity {
                     Intent intent = new Intent(TasksActivity.this, NewTaskActivity.class);
                     Gson gson = new Gson();
                     intent.putExtra("taskEdit", gson.toJson(task));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 }
 
@@ -167,6 +189,7 @@ public class TasksActivity extends BaseActivity {
             }
         };
     }
+
 
 
 
@@ -277,33 +300,8 @@ public class TasksActivity extends BaseActivity {
 //    }
 
 
-    /**
-     * Interface OnRefreshListener do SwipeRefreshLayout
-     * @return
-     */
-//    private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
-//        return new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                if (IsConnectionNetworkAvailable.isNetworkAvailable(getContext())) {
-//                    loadRegistros();
-//                } else {
-//                    toast("erro - verifique sua conexão");
-//                    stopRefresh();
-//                }
-//
-//            }
-//        };
-//    }
 
-    /**
-     * Metodo para cancelar o swipeRefresh
-     */
-//    private void stopRefresh() {
-//        if (swipeLayout.isRefreshing()) {
-//            swipeLayout.setRefreshing(false);
-//        }
-//    }
+
 
 
 

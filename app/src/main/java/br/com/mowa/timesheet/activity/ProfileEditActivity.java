@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 import java.util.regex.Pattern;
 
 import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
+import br.com.mowa.timesheet.dialog.ProfileEditGalleryOrCamera;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
@@ -41,6 +43,7 @@ public class ProfileEditActivity extends BaseActivity {
     private CallJsonNetwork callJson;
     private FloatingActionButton floatingButton;
     private static int RESULT_LOAD_IMG = 1;
+    private static int CAMERA_REQUEST = 1888;
     private String imageDecodableString;
     private ImageView ivImagePerfil;
     private Button btAlterarImage;
@@ -70,12 +73,15 @@ public class ProfileEditActivity extends BaseActivity {
         this.btAlterarImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadImageFromGallery();
+                ProfileEditGalleryOrCamera dialog = new ProfileEditGalleryOrCamera();
+                FragmentManager fm = getSupportFragmentManager();
+                dialog.show(fm, "dialog");
             }
         });
 
         this.etName = (EditText) findViewById(R.id.activity_profile_edit_edit_text_name);
         this.etName.setText(user.getName());
+
 
         this.etEmail = (EditText) findViewById(R.id.activity_profile_edit_edit_text_email);
         this.etEmail.setText(user.getUserName());
@@ -163,10 +169,6 @@ public class ProfileEditActivity extends BaseActivity {
     }
 
 
-    private void loadImageFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, RESULT_LOAD_IMG);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -188,6 +190,9 @@ public class ProfileEditActivity extends BaseActivity {
 
                 ivImagePerfil.setImageBitmap(BitmapFactory.decodeFile(imageDecodableString));
 
+            } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK){
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                ivImagePerfil.setImageBitmap(photo);
             }
         } catch (Exception e) {
             toast("Exception image perfil");
@@ -223,6 +228,17 @@ public class ProfileEditActivity extends BaseActivity {
         return bitmap;
     }
 
+
+
+    public void onClickGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, RESULT_LOAD_IMG);
+    }
+
+    public void onclickCamera() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
 
 
 }

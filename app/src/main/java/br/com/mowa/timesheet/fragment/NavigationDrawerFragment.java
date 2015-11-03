@@ -19,7 +19,6 @@ import android.widget.ListView;
 import java.util.List;
 
 import br.com.mowa.timesheet.activity.HomeActivity;
-import br.com.mowa.timesheet.activity.NewTaskActivity;
 import br.com.mowa.timesheet.activity.PerfilActivity;
 import br.com.mowa.timesheet.activity.ProjectsActivity;
 import br.com.mowa.timesheet.activity.TasksActivity;
@@ -79,15 +78,6 @@ public class NavigationDrawerFragment extends Fragment {
                             Intent intentThree = new Intent(getContext(), ProjectsActivity.class);
                             closeDrawer();
                             startActivity(intentThree);
-                        }
-                        closeDrawer();
-
-                        break;
-                    case 4:
-                        if (!("br.com.mowa.timesheet.activity.NewTaskActivity".equals(getActivity().getLocalClassName()))){
-                            Intent intentFour = new Intent(getContext(), NewTaskActivity.class);
-                            closeDrawer();
-                            startActivity(intentFour);
                         }
                         closeDrawer();
 

@@ -67,7 +67,6 @@ public class HomeActivity extends BaseActivity {
         this.cardViewHoras = (CardView) findViewById(R.id.include_activity_home_card_view_horas_semanais);
         this.cardUltimasTarefas = (CardView) findViewById(R.id.include_activity_home_card_view_ultimas_tarefas);
 
-
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
         drawerFragment.setUp(mDrawerLayout, createToolbarHome(R.id.activity_home_toolbar));
@@ -224,4 +223,37 @@ public class HomeActivity extends BaseActivity {
         FragmentManager fm = getSupportFragmentManager();
         exitDialogFragment.show(fm, "HomeExitDialogFragment");
     }
+
+
+
+
+//    /**
+//     * Interface OnRefreshListener do SwipeRefreshLayout
+//     * @return
+//     */
+//    private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
+//        return new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                if (IsConnectionNetworkAvailable.isNetworkAvailable(getContext())) {
+//                    loadDisplayAllHoursWork();
+//                    loadDisplayUltimateTasks();
+//                    stopRefresh();
+//                } else {
+//                    toast("erro - verifique sua conexão");
+//                    stopRefresh();
+//                }
+//
+//            }
+//        };
+//    }
+//
+//    /**
+//     * Metodo para cancelar o swipeRefresh
+//     */
+//    private void stopRefresh() {
+//        if (swipeLayout.isRefreshing()) {
+//            swipeLayout.setRefreshing(false);
+//        }
+//    }
 }

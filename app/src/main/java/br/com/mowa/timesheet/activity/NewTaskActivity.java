@@ -2,6 +2,7 @@ package br.com.mowa.timesheet.activity;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -62,6 +63,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     private boolean isEditTask;
     private boolean isEditTaskDate;
     private TaskModel taskEditObject;
+    public static String BROADCAST = "ATUALIZA";
 
 
     @Override
@@ -198,7 +200,9 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
+            sendBroadcast(new Intent(BROADCAST));
             finish();
+
         }
     }
 
@@ -318,7 +322,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                                 });
                             }
                         } else {
-                            toast("Algum campo não foi preenchido corretamente");
+
                         }
                     } catch (JSONException e) {
 
@@ -513,6 +517,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             requestBody.put("time", taskEditObject.getTime());
         } else if (formTaskModel.verificaStartAndEndTime()){
             if (!(formTaskModel.calculaTime())) {
+                toast("Tempo da tarefa invalido");
                 isOk = false;
             } else {
                 requestBody.put("time", formTaskModel.getTime());
