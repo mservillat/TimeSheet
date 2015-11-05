@@ -20,6 +20,9 @@ public class VolleySingleton {
     public static final String URL_PUT_USERS_ID = "http://walkyteste.goldarkapi.com/users/";
     public static final String URL_PUT_TASK_ID = "http://walkyteste.goldarkapi.com/task/";
     public static final String URL_DELETE_TASK_ID = "http://walkyteste.goldarkapi.com/task/";
+    public static final String URL_CREATED_AT =  "&created_at=$gte:";
+    public static final String URL_PER_PAGE = "&per_page=";
+    public static final String URL_PAGE = "&page=";
 
 
 
@@ -42,4 +45,6 @@ public class VolleySingleton {
     public RequestQueue getRequestQueue() {
         return mRequestQueue;
     }
+
+
 }

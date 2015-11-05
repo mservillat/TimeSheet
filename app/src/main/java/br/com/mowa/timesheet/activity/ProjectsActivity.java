@@ -32,7 +32,7 @@ import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 
-public class ProjectsActivity extends BaseActivity {
+public class ProjectsActivity extends BaseActivity implements ParseProject.OnParseFinish {
     private ParseProject parseProject;
     private List<ProjectModel> listProjectModel;
     private ListView listViewProjetos;
@@ -58,9 +58,6 @@ public class ProjectsActivity extends BaseActivity {
 
         createToolbar(R.id.activity_projetos_toolbar);
 
-//        this.taskModel = new TaskModel();
-//        this.listViewDetalhes = (ListView) findViewById(R.id.activity_projetos_list_view_detalhes);
-//        this.listViewProjetos = (ListView) findViewById(R.id.activity_projetos_list_view_projetos);
         this.layoutManager = new LinearLayoutManager(this);
         this.recyclerView = (RecyclerView) findViewById(R.id.activity_projects_recycler_view);
         this.recyclerView.setLayoutManager(layoutManager);
@@ -74,6 +71,28 @@ public class ProjectsActivity extends BaseActivity {
 
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onParseFinish(List<ProjectModel> list) {
+        this.listProjectModel = list;
+        ProjectRecyclerviewAdapter adapter = new ProjectRecyclerviewAdapter(listProjectModel, getClickProject());
+        recyclerView.setAdapter(adapter);
+        registerForContextMenu(recyclerView);
+        progress.dismiss();
+    }
+
+
+
+
+
+
+
+
     /**
      * Chamada Get em todos os projetos
      */
@@ -81,15 +100,7 @@ public class ProjectsActivity extends BaseActivity {
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    listProjectModel = parseProject.parseJsonToProjectModel(response);
-                    ProjectRecyclerviewAdapter adapter = new ProjectRecyclerviewAdapter(listProjectModel, getClickProject());
-                    recyclerView.setAdapter(adapter);
-                    registerForContextMenu(recyclerView);
-                    progress.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                parseProject.parseJsonToProjectModel(response, ProjectsActivity.this);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -107,7 +118,7 @@ public class ProjectsActivity extends BaseActivity {
      * @throws JSONException
      */
     private void builderListViewProject(JSONObject response) throws JSONException {
-        this.listProjectModel = parseProject.parseJsonToProjectModel(response);
+        parseProject.parseJsonToProjectModel(response, ProjectsActivity.this);
         ArrayAdapter<ProjectModel> adapter = new ArrayAdapter<>(this , android.R.layout.simple_list_item_1, listProjectModel);
         this.listViewProjetos.setAdapter(adapter);
         this.progress.dismiss();
@@ -174,11 +185,5 @@ public class ProjectsActivity extends BaseActivity {
                 startActivity(intent);
             }
         };
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
     }
 }

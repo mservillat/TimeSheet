@@ -21,7 +21,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_botao_entrar">ENTRAR</string>
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_home">Resumo</string>
 
 
     <!-- Activity Perfil-->
@@ -53,8 +53,7 @@
     <string name="activity_home_text_view_title_comentarios">Comentários</string>
     <string name="activity_home_edit_text_descricao">Esse campo pode ser vazio</string>
     <string name="activity_home_menu_action_sair">logoff</string>
-    <string name="include_activity_home_text_view_title_total_horas">Total de horas</string>
-    <string name="include_activity_home_text_view_subtitle_horas_semanais">Horas trabalhadas durante a semana</string>
+    <string name="include_activity_home_text_view_title_resumo_da_semana">Resumo da semana</string>
     <string name="include_activity_home_text_view_title_ultimas_tarefas">Ultimas Tarefas</string>
     <string name="include_activity_home_text_view_ir_para_tarefas">Ir para tarefas</string>
 
@@ -107,6 +106,7 @@
     <string name="activity_tasks_text_view_order_name">Nome</string>
     <string name="fragment_profile_edit_gallery">Galeria</string>
     <string name="fragment_profile_edit_camera">Camera</string>
+    <string name="include_activity_home_text_view_total_de_horas">Total de horas</string>
 
 
 </resources>

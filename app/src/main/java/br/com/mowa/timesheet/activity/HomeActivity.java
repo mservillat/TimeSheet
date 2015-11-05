@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -22,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +38,7 @@ import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements ParseProject.OnParseFinish {
     private TextView tvQuantidadeDeHoras;
     private CallJsonNetwork jsonNetwork;
     private DrawerLayout mDrawerLayout;
@@ -49,8 +49,6 @@ public class HomeActivity extends BaseActivity {
     private LinearLayoutManager layoutManager;
     private TextView tvIrParaTasks;
     private FloatingActionButton floatingButton;
-    private CardView cardViewHoras;
-    private CardView cardUltimasTarefas;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,8 +62,6 @@ public class HomeActivity extends BaseActivity {
         this.jsonNetwork = new CallJsonNetwork();
         this.parseTask = new ParseTask();
 
-        this.cardViewHoras = (CardView) findViewById(R.id.include_activity_home_card_view_horas_semanais);
-        this.cardUltimasTarefas = (CardView) findViewById(R.id.include_activity_home_card_view_ultimas_tarefas);
 
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.activity_home_fragment_navigation_drawer_container);
@@ -111,12 +107,7 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 ParseProject parse = new ParseProject();
-                try {
-                    List<ProjectModel> projectModels = parse.parseJsonToProjectModel(response);
-                    SharedPreferencesUtil.setListProjectInSharedPreferences(projectModels);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                parse.parseJsonToProjectModel(response, HomeActivity.this);
 
             }
         }, new Response.ErrorListener() {
@@ -127,6 +118,14 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onParseFinish(List<ProjectModel> list) {
+        try {
+            SharedPreferencesUtil.setListProjectInSharedPreferences(list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      *
@@ -134,29 +133,31 @@ public class HomeActivity extends BaseActivity {
      *
      */
     private void loadDisplayAllHoursWork() {
-        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId() + VolleySingleton.URL_CREATED_AT + getDateSunday() , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray data = response.getJSONArray("data");
-                    Long time = null;
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject jsonObject = data.getJSONObject(i);
-                        if (time == null) {
-                            time = jsonObject.optLong("time");
-                        } else {
-                            time = time + jsonObject.optLong("time");
+                    if (data != null) {
+                        Long time = null;
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject jsonObject = data.getJSONObject(i);
+                            if (time == null) {
+                                time = jsonObject.optLong("time");
+                            } else {
+                                time = time + jsonObject.optLong("time");
+                            }
                         }
-                    }
 
-                    String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),
-                            TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
-                            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
+                        String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),
+                                TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
+                                TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
 
-                    tvQuantidadeDeHoras.setText(hms);
+                        tvQuantidadeDeHoras.setText(hms);
 //                    tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
-                    tvQuantidadeDeHoras.refreshDrawableState();
-                    progress.dismiss();
+                        tvQuantidadeDeHoras.refreshDrawableState();
+                        progress.dismiss();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -177,15 +178,17 @@ public class HomeActivity extends BaseActivity {
         jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                List<TaskModel> list = new ArrayList<>();
                 try {
+                    List<TaskModel> list = new ArrayList<>();
                     List<TaskModel> listTask = parseTask.jsonObjectToTaskModel(response);
-                    for(int i = 0; i < 2; i++) {
-                        list.add(listTask.get(i));
+                    if (listTask.size() >= 2) {
+                        for(int i = 0; i < 2; i++) {
+                            list.add(listTask.get(i));
+                        }
+                        TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(list);
+                        recyclerView.setAdapter(adapter);
+                        registerForContextMenu(recyclerView);
                     }
-                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(list);
-                    recyclerView.setAdapter(adapter);
-                    registerForContextMenu(recyclerView);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -217,12 +220,26 @@ public class HomeActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private String getDateSunday() {
+        Calendar calendar = Calendar.getInstance();
+        int dayWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        calendar.add(Calendar.DATE, - (dayWeek - 1));
+        int year = calendar.get(Calendar.YEAR);
+        int month = (calendar.get(Calendar.MONTH) + 1);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return year + "-" + month + "-" + day;
+    }
+
+
+
     @Override
     public void onBackPressed() {
         HomeExitDialogFragment exitDialogFragment = new HomeExitDialogFragment();
         FragmentManager fm = getSupportFragmentManager();
         exitDialogFragment.show(fm, "HomeExitDialogFragment");
     }
+
 
 
 

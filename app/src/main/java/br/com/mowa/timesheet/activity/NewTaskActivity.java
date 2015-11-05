@@ -42,7 +42,7 @@ import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 /**
  * Created by walky on 10/8/15.
  */
-public class NewTaskActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+public class NewTaskActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ParseProject.OnParseFinish{
     private FormTaskModel formTaskModel = new FormTaskModel();
     private List<ProjectModel> listaDeProjetosObjProject;
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -183,6 +183,24 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
 
     }
 
+    @Override
+    public void onParseFinish(List<ProjectModel> list) {
+        listaDeProjetosObjProject = list;
+        listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, listaDeProjetosString);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
+                progress.dismiss();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
 
     private class AsyncTask extends android.os.AsyncTask{
 
@@ -248,26 +266,8 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
         jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_PROJECT_USER_ID + user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    listaDeProjetosObjProject = parseProject.parseJsonToProjectModel(response);
-                    listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
-                    SharedPreferencesUtil.setListProjectInSharedPreferences(listaDeProjetosObjProject);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, listaDeProjetosString);
-                    spinner.setAdapter(adapter);
-                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            formTaskModel.setProject(listaDeProjetosObjProject.get(position).getId());
-                            progress.dismiss();
-                        }
+                parseProject.parseJsonToProjectModel(response, NewTaskActivity.this);
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
         }, new Response.ErrorListener() {
             @Override

@@ -22,10 +22,10 @@ public class NavDrawerMenuItem {
         List<NavDrawerMenuItem> list = new ArrayList<>();
 
 
-        list.add(new NavDrawerMenuItem("Home", R.mipmap.ic_launcher));
-        list.add(new NavDrawerMenuItem("Perfil", R.mipmap.ic_launcher));
-        list.add(new NavDrawerMenuItem("Registros", R.mipmap.ic_launcher));
-        list.add(new NavDrawerMenuItem("Projetos", R.mipmap.ic_launcher));
+        list.add(new NavDrawerMenuItem("Home", R.drawable.ic_home_black_24dp));
+        list.add(new NavDrawerMenuItem("Perfil", R.drawable.ic_person_black_24dp));
+        list.add(new NavDrawerMenuItem("Tarefas", R.drawable.ic_task_black_24dp));
+        list.add(new NavDrawerMenuItem("Projetos", R.drawable.ic_content_paste_black_24dp));
 
 
         return list;

@@ -38,6 +38,7 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.EndlessRecyclerOnScrollListener;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 import br.com.mowa.timesheet.utils.TaskModelCompare;
 
@@ -57,6 +58,8 @@ public class TasksActivity extends BaseActivity {
     private TextView tvFilter;
     private TextView tvOrder;
     private BroadcastReceiver mBroadcast;
+    private int countPage;
+    private int countPageFix;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +67,12 @@ public class TasksActivity extends BaseActivity {
         setContentView(R.layout.activity_tasks);
 
         this.progress = createProgressDialog("Loading", "carregando lista de tarefas", true, true);
-        this.progress.show();
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
-
-
+        countPage = 0;
+        recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recycler.setLayoutManager(layoutManager);
+        recycler.setHasFixedSize(true);
 
         createToolbar(R.id.activity_registros_toolbar);
 
@@ -93,7 +98,7 @@ public class TasksActivity extends BaseActivity {
         parseTask = new ParseTask();
         callJson = new CallJsonNetwork();
         listFix = new ArrayList<>();
-        loadRegistros();
+        countPerPage();
 
 
 
@@ -102,6 +107,23 @@ public class TasksActivity extends BaseActivity {
 
 
 
+    private void countPerPage() {
+        CallJsonNetwork callJson = new CallJsonNetwork();
+        callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + user.getId() + "&per_page=10", new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+//                int qtdPerPage = response.optInt("total");
+                countPageFix = response.optInt("per_page");
+                loadRegistros();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+    }
 
 
 
@@ -110,25 +132,49 @@ public class TasksActivity extends BaseActivity {
      * adapta a lista em um recyclerView
      */
     private void loadRegistros() {
-        callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + user.getId(), new Response.Listener<JSONObject>() {
+        progress.show();
+        callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + user.getId() + VolleySingleton.URL_PER_PAGE + 10 + VolleySingleton.URL_PAGE + countPage , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listNoChange = parseTask.jsonObjectToTaskModel(response);
-                    listFix = copyList(listNoChange);
-                    listDisplay = copyList(listNoChange);
-                    recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
-                    layoutManager = new LinearLayoutManager(getActivity());
-                    recycler.setLayoutManager(layoutManager);
-                    recycler.setHasFixedSize(true);
-                    TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(listDisplay, interfaceOnClick());
-                    recycler.setAdapter(adapter);
-                    registerForContextMenu(recycler);
-                    progress.dismiss();
+                    if (listNoChange == null) {
+                        countPage = 0;
+                        listNoChange = parseTask.jsonObjectToTaskModel(response);
+                        listFix = copyList(listNoChange);
+                        listDisplay = copyList(listNoChange);
+                        recycler.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+                            @Override
+                            public void onLoadMore(int current_page) {
+                                countPage++;
+                                if (!(countPage > countPageFix)) {
+                                    loadRegistros();
+                                }
+
+                            }
+                        });
+
+                        TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(listDisplay, interfaceOnClick());
+                        recycler.setAdapter(adapter);
+                        registerForContextMenu(recycler);
+                    } else {
+                        List<TaskModel> listTemp = parseTask.jsonObjectToTaskModel(response);
+                        for (TaskModel task :listTemp) {
+                            listNoChange.add(task);
+                            listFix.add(task);
+                            listDisplay.add(task);
+                            recycler.getAdapter().notifyDataSetChanged();
+                        }
+
+                    }
+
+
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                progress.dismiss();
 
             }
         }, new Response.ErrorListener() {
@@ -138,6 +184,9 @@ public class TasksActivity extends BaseActivity {
             }
         });
     }
+
+
+
 
 
     /**

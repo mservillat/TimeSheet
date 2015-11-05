@@ -72,7 +72,7 @@ public class ProjectDetailsActivity extends BaseActivity {
 
         this.tvDescription = (TextView) findViewById(R.id.activity_project_details_text_description);
 //        this.tvDescription.setText(this.project.getDescription());
-        this.tvDescription.setText("description description description description descriptiondescription description description description description description description description description description description ");
+        this.tvDescription.setText(this.project.getDescription());
         this.tvTotalHours = (TextView) findViewById(R.id.activity_project_details_text_total_hours);
 
         this.listViewAttendees = (ListView) findViewById(R.id.activity_project_details_list_view_attendees);

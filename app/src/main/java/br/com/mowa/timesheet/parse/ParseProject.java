@@ -1,5 +1,7 @@
 package br.com.mowa.timesheet.parse;
 
+import android.os.AsyncTask;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,32 +17,15 @@ import br.com.mowa.timesheet.model.UserModel;
  */
 public class ParseProject {
 
-    public List<ProjectModel> parseJsonToProjectModel(JSONObject response) throws JSONException {
-        List<ProjectModel> list = new ArrayList<>();
-        JSONArray jsonArray = response.getJSONArray("data");
-        for (int i = 0; i < jsonArray.length(); i++ ) {
-            JSONObject object = jsonArray.getJSONObject(i);
+    private OnParseFinish listener;
 
-            ProjectModel project = new ProjectModel();
-            project.setId(object.optString("id"));
-            project.setName(object.optString("name"));
-            project.setActivite(object.optBoolean("activite"));
-            project.setDone(object.optBoolean("done"));
-            project.setStartDate(object.optString("start_date"));
-            project.setDescription(object.optString("description"));
+    public interface OnParseFinish {
+        void onParseFinish(List<ProjectModel> list);
+    }
 
-
-            JSONArray arrayUser = object.getJSONArray("users");
-            for (int j = 0; j < arrayUser.length(); j++) {
-                JSONObject objectUser = arrayUser.getJSONObject(j);
-                UserModel userModel = new UserModel();
-                userModel.setId(objectUser.optString("id"));
-                project.getUsers().add(userModel);
-            }
-
-            list.add(project);
-        }
-        return list;
+    public void parseJsonToProjectModel(JSONObject response, OnParseFinish listener) {
+        this.listener = listener;
+        new ParseResponseAsyncTask().execute(response);
     }
 
     public List<String> parseListProjectEntityToString(List<ProjectModel> listProjectModel) {
@@ -51,5 +36,47 @@ public class ParseProject {
         return list;
     }
 
+    public class ParseResponseAsyncTask extends AsyncTask<JSONObject, Void, List<ProjectModel>> {
+        @Override
+        protected List<ProjectModel> doInBackground(JSONObject... params) {
+            JSONObject response = params[0];
 
+            List<ProjectModel> list = new ArrayList<>();
+
+            try {
+                JSONArray jsonArray = response.getJSONArray("data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+
+                    ProjectModel project = new ProjectModel();
+                    project.setId(object.optString("id"));
+                    project.setName(object.optString("name"));
+                    project.setActivite(object.optBoolean("activite"));
+                    project.setDone(object.optBoolean("done"));
+                    project.setStartDate(object.optString("start_date"));
+                    project.setDescription(object.optString("description"));
+
+
+                    JSONArray arrayUser = object.getJSONArray("users");
+                    for (int j = 0; j < arrayUser.length(); j++) {
+                        JSONObject objectUser = arrayUser.getJSONObject(j);
+                        UserModel userModel = new UserModel();
+                        userModel.setId(objectUser.optString("id"));
+                        project.getUsers().add(userModel);
+                    }
+
+                    list.add(project);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<ProjectModel> projectModels) {
+            listener.onParseFinish(projectModels);
+        }
+    }
 }

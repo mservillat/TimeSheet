@@ -3,13 +3,12 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,10 +33,11 @@ import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.parse.ParseUser;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.ImageUtils;
 import br.com.mowa.timesheet.utils.ListViewUtils;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
-public class PerfilActivity extends BaseActivity {
+public class PerfilActivity extends BaseActivity implements ParseProject.OnParseFinish, ImageUtils.OnImageUtilsFinish{
     private UserModel user;
     private CallJsonNetwork callJson;
     private UserModel userModel;
@@ -52,6 +52,7 @@ public class PerfilActivity extends BaseActivity {
     private FloatingActionButton floatingButton;
     private TextView tvNameProfile;
     public static final String KEY_INTENT_PUT_EXTRA_USER = "USER_KEY";
+    private ImageView backgroundProfile;
 
 
 
@@ -68,7 +69,7 @@ public class PerfilActivity extends BaseActivity {
         listTask = new ArrayList<>();
         this.listView = (ListView) findViewById(R.id.activity_perfil_list_view);
         this.tvNameProfile = (TextView) findViewById(R.id.activity_profile_edit_name_profile);
-
+        this.backgroundProfile = (ImageView) findViewById(R.id.img_perfil);
 
 
         loadImageProfile();
@@ -117,6 +118,14 @@ public class PerfilActivity extends BaseActivity {
     }
 
 
+
+
+    @Override
+    public void onParseFinish(List<ProjectModel> list) {
+        this.listProject = list;
+        loadListProject();
+    }
+
     /**
      * Chamada REST (GET) no usuario logado, conversão para o objeto UserModel e preenchimento dos campos na activity
      */
@@ -151,12 +160,7 @@ public class PerfilActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 ParseProject parseProject = new ParseProject();
-                try {
-                    listProject = parseProject.parseJsonToProjectModel(response);
-                    loadListProject();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                parseProject.parseJsonToProjectModel(response, PerfilActivity.this);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -169,19 +173,31 @@ public class PerfilActivity extends BaseActivity {
     }
 
 
+
     private void loadImageProfile() {
-        ImageView img = (ImageView) findViewById(R.id.img_perfil);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 16;
-        Bitmap blurTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.image_perfil, options);
-        BitmapDrawable drawable = new BitmapDrawable(getResources(), blurTemplate);
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            img.setBackground(drawable);
-        } else {
-            img.setBackgroundDrawable(drawable);
-        }
+        ViewGroup.LayoutParams layoutParams = backgroundProfile.getLayoutParams();
+        new ImageUtils().ImageRenderBlur(getResources(), R.drawable.image_perfil, layoutParams.width, layoutParams.height, this );
+
 
     }
+
+
+//    private void loadImageProfile() {
+//        ImageView img = (ImageView) findViewById(R.id.img_perfil);
+//
+//        ViewGroup.LayoutParams layoutParams = img.getLayoutParams();
+//
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 16;
+//        Bitmap blurTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.image_perfil, options);
+//        BitmapDrawable drawable = new BitmapDrawable(getResources(), blurTemplate);
+//        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+//            img.setBackground(drawable);
+//        } else {
+//            img.setBackgroundDrawable(drawable);
+//        }
+//
+//    }
 
 
 
@@ -242,9 +258,8 @@ public class PerfilActivity extends BaseActivity {
     }
 
 
-
-
-
-
-
+    @Override
+    public void onImageFinish(Bitmap bitmap) {
+        backgroundProfile.setImageBitmap(bitmap);
+    }
 }

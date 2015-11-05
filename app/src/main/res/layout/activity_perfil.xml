@@ -28,7 +28,8 @@
                     <ImageView
                         android:id="@+id/img_perfil"
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"/>
+                        android:layout_height="240dp"
+                        android:scaleType="centerCrop" />
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="240dp"
