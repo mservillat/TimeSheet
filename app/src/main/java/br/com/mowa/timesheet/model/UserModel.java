@@ -14,6 +14,7 @@ public class UserModel {
     private Date createdAt;
     private Date updateAt;
     private boolean activite;
+    private String profilePicture;
 
 
     public UserModel() {
@@ -88,5 +89,13 @@ public class UserModel {
 
     public void setActivite(boolean activite) {
         this.activite = activite;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

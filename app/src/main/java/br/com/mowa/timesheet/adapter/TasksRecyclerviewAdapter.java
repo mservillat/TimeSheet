@@ -1,6 +1,10 @@
 package br.com.mowa.timesheet.adapter;
 
 import android.content.Context;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,8 +77,20 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
         itemViewHolder.dataInicio.setText(list.get(i).getStartTimeString().substring(0, 10));
         itemViewHolder.quantidadeHoras.setText(list.get(i).calculateHoursWorks());
         itemViewHolder.iconTextLetter.setText(list.get(i).getName().substring(0, 1).toUpperCase());
-        itemViewHolder.imgIconCircle.setImageResource(iconCircleColor.sortColor());
         itemViewHolder.projeto.setText(list.get(i).getProject().getName());
+
+
+        ShapeDrawable biggerCircle= new ShapeDrawable( new OvalShape());
+        biggerCircle.setIntrinsicHeight(40);
+        biggerCircle.setIntrinsicWidth(40);
+        biggerCircle.setBounds(new Rect(0, 0, 40, 40));
+        biggerCircle.getPaint().setColor(context.getResources().getColor(R.color.primary));
+        Drawable d = biggerCircle;
+
+        itemViewHolder.imgIconCircle.setImageDrawable(d);
+
+
+
 
         if (list.get(i).selectd == true) {
             itemViewHolder.container.setBackgroundColor(context.getResources().getColor(R.color.gray));
@@ -106,6 +122,7 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
         TextView iconTextLetter;
         ImageView imgIconCircle;
         public View container;
+        private View gradiente;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -115,7 +132,7 @@ public class TasksRecyclerviewAdapter extends RecyclerView.Adapter<TasksRecycler
             iconTextLetter = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_icon);
             imgIconCircle = (ImageView) itemView.findViewById(R.id.layout_item_recycler_task_image_view_icon_circle);
             projeto = (TextView) itemView.findViewById(R.id.layout_item_recycler_task_text_view_project);
-            container = itemView;
+            container = itemView;;
 
         }
     }

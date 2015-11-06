@@ -192,6 +192,7 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -199,6 +200,7 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
 
             }
         });
+        progress.dismiss();
     }
 
 

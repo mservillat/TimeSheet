@@ -5,10 +5,6 @@
     <string name="action_settings">Settings</string>
 
 
-
-
-
-
     <!-- Nav Drawer-->
     <string name="navigation_drawer_aberto">aberto</string>
     <string name="navigation_drawer_fechado">fechado</string>
@@ -72,8 +68,6 @@
     <string name="activity_home_button_horas_fim_error">hora de inicio</string>
     <string name="dialog_fragment_login_esqueceu_senha_text_view">Digite seu email</string>
     <string name="dialog_fragment_login_button_enviar_senha">ENVIAR</string>
-
-
 
 
     <!--  Activity New Task-->

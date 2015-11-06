@@ -19,6 +19,7 @@ public class ParseUser {
         user.setName(object.optString("name"));
         user.setUserName(object.optString("username"));
         user.setActivite(object.optBoolean("activite"));
+        user.setProfilePicture(object.optString("profile_picture"));
 
         return user;
     }
