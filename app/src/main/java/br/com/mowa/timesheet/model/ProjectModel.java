@@ -16,6 +16,7 @@ public class ProjectModel {
     private boolean activite;
     private boolean done;
     private String description;
+    private String color;
 
     public String getName() {
         return name;
@@ -75,6 +76,14 @@ public class ProjectModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     @Override

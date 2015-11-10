@@ -19,7 +19,7 @@ public class TaskModel implements Comparable<TaskModel>{
     private String timeDisplay;
     private String dateString;
     public boolean selectd = false;
-
+    private String color;
 
 
     public TaskModel(){
@@ -119,6 +119,14 @@ public class TaskModel implements Comparable<TaskModel>{
 
     public String getUserName() {
         return this.user.getName();
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     /**

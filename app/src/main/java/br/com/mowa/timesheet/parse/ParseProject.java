@@ -55,6 +55,7 @@ public class ParseProject {
                     project.setDone(object.optBoolean("done"));
                     project.setStartDate(object.optString("start_date"));
                     project.setDescription(object.optString("description"));
+                    project.setColor(object.optString("color"));
 
 
                     JSONArray arrayUser = object.getJSONArray("users");

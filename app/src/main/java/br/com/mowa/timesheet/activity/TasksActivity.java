@@ -67,6 +67,7 @@ public class TasksActivity extends BaseActivity {
         setContentView(R.layout.activity_tasks);
 
         this.progress = createProgressDialog("Loading", "carregando lista de tarefas", true, true);
+        this.progress.show();
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         countPage = 0;
         recycler = (RecyclerView) findViewById(R.id.activity_tasks_recycler_view);
@@ -132,7 +133,6 @@ public class TasksActivity extends BaseActivity {
      * adapta a lista em um recyclerView
      */
     private void loadRegistros() {
-        progress.show();
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + user.getId() + VolleySingleton.URL_PER_PAGE + 10 + VolleySingleton.URL_PAGE + countPage , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -203,7 +203,7 @@ public class TasksActivity extends BaseActivity {
                     if (task.selectd) {
                         task.selectd = false;
                     } else {
-                        task.selectd =true;
+                        task.selectd = true;
                     }
 
                     if (getSelectedTasks().size() == 0) {

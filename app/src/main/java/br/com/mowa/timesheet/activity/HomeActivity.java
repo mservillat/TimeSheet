@@ -1,6 +1,7 @@
 package br.com.mowa.timesheet.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -81,8 +90,9 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
         });
         this.tvQuantidadeDeHoras = (TextView) findViewById(R.id.include_activity_home_text_view_horas_semanais);
         callProjectInUser();
-        loadDisplayUltimateTasks();
-        loadDisplayAllHoursWork();
+
+
+
 
 
         this.floatingButton = (FloatingActionButton) findViewById(R.id.include_activity_home_floating_button_new_task);
@@ -92,8 +102,6 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
                 startActivity(new Intent(getContext(), NewTaskActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
             }
         });
-
-
 
 
     }
@@ -108,7 +116,7 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
             public void onResponse(JSONObject response) {
                 ParseProject parse = new ParseProject();
                 parse.parseJsonToProjectModel(response, HomeActivity.this);
-
+                loadDisplayUltimateTasks();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -155,9 +163,8 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
 
                         tvQuantidadeDeHoras.setText(hms);
 //                    tvQuantidadeDeHoras.setText(String.format(" %d min ", TimeUnit.MILLISECONDS.toMinutes(time)));
-                        tvQuantidadeDeHoras.refreshDrawableState();
-                        progress.dismiss();
                     }
+                    progress.dismiss();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -175,32 +182,42 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
 
 
     private void loadDisplayUltimateTasks() {
-        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId(), new Response.Listener<JSONObject>() {
+        jsonNetwork.callJsonObjectGet(VolleySingleton.URL_GET_TASK_USER_ID + this.user.getId() + VolleySingleton.URL_PER_PAGE + 2, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    List<TaskModel> list = new ArrayList<>();
                     List<TaskModel> listTask = parseTask.jsonObjectToTaskModel(response);
-                    if (listTask.size() >= 2) {
-                        for(int i = 0; i < 2; i++) {
-                            list.add(listTask.get(i));
+                    if (listTask.size() != 0) {
+                        List<TaskModel> list = new ArrayList<>();
+                        if (listTask.size() == 1) {
+                            list.add(listTask.get(0));
+                        } else {
+                            for (int i = 0; i < 2; i++) {
+                                list.add(listTask.get(i));
+                            }
                         }
                         TasksRecyclerviewAdapter adapter = new TasksRecyclerviewAdapter(list);
                         recyclerView.setAdapter(adapter);
                         registerForContextMenu(recyclerView);
+
+                    } else {
+                        toast("Nenhuma tarefa");
                     }
+                    progress.dismiss();
+                    loadDisplayAllHoursWork();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    progress.dismiss();
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                progress.dismiss();
             }
         });
-        progress.dismiss();
     }
 
 

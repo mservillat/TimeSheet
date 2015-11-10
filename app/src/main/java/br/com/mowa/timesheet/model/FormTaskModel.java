@@ -16,6 +16,7 @@ public class FormTaskModel {
     private String project;
     private Long time;
     private static final int tempoMaximoTask = 86300000;
+    private String color;
 
 
     private Long timeIncialMilissegundos;
@@ -77,6 +78,13 @@ public class FormTaskModel {
 
     public Long getTime() { return time; }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public void setDate(int year, int month, int day, int hour, int minute) {
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");

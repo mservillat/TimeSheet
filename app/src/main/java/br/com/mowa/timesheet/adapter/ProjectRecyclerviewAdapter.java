@@ -46,7 +46,7 @@ public class ProjectRecyclerviewAdapter extends RecyclerView.Adapter<ProjectRecy
         holder.description.setText(list.get(position).getDescription().substring(0,16) + "...");
         holder.situacao.setText(list.get(position).isActivite()? "Ativo" : "Finalizado");
         holder.iconTextLetter.setText(list.get(position).getName().substring(0, 1).toUpperCase());
-        holder.imgIconCircle.setImageResource(iconCircleColor.sortColor());
+        holder.imgIconCircle.setImageDrawable(iconCircleColor.circleColor(list.get(position).getColor()));
 
 
     }

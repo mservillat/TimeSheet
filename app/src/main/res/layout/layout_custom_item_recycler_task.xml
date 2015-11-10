@@ -46,7 +46,7 @@
         android:layout_toEndOf="@+id/layout_item_recycler_task_text_view_title"
         android:text="Subtitle"
         android:textColor="@color/white"
-        android:background="@color/bright_yellow"/>
+        android:background="@color/primary"/>
 
     <TextView
         android:id="@+id/layout_item_recycler_task_text_view_title"

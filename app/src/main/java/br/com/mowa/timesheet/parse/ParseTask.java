@@ -29,6 +29,7 @@ public class ParseTask {
             taskModel.setEndTimeString(object.optString("end_time"));
             taskModel.setTime(object.optLong("time"));
             taskModel.setDateStringAndCalendar(object.optString("date"));
+            taskModel.setColor(object.optString("color"));
 
             // User
             JSONObject objectUser = object.getJSONObject("user");
@@ -42,6 +43,7 @@ public class ParseTask {
             projectModel.setId(objectProject.optString("id"));
             projectModel.setName(objectProject.optString("name"));
             projectModel.setDescription(objectProject.optString("description"));
+            projectModel.setColor(object.optString("color"));
             taskModel.setProject(projectModel);
 
 

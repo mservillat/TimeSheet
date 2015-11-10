@@ -23,11 +23,19 @@
     <color name="pink">#FF80AB</color>
     <color name="blue_text_button_dialog_fragment">#2196F3</color>
     <color name="white_in_primary">#E1F5FE</color>
-    <color name="pink_circle">#E040FB</color>
-    <color name="bright_yellow">#CDDC39</color>
-    <color name="green_circle">#76FF03</color>
-    <color name="indigo_circle">#304FFE</color>
-    <color name="blue_circle">#64B5F6</color>
-    <color name="red_circle">#F44336</color>
-    <color name="brur">#A6000000</color>
+    <color name="blur">#A6000000</color>
+
+
+    <color name="circle_yellow_bright">#CDDC39</color>
+    <color name="circle_green">#76FF03</color>
+    <color name="circle_blue_indigo">#304FFE</color>
+    <color name="circle_blue">#64B5F6</color>
+    <color name="circle_red">#F44336</color>
+    <color name="circle_pink">#E040FB</color>
+    <color name="circle_orange">#FF9933</color>
+    <color name="circle_aqua">#00FFFF</color>
+    <color name="circle_dark_sea_green">#8FBC8F</color>
+    <color name="circle_golden">#FFD700</color>
+    <color name="circle_light_coral">#F08080</color>
+
 </resources>

@@ -37,6 +37,7 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.IconCircleColor;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 /**
@@ -526,6 +527,13 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
             toast("Data ou hora invalido");
             isOk = false;
         }
+
+        if (!isEditTask) {
+            requestBody.put("color", new IconCircleColor().sortColor());
+        } else {
+            requestBody.put("color", taskEditObject.getColor());
+        }
+
 
         requestBody.put("comments", this.etComment.getText().toString());
 

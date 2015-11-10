@@ -3,6 +3,7 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +35,12 @@ import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.parse.ParseUser;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.ImageDownload;
+import br.com.mowa.timesheet.utils.ImageStorage;
 import br.com.mowa.timesheet.utils.ImageUtils;
 import br.com.mowa.timesheet.utils.ListViewUtils;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PerfilActivity extends BaseActivity implements ParseProject.OnParseFinish, ImageUtils.OnImageUtilsFinish{
     private UserModel user;
@@ -53,6 +58,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
     private TextView tvNameProfile;
     public static final String KEY_INTENT_PUT_EXTRA_USER = "USER_KEY";
     private ImageView backgroundProfile;
+    private CircleImageView circleImage;
 
 
 
@@ -69,10 +75,10 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         listTask = new ArrayList<>();
         this.listView = (ListView) findViewById(R.id.activity_perfil_list_view);
         this.tvNameProfile = (TextView) findViewById(R.id.activity_profile_edit_name_profile);
-        this.backgroundProfile = (ImageView) findViewById(R.id.img_perfil);
+        this.backgroundProfile = (ImageView) findViewById(R.id.activity_profile_image_background);
+        this.circleImage = (CircleImageView) findViewById(R.id.activity_profile_circle_img);
 
 
-        loadImageProfile();
 
         createToolbar(R.id.activity_perfil_toolbar);
 
@@ -110,7 +116,6 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
 
 
-
         loadProjectInUser();
         loadProfileUser();
 
@@ -139,7 +144,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
                     tvEmail.setText(userModel.getUserName());
                     tvNameProfile.setText(userModel.getName());
 //                    tvSituacao.setText((userModel.isActivite() == true ? "true" : "false"));
-                    progress.dismiss();
+                    loadImageProfile();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -176,7 +181,27 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
     private void loadImageProfile() {
         ViewGroup.LayoutParams layoutParams = backgroundProfile.getLayoutParams();
-        new ImageUtils().ImageRenderBlur(getResources(), R.drawable.image_perfil, layoutParams.width, layoutParams.height, this );
+        String imageName = user.getId();
+
+        if(ImageStorage.checkifImageExists(imageName)) {
+        File file = ImageStorage.getImage(imageName);
+        String path = file.getAbsolutePath();
+        Log.d("walkyima", "perfAct" + file.getAbsolutePath());
+        if (path != null) {
+                Bitmap b = BitmapFactory.decodeFile(path);
+                ImageUtils.decodeSampledBitmapFromResource(ImageStorage.getImage(imageName), backgroundProfile.getLayoutParams().width, backgroundProfile.getLayoutParams().height);
+                backgroundProfile.setImageBitmap(b);
+            }
+        }
+        else {
+            Log.d("walkyURL", userModel.getProfilePicture().toString());
+            new ImageDownload(userModel.getProfilePicture(), backgroundProfile, imageName, this).execute() ;
+        }
+
+
+
+
+//        new ImageUtils().ImageRenderBlur(getResources(), R.drawable.image_perfil, layoutParams.width, layoutParams.height, this );
 
 
     }
@@ -260,6 +285,9 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
     @Override
     public void onImageFinish(Bitmap bitmap) {
+        circleImage.setImageBitmap(bitmap);
+//        ImageUtils.decodeSampledBitmapFromResource(ImageStorage.getImage(user.getId()), backgroundProfile.getLayoutParams().width, backgroundProfile.getLayoutParams().height);
         backgroundProfile.setImageBitmap(bitmap);
+        progress.dismiss();
     }
 }

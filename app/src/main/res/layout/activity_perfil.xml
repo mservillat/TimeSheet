@@ -26,20 +26,20 @@
                     android:layout_height="240dp">
 
                     <ImageView
-                        android:id="@+id/img_perfil"
+                        android:id="@+id/activity_profile_image_background"
                         android:layout_width="match_parent"
                         android:layout_height="240dp"
                         android:scaleType="centerCrop" />
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="240dp"
-                        android:background="@color/brur"/>
+                        android:background="@color/blur"/>
 
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/activity_profile_circle_img"
                         android:layout_width="96dp"
                         android:layout_height="96dp"
-                        android:src="@drawable/image_perfil"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"/>
                     <TextView
