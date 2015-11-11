@@ -82,6 +82,7 @@ public class NavigationDrawerFragment extends Fragment {
                         closeDrawer();
 
                         break;
+
                     default:
                         break;
                 }

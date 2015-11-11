@@ -34,7 +34,7 @@ public class ImageDownload extends AsyncTask<Object, Object, Object> {
             conn.setRequestProperty("X-Api-Token", "QdqV9mQud/PT0LiiEW4zpuJeuCWfEsToMqiuto98XyT5U48CymfdXW/m5us+Tcx9dewwJuiYOYi2JFdd8qD0Rw==");
             conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
             bitmap = BitmapFactory.decodeStream(conn.getInputStream());
-            Log.d("walkyImage", "do back");
+            Log.d("walkyImage", "fazendo download");
         } catch (Exception ex) {
         }
         return null;
@@ -44,11 +44,9 @@ public class ImageDownload extends AsyncTask<Object, Object, Object> {
     protected void onPostExecute(Object o) {
         if(!ImageStorage.checkifImageExists(imageName))
         {
-            ImageStorage.saveToSdCard(bitmap, imageName);
+            ImageStorage.saveInternalStorage(bitmap, imageName);
             this.finish.onImageFinish(bitmap);
 //            imageView.setImageBitmap(bitmap);
-
-
         }
     }
 

@@ -82,6 +82,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
         createToolbar(R.id.activity_perfil_toolbar);
 
+
 //        this.tvNome = (TextView) findViewById(R.id.activity_perfil_text_view_nome);
         this.tvEmail = (TextView) findViewById(R.id.activity_perfil_text_view_email);
 //        this.tvSituacao = (TextView) findViewById(R.id.activity_perfil_text_view_situacao);
@@ -186,15 +187,16 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         if(ImageStorage.checkifImageExists(imageName)) {
         File file = ImageStorage.getImage(imageName);
         String path = file.getAbsolutePath();
-        Log.d("walkyima", "perfAct" + file.getAbsolutePath());
+        Log.d("walkyima", " Perfil activity, getImagem storage" + file.getAbsolutePath());
         if (path != null) {
+            Log.d("walkyima", "Perfil activity imagem do storage não é null");
                 Bitmap b = BitmapFactory.decodeFile(path);
                 ImageUtils.decodeSampledBitmapFromResource(ImageStorage.getImage(imageName), backgroundProfile.getLayoutParams().width, backgroundProfile.getLayoutParams().height);
                 backgroundProfile.setImageBitmap(b);
             }
         }
         else {
-            Log.d("walkyURL", userModel.getProfilePicture().toString());
+            Log.d("walkyima", "Perfil activity imagem do storage é null");
             new ImageDownload(userModel.getProfilePicture(), backgroundProfile, imageName, this).execute() ;
         }
 
@@ -227,7 +229,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
 
     private void loadListProject() {
-        parseTask =new ParseTask();
+        parseTask = new ParseTask();
 
         adapter = new ProjetosDetalhesUserListAdapter(this, listTask);
         listView.setAdapter(adapter);
@@ -259,21 +261,10 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         String taskName = list.get(0).getProjectName();
         for (TaskModel task: list) {
             time += task.getTime();
-
-
         }
-
         listTask.add(new TaskModel(taskName, +  time));
-
-
-
-
         adapter.notifyDataSetChanged();
         ListViewUtils.getListViewSize(listView);
-
-
-
-
     }
 
     @Override

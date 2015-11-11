@@ -17,18 +17,19 @@ import br.com.mowa.timesheet.TimeSheetApplication;
 public class ImageStorage {
     public static final String DIRECTORY = "time_sheet";
     private static final Context context = TimeSheetApplication.getAppContext();
-    public static String saveToSdCard(Bitmap bitmap, String fileName) {
+    public static String saveInternalStorage(Bitmap bitmap, String fileName) {
 
         String stored = null;
 
-//        File sdcard = Environment.getExternalStorageDirectory() ;
-//        File path = Environment.getDataDirectory();
-        File myDir = context.getDir(DIRECTORY, Context.MODE_PRIVATE);
-        File folder = new File(myDir, fileName + ".jpg");
-        folder.mkdir();
-        File file = new File(folder.getAbsoluteFile(), fileName + ".jpg") ;
-        if (file.exists())
-            return stored ;
+        File myDir = Environment.getDataDirectory();
+        File folder = new File(myDir,  "/" + fileName + ".jpg");
+//        folder.mkdir();
+        File file = new File(folder.getAbsoluteFile(), "/" + fileName + ".jpg") ;
+        if (file.exists()) {
+            Log.d("walkyima", "save  EXISTE não precisa salvar--- return" );
+            return stored;
+        }
+
 
         try {
             FileOutputStream out = new FileOutputStream(folder);
@@ -37,7 +38,7 @@ public class ImageStorage {
             out.close();
 
             stored = "success";
-            Log.d("walkyima", " b " + stored);
+            Log.d("walkyima", " save " + stored);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +54,7 @@ public class ImageStorage {
             if (!myDir.exists())
                 return null;
 
-            mediaImage = new File(myDir.getPath() + "/" + DIRECTORY +"/"+imageName + ".jpg");
+            mediaImage = new File(myDir.getPath() +"/" +imageName + ".jpg");
             Log.d("walkyimage", "get image  " + mediaImage.getPath());
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -69,17 +70,16 @@ public class ImageStorage {
         Bitmap b = null ;
         File file = ImageStorage.getImage(imageName);
         String path = file.getPath();
-        Log.d("walkyima", " check  " + path);
 
         if (path != null) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             b = BitmapFactory.decodeFile(path, options);
-            Log.d("walkyimage", "não null");
+            Log.d("walkyimage", "caminho existe");
         }
 
         if(b == null ||  b.equals("")) {
-            Log.d("walkyimage", "null");
+            Log.d("walkyimage", "imagem não existe");
             return false ;
         }
         return true ;
