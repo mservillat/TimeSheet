@@ -1,5 +1,6 @@
 package br.com.mowa.timesheet.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -14,16 +15,24 @@ import java.net.URLConnection;
  * Created by walky on 11/9/15.
  */
 public class ImageDownload extends AsyncTask<Object, Object, Object> {
+    public static final String LOG_TAG = "ImageDownload";
     private String requestUrl, imageName;
     private ImageView imageView;
     private Bitmap bitmap ;
     private FileOutputStream fos;
-    private ImageUtils.OnImageUtilsFinish finish;
-    public ImageDownload(String requestUrl, ImageView view, String imageName, ImageUtils.OnImageUtilsFinish fini) {
+    private OnImageDownloadListener listener;
+    private Context context;
+
+    public interface OnImageDownloadListener {
+        void onImageDownloadFinishListener(Bitmap imageDownload, String url);
+    }
+
+    public ImageDownload(Context context, String requestUrl, ImageView view, String imageName, OnImageDownloadListener listener) {
         this.requestUrl = requestUrl;
         this.imageView = view;
         this.imageName = imageName ;
-        this.finish = fini;
+        this.listener = listener;
+        this.context = context;
     }
 
     @Override
@@ -34,7 +43,10 @@ public class ImageDownload extends AsyncTask<Object, Object, Object> {
             conn.setRequestProperty("X-Api-Token", "QdqV9mQud/PT0LiiEW4zpuJeuCWfEsToMqiuto98XyT5U48CymfdXW/m5us+Tcx9dewwJuiYOYi2JFdd8qD0Rw==");
             conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
             bitmap = BitmapFactory.decodeStream(conn.getInputStream());
-            Log.d("walkyImage", "fazendo download");
+            Log.d(LOG_TAG, "downloading");
+
+            ImageStorage.saveInternalStorage(context, bitmap, requestUrl);
+
         } catch (Exception ex) {
         }
         return null;
@@ -42,12 +54,7 @@ public class ImageDownload extends AsyncTask<Object, Object, Object> {
 
     @Override
     protected void onPostExecute(Object o) {
-        if(!ImageStorage.checkifImageExists(imageName))
-        {
-            ImageStorage.saveInternalStorage(bitmap, imageName);
-            this.finish.onImageFinish(bitmap);
-//            imageView.setImageBitmap(bitmap);
-        }
+        listener.onImageDownloadFinishListener(bitmap, requestUrl);
     }
 
 }

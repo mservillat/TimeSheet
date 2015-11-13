@@ -1,7 +1,6 @@
 package br.com.mowa.timesheet.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,13 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -48,6 +41,7 @@ import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 public class HomeActivity extends BaseActivity implements ParseProject.OnParseFinish {
+    public static final String LOG_TAG = "HomeActivity";
     private TextView tvQuantidadeDeHoras;
     private CallJsonNetwork jsonNetwork;
     private DrawerLayout mDrawerLayout;
@@ -104,9 +98,10 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
         });
 
 
+        File[] files = getCacheDir().listFiles();
+        Log.d(LOG_TAG, "files total " + files.length);
+
     }
-
-
 
 
 

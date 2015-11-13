@@ -10,10 +10,10 @@ import java.io.File;
  * Created by walky on 11/5/15.
  */
 public class ImageUtils {
-    private OnImageUtilsFinish listener;
+    private OnImageUtilsListener listener;
 
-    public interface OnImageUtilsFinish {
-        void onImageFinish(Bitmap bitmap);
+    public interface OnImageUtilsListener {
+        void onImageBlurListener(Bitmap bitmap);
     }
 
     public class ImageUtilsAsyncTask extends AsyncTask<Object, Bitmap, Bitmap> {
@@ -46,13 +46,13 @@ public class ImageUtils {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            listener.onImageFinish(bitmap);
+            listener.onImageBlurListener(bitmap);
         }
     }
 
 
 
-    public void ImageRenderBlur(File file, int reqWidth, int reqHeight, OnImageUtilsFinish onImageFinish) {
+    public void ImageRenderBlur(File file, int reqWidth, int reqHeight, OnImageUtilsListener onImageFinish) {
         this.listener = onImageFinish;
         new ImageUtilsAsyncTask().execute(file, reqWidth, reqHeight);
     }
@@ -82,8 +82,7 @@ public class ImageUtils {
     }
 
 
-    public static Bitmap decodeSampledBitmapFromResource(File file,
-                                                          int reqWidth, int reqHeight) {
+    public static Bitmap decodeSampledBitmapFromResource(File file, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();

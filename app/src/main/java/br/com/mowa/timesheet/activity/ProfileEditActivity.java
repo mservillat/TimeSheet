@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,6 +31,8 @@ import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.ImageStorage;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by walky on 10/26/15.
@@ -49,6 +52,8 @@ public class ProfileEditActivity extends BaseActivity {
     private Button btAlterarImage;
     private EditText etName;
     private EditText etEmail;
+    private CircleImageView circleImageProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +84,10 @@ public class ProfileEditActivity extends BaseActivity {
             }
         });
 
+        this.circleImageProfile = (CircleImageView) findViewById(R.id.activity_profile_edit_circle_photo);
+        ViewGroup.LayoutParams layoutParams = this.circleImageProfile.getLayoutParams();
+        this.circleImageProfile.setImageBitmap(ImageStorage.getImage(this, user.getProfilePicture(), layoutParams.width, layoutParams.height));
+
         this.etName = (EditText) findViewById(R.id.activity_profile_edit_edit_text_name);
         this.etName.setText(user.getName());
 
@@ -93,6 +102,8 @@ public class ProfileEditActivity extends BaseActivity {
                 verifyEqualNewPassword();
             }
         });
+
+
 
     }
 

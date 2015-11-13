@@ -3,7 +3,6 @@ package br.com.mowa.timesheet.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -42,7 +41,7 @@ import br.com.mowa.timesheet.utils.ListViewUtils;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PerfilActivity extends BaseActivity implements ParseProject.OnParseFinish, ImageUtils.OnImageUtilsFinish{
+public class PerfilActivity extends BaseActivity implements ParseProject.OnParseFinish, ImageUtils.OnImageUtilsListener, ImageDownload.OnImageDownloadListener {
     private UserModel user;
     private CallJsonNetwork callJson;
     private UserModel userModel;
@@ -132,6 +131,32 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         loadListProject();
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+
+    @Override
+    public void onImageBlurListener(Bitmap bitmap) {
+        backgroundProfile.setImageBitmap(bitmap);
+        progress.dismiss();
+    }
+
+    @Override
+    public void onImageDownloadFinishListener(Bitmap imageDownload, String url) {
+        if (!getImageStorage(url)) {
+            circleImage.setImageBitmap(imageDownload);
+            backgroundProfile.setImageBitmap(imageDownload);
+        }
+    }
+
+
+
+
+
     /**
      * Chamada REST (GET) no usuario logado, conversão para o objeto UserModel e preenchimento dos campos na activity
      */
@@ -181,32 +206,33 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
 
     private void loadImageProfile() {
-        ViewGroup.LayoutParams layoutParams = backgroundProfile.getLayoutParams();
-        String imageName = user.getId();
 
-        if(ImageStorage.checkifImageExists(imageName)) {
-        File file = ImageStorage.getImage(imageName);
-        String path = file.getAbsolutePath();
-        Log.d("walkyima", " Perfil activity, getImagem storage" + file.getAbsolutePath());
-        if (path != null) {
-            Log.d("walkyima", "Perfil activity imagem do storage não é null");
-                Bitmap b = BitmapFactory.decodeFile(path);
-                ImageUtils.decodeSampledBitmapFromResource(ImageStorage.getImage(imageName), backgroundProfile.getLayoutParams().width, backgroundProfile.getLayoutParams().height);
-                backgroundProfile.setImageBitmap(b);
-            }
+        String imageUrl = userModel.getProfilePicture();
+
+        if(!getImageStorage(imageUrl)) {
+            new ImageDownload(this, userModel.getProfilePicture(), backgroundProfile, imageUrl, this).execute();
         }
-        else {
-            Log.d("walkyima", "Perfil activity imagem do storage é null");
-            new ImageDownload(userModel.getProfilePicture(), backgroundProfile, imageName, this).execute() ;
-        }
-
-
-
-
-//        new ImageUtils().ImageRenderBlur(getResources(), R.drawable.image_perfil, layoutParams.width, layoutParams.height, this );
-
-
     }
+
+
+
+    private boolean getImageStorage(String imageUrl) {
+
+        ViewGroup.LayoutParams layoutParams = backgroundProfile.getLayoutParams();
+
+        File imageFile = ImageStorage.getImage(this, imageUrl);
+
+        if(imageFile != null) {
+            circleImage.setImageBitmap(ImageStorage.getImage(this, imageUrl, layoutParams.width, layoutParams.height));
+            new ImageUtils().ImageRenderBlur(imageFile, layoutParams.width, layoutParams.height, this);
+            return true;
+        }
+        return false;
+    }
+
+
+
+
 
 
 //    private void loadImageProfile() {
@@ -251,9 +277,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
                 }
             });
-
         }
-
     }
 
     private void calculateTotalHours(List<TaskModel> list, int ii) {
@@ -267,18 +291,4 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         ListViewUtils.getListViewSize(listView);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
-    }
-
-
-    @Override
-    public void onImageFinish(Bitmap bitmap) {
-        circleImage.setImageBitmap(bitmap);
-//        ImageUtils.decodeSampledBitmapFromResource(ImageStorage.getImage(user.getId()), backgroundProfile.getLayoutParams().width, backgroundProfile.getLayoutParams().height);
-        backgroundProfile.setImageBitmap(bitmap);
-        progress.dismiss();
-    }
 }
