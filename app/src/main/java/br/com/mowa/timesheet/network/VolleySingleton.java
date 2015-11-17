@@ -23,6 +23,7 @@ public class VolleySingleton {
     public static final String URL_CREATED_AT =  "&created_at=$gte:";
     public static final String URL_PER_PAGE = "&per_page=";
     public static final String URL_PAGE = "&page=";
+    public static final String URL_PROFILE_PICTURE = "/profile_picture";
 
 
 

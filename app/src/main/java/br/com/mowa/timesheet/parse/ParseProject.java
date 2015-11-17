@@ -17,24 +17,17 @@ import br.com.mowa.timesheet.model.UserModel;
  */
 public class ParseProject {
 
-    private OnParseFinish listener;
+    private OnParseFinishListener listener;
 
-    public interface OnParseFinish {
-        void onParseFinish(List<ProjectModel> list);
+    public interface OnParseFinishListener {
+        void onParseFinishListener(List<ProjectModel> list);
     }
 
-    public void parseJsonToProjectModel(JSONObject response, OnParseFinish listener) {
+    public void parseJsonToProjectModel(JSONObject response, OnParseFinishListener listener) {
         this.listener = listener;
         new ParseResponseAsyncTask().execute(response);
     }
 
-    public List<String> parseListProjectEntityToString(List<ProjectModel> listProjectModel) {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < listProjectModel.size(); i++) {
-            list.add(listProjectModel.get(i).getName());
-        }
-        return list;
-    }
 
     public class ParseResponseAsyncTask extends AsyncTask<JSONObject, Void, List<ProjectModel>> {
         @Override
@@ -77,7 +70,19 @@ public class ParseProject {
 
         @Override
         protected void onPostExecute(List<ProjectModel> projectModels) {
-            listener.onParseFinish(projectModels);
+            listener.onParseFinishListener(projectModels);
         }
+    }
+
+
+
+
+
+    public List<String> parseListProjectEntityToString(List<ProjectModel> listProjectModel) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < listProjectModel.size(); i++) {
+            list.add(listProjectModel.get(i).getName());
+        }
+        return list;
     }
 }

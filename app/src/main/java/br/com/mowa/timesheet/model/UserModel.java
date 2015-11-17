@@ -1,7 +1,5 @@
 package br.com.mowa.timesheet.model;
 
-import java.util.Date;
-
 /**
  * Created by walky on 9/22/15.
  */
@@ -11,20 +9,21 @@ public class UserModel {
     private String userName;
     private String password;
     private String token;
-    private Date createdAt;
-    private Date updateAt;
     private boolean activite;
     private String profilePicture;
+    private String updatedAt;
 
 
     public UserModel() {
 
     }
 
-    public UserModel(String id, String username, String token) {
+    public UserModel(String id, String username, String token, String name, String updatedAt) {
         this.id = id;
         this.userName = username;
         this.token = token;
+        this.name = name;
+        this.updatedAt = updatedAt;
     }
 
     public String getId() {
@@ -67,22 +66,6 @@ public class UserModel {
         this.token = token;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
-    }
-
     public boolean isActivite() {
         return activite;
     }
@@ -97,5 +80,13 @@ public class UserModel {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 }

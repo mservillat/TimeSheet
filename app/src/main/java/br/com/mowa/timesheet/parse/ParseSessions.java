@@ -2,56 +2,58 @@ package br.com.mowa.timesheet.parse;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.mowa.timesheet.model.UserModel;
 
 /**
- * Created by walky on 9/25/15.
+ * Created by walky on 11/16/15.
  */
-public class ParseUser {
+public class ParseSessions {
 
     private OnParseFinishListener listener;
 
-    public interface OnParseFinishListener {
+    public interface OnParseFinishListener{
         void onParseFinishListener(UserModel user);
     }
 
-    public void parseJsonToUserModel(JSONObject jsonObject, OnParseFinishListener listener) {
+
+    public void  parseJsonSessionsToUserModel(JSONObject jsonObject, OnParseFinishListener listener) {
         this.listener = listener;
-        new ParseResponseUserAsyncTask().execute(jsonObject);
+        new ParseResponseSessionsAsyncTask().execute(jsonObject);
 
     }
 
-
-    public class ParseResponseUserAsyncTask extends AsyncTask<JSONObject, Void, UserModel> {
+    public class ParseResponseSessionsAsyncTask extends AsyncTask<JSONObject, Void, UserModel> {
 
         @Override
         protected UserModel doInBackground(JSONObject... params) {
-            UserModel user;
             JSONObject jsonObject = params[0];
+            UserModel user = new UserModel();
             try {
-                JSONArray jsonArray = jsonObject.getJSONArray("data");
-                JSONObject object = jsonArray.getJSONObject(0);
-                user = new UserModel();
+                JSONObject object = jsonObject.getJSONObject("user");
                 user.setId(object.optString("id"));
                 user.setName(object.optString("name"));
                 user.setUserName(object.optString("username"));
                 user.setActivite(object.optBoolean("activite"));
-                user.setProfilePicture(object.optString("profile_picture"));
                 user.setUpdatedAt(object.optString("updated_at"));
+                user.setProfilePicture(object.optString("profile_picture"));
+                user.setToken(jsonObject.optString("token"));
+
                 return user;
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(UserModel user) {
-            listener.onParseFinishListener(user);
+        protected void onPostExecute(UserModel userModel) {
+            listener.onParseFinishListener(userModel);
         }
     }
 }

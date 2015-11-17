@@ -41,7 +41,7 @@ import br.com.mowa.timesheet.utils.ListViewUtils;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PerfilActivity extends BaseActivity implements ParseProject.OnParseFinish, ImageUtils.OnImageUtilsListener, ImageDownload.OnImageDownloadListener {
+public class PerfilActivity extends BaseActivity implements ParseProject.OnParseFinishListener, ImageUtils.OnImageUtilsListener, ImageDownload.OnImageDownloadListener {
     private UserModel user;
     private CallJsonNetwork callJson;
     private UserModel userModel;
@@ -67,7 +67,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
-        this.progress = createProgressDialog("Loading", "carregando informações do usuário", true, true);
+        this.progress = createProgressDialog("Loading", "loading user information", true, true);
         this.progress.show();
         this.user = SharedPreferencesUtil.getUserFromSharedPreferences();
         this.callJson = new CallJsonNetwork();
@@ -123,10 +123,22 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
     }
 
 
+    private ParseUser.OnParseFinishListener onParseFinishListener() {
+        return new ParseUser.OnParseFinishListener() {
+            @Override
+            public void onParseFinishListener(UserModel user) {
+                userModel = user;
+                tvEmail.setText(userModel.getUserName());
+                tvNameProfile.setText(userModel.getName());
+//                    tvSituacao.setText((userModel.isActivite() == true ? "true" : "false"));
+                loadImageProfile();
 
+            }
+        };
+    }
 
     @Override
-    public void onParseFinish(List<ProjectModel> list) {
+    public void onParseFinishListener(List<ProjectModel> list) {
         this.listProject = list;
         loadListProject();
     }
@@ -147,7 +159,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
 
     @Override
     public void onImageDownloadFinishListener(Bitmap imageDownload, String url) {
-        if (!getImageStorage(url)) {
+        if (!getImageStorage(url, true)) {
             circleImage.setImageBitmap(imageDownload);
             backgroundProfile.setImageBitmap(imageDownload);
         }
@@ -164,16 +176,8 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         callJson.callJsonObjectGet(VolleySingleton.URL_GET_USERS_ID + this.user.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    userModel = new ParseUser().jsonObjectToUserEntity(response);
-//                    tvNome.setText(userModel.getName());
-                    tvEmail.setText(userModel.getUserName());
-                    tvNameProfile.setText(userModel.getName());
-//                    tvSituacao.setText((userModel.isActivite() == true ? "true" : "false"));
-                    loadImageProfile();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                new ParseUser().parseJsonToUserModel(response, onParseFinishListener());
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -208,15 +212,19 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
     private void loadImageProfile() {
 
         String imageUrl = userModel.getProfilePicture();
-
-        if(!getImageStorage(imageUrl)) {
-            new ImageDownload(this, userModel.getProfilePicture(), backgroundProfile, imageUrl, this).execute();
+        String updateAt = userModel.getUpdatedAt();
+        if (updateAt.equals(user.getUpdatedAt())) {
+            if(!getImageStorage(imageUrl, false)) {
+                getImageDownload(imageUrl);
+            }
+        } else {
+            getImageDownload(imageUrl);
         }
     }
 
 
 
-    private boolean getImageStorage(String imageUrl) {
+    private boolean getImageStorage(String imageUrl, boolean saveDateUpdate) {
 
         ViewGroup.LayoutParams layoutParams = backgroundProfile.getLayoutParams();
 
@@ -225,9 +233,19 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         if(imageFile != null) {
             circleImage.setImageBitmap(ImageStorage.getImage(this, imageUrl, layoutParams.width, layoutParams.height));
             new ImageUtils().ImageRenderBlur(imageFile, layoutParams.width, layoutParams.height, this);
+
+            if (saveDateUpdate) {
+                SharedPreferencesUtil.deleteSharedPreferencesUser(SharedPreferencesUtil.KEY_USER_LOGIN_PREFERENCE_USERNAME);
+                SharedPreferencesUtil.setUserInSharedPreferences(userModel);
+            }
+
             return true;
         }
         return false;
+    }
+
+    private void getImageDownload(String imageUrl) {
+        new ImageDownload(this, userModel.getProfilePicture(), backgroundProfile, imageUrl, this).execute();
     }
 
 
@@ -274,13 +292,12 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
                 }
             });
         }
     }
 
-    private void calculateTotalHours(List<TaskModel> list, int ii) {
+    private void calculateTotalHours(List<TaskModel> list, int i) {
         Long time = new Long(0);
         String taskName = list.get(0).getProjectName();
         for (TaskModel task: list) {

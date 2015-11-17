@@ -57,6 +57,8 @@ public class SharedPreferencesUtil {
         editor.putString("username", user.getUserName());
         editor.putString("id", user.getId());
         editor.putString("token", user.getToken());
+        editor.putString("updated_at", user.getUpdatedAt());
+        editor.putString("name", user.getName());
         editor.commit();
     }
 
@@ -72,7 +74,10 @@ public class SharedPreferencesUtil {
             String username = shared.getString("username",null);
             String id = shared.getString("id", null);
             String token = shared.getString("token", null);
-            UserModel user = new UserModel(username, id, token);
+            String name = shared.getString("name", null);
+            String updatedAt = shared.getString("updated_at", null);
+
+            UserModel user = new UserModel(id, username, token, name, updatedAt);
             return user;
         }
         return null;

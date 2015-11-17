@@ -1,7 +1,8 @@
 package br.com.mowa.timesheet.activity;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +25,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.regex.Pattern;
 
 import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
@@ -32,27 +35,29 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.ImageStorage;
+import br.com.mowa.timesheet.utils.ImageUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by walky on 10/26/15.
  */
 public class ProfileEditActivity extends BaseActivity {
+    private static int RESULT_LOAD_IMG = 1;
+    private static int CAMERA_REQUEST = 1888;
+
+    private UserModel user;
     private EditText etPasswordCurrent;
     private EditText etPasswordNew;
     private EditText etPasswordConfirm;
-    private JSONObject requestBody;
-    private UserModel user;
-    private CallJsonNetwork callJson;
-    private FloatingActionButton floatingButton;
-    private static int RESULT_LOAD_IMG = 1;
-    private static int CAMERA_REQUEST = 1888;
-    private String imageDecodableString;
-    private ImageView ivImagePerfil;
-    private Button btAlterarImage;
     private EditText etName;
     private EditText etEmail;
+    private ImageView ivImagePerfil;
     private CircleImageView circleImageProfile;
+    private FloatingActionButton floatingButton;
+    private Button btAlterarImage;
+    private JSONObject requestBody;
+    private ProgressDialog progress;
+
 
 
     @Override
@@ -62,12 +67,12 @@ public class ProfileEditActivity extends BaseActivity {
         createToolbar(R.id.activity_profile_edit_toolbar);
 
 
+        progress = createProgressDialog("Loading", "loading new image", true, true);
         Gson gson = new Gson();
         this.user = gson.fromJson(getIntent().getStringExtra(PerfilActivity.KEY_INTENT_PUT_EXTRA_USER), UserModel.class);
 
 
         this.requestBody = new JSONObject();
-        this.callJson = new CallJsonNetwork();
 
         this.etPasswordCurrent = (EditText) findViewById(R.id.activity_profile_edit_edit_text_password_current);
         this.etPasswordNew = (EditText) findViewById(R.id.activity_profile_edit_edit_text_password_new);
@@ -102,9 +107,6 @@ public class ProfileEditActivity extends BaseActivity {
                 verifyEqualNewPassword();
             }
         });
-
-
-
     }
 
 
@@ -140,8 +142,8 @@ public class ProfileEditActivity extends BaseActivity {
 
 
     private void verifyPasswordCurrent() {
-        this.callJson = new CallJsonNetwork();
-        this.callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_SESSIONS, requestBody, new Response.Listener<JSONObject>() {
+        CallJsonNetwork callJson = new CallJsonNetwork();
+        callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_SESSIONS, requestBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -164,7 +166,8 @@ public class ProfileEditActivity extends BaseActivity {
 
 
     private void callJsonAlteraSenha() {
-        this.callJson.callJsonObjectPut(VolleySingleton.URL_PUT_USERS_ID + this.user.getId(), requestBody, new Response.Listener<JSONObject>() {
+        CallJsonNetwork callJson = new CallJsonNetwork();
+        callJson.callJsonImagePut(VolleySingleton.URL_PUT_USERS_ID + this.user.getId(), requestBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 snack(floatingButton, getResources().getString(R.string.activity_profile_edit_password_changed_success));
@@ -180,76 +183,91 @@ public class ProfileEditActivity extends BaseActivity {
     }
 
 
+    private void callJsonUpdateImageProfile(String imageDecodedString) {
+        new CallJsonNetwork().callJsonImagePut(VolleySingleton.URL_PUT_USERS_ID + user.getId() + VolleySingleton.URL_PROFILE_PICTURE, imageDecodedString, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progress.dismiss();
+                toast("updated image");
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progress.dismiss();
+                toast("error");
+                Log.e("Volley", error.networkResponse.toString());
+            }
+        });
+    }
+
+
+
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CAMERA_REQUEST || requestCode == RESULT_LOAD_IMG) {
+                Bitmap bitmap = getBitmapFromData(data);
+                String imageDecodedString = getBitmapRequestBody(bitmap);
+                callJsonUpdateImageProfile(imageDecodedString);
+
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data);
-        try {
-            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
-                Uri uri = data.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+    }
 
 
-                Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                imageDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-
-                createImageThumbnail(imageDecodableString, 480, 800);
-
-                ivImagePerfil.setImageBitmap(BitmapFactory.decodeFile(imageDecodableString));
-
-            } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK){
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                ivImagePerfil.setImageBitmap(photo);
-            }
-        } catch (Exception e) {
-            toast("Exception image perfil");
+    public static Bitmap getBitmapFromData(Intent data) {
+        Bitmap photo = null;
+        Uri photoUri = data.getData();
+        if (photoUri != null) {
+            photo = BitmapFactory.decodeFile(photoUri.getPath());
         }
+        if (photo == null) {
+            Bundle extra = data.getExtras();
+            if (extra != null) {
+                photo = (Bitmap) extra.get("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            }
+        }
+
+        return photo;
     }
 
 
 
-    private Bitmap createImageThumbnail(String imagePath, int width, int height) {
-        Bitmap bitmap = null;
-        BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-        bmpFactoryOptions.inJustDecodeBounds = true;
-        int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight
-                / (float) height);
-        int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth
-                / (float) width);
-
-        if (heightRatio > 1 || widthRatio > 1) {
-            if (heightRatio > widthRatio) {
-                bmpFactoryOptions.inSampleSize = heightRatio;
-            } else {
-                bmpFactoryOptions.inSampleSize = widthRatio;
-            }
-        }
-        bmpFactoryOptions.inJustDecodeBounds = false;
-
-        if (bitmap != null) {
-            bitmap.recycle();
-            bitmap = null;
-        }
-
-        bitmap = BitmapFactory.decodeFile(imagePath, bmpFactoryOptions);
-        return bitmap;
+    private Intent getCropIntent(Intent intent) {
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 320);
+        intent.putExtra("outputY", 320);
+        intent.putExtra("return-data", true);
+        return intent;
     }
-
 
 
     public void onClickGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, RESULT_LOAD_IMG);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(getCropIntent(intent), RESULT_LOAD_IMG);
     }
 
     public void onclickCamera() {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(getCropIntent(intent), CAMERA_REQUEST);
+
     }
 
+    private String getBitmapRequestBody(Bitmap bitmap) {
+        String stringBitmap = ImageUtils.bitmapToBase64(bitmap);
+
+        return  stringBitmap;
+
+    }
 
 }

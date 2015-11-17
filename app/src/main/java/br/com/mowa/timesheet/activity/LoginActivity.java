@@ -21,11 +21,12 @@ import br.com.mowa.timesheet.dialog.LoginEsqueciASenhaDialogFragment;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
+import br.com.mowa.timesheet.parse.ParseSessions;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements ParseSessions.OnParseFinishListener {
     private EditText editEmail;
     private EditText editSenha;
     private Button btLogin;
@@ -97,6 +98,13 @@ public class LoginActivity extends BaseActivity {
     }
 
 
+
+    @Override
+    public void onParseFinishListener(UserModel user) {
+        SharedPreferencesUtil.setUserInSharedPreferences(user);
+    }
+
+
     /**
      * Metodo que faz a chamada POST PARA criar a sessão
      * @param requestBody Json com usuario e senha digitado
@@ -105,22 +113,15 @@ public class LoginActivity extends BaseActivity {
         callJson.callJsonObjectPost(VolleySingleton.URL_POST_CREATE_SESSIONS, requestBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    String username = response.getString("username");
-                    String id = response.getString("user_id");
-                    String token = response.getString("token");
-                    user = new UserModel(username, id, token);
 
-                    SharedPreferencesUtil.setUserInSharedPreferences(user);
+                ParseSessions parse = new ParseSessions();
+                parse.parseJsonSessionsToUserModel(response, LoginActivity.this);
 
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    progress.dismiss();
-                    startActivity(intent);
-                    finish();
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                progress.dismiss();
+                startActivity(intent);
+                finish();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -176,4 +177,5 @@ public class LoginActivity extends BaseActivity {
         progress.dismiss();
         return false;
     }
+
 }

@@ -14,8 +14,13 @@ import java.util.Map;
  */
 public class CustomJsonObjectRequest extends JsonObjectRequest {
 
+
     public CustomJsonObjectRequest(int method, String url, JSONObject requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
         super(method, url, requestBody, responseListener, errorListener);
+    }
+
+    public CustomJsonObjectRequest(int method, String url, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+        super(method, url, responseListener, errorListener);
     }
 
     @Override
@@ -27,4 +32,5 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
 
         return customHeader;
     }
+
 }

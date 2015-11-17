@@ -40,7 +40,7 @@ import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 
-public class HomeActivity extends BaseActivity implements ParseProject.OnParseFinish {
+public class HomeActivity extends BaseActivity implements ParseProject.OnParseFinishListener {
     public static final String LOG_TAG = "HomeActivity";
     private TextView tvQuantidadeDeHoras;
     private CallJsonNetwork jsonNetwork;
@@ -98,8 +98,7 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
         });
 
 
-        File[] files = getCacheDir().listFiles();
-        Log.d(LOG_TAG, "files total " + files.length);
+        clearInternalCache();
 
     }
 
@@ -122,7 +121,7 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
     }
 
     @Override
-    public void onParseFinish(List<ProjectModel> list) {
+    public void onParseFinishListener(List<ProjectModel> list) {
         try {
             SharedPreferencesUtil.setListProjectInSharedPreferences(list);
         } catch (JSONException e) {
@@ -256,35 +255,18 @@ public class HomeActivity extends BaseActivity implements ParseProject.OnParseFi
 
 
 
+    private void clearInternalCache() {
+        File[] files = getCacheDir().listFiles();
+        if (files.length > 50) {
+            File file;
+            for (int i = 0; i < files.length; i++) {
+                file = files[i];
+                file.delete();
+                Log.d(LOG_TAG, "delete file cache number" + i);
+            }
+        }
+    }
 
 
-//    /**
-//     * Interface OnRefreshListener do SwipeRefreshLayout
-//     * @return
-//     */
-//    private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
-//        return new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                if (IsConnectionNetworkAvailable.isNetworkAvailable(getContext())) {
-//                    loadDisplayAllHoursWork();
-//                    loadDisplayUltimateTasks();
-//                    stopRefresh();
-//                } else {
-//                    toast("erro - verifique sua conexão");
-//                    stopRefresh();
-//                }
-//
-//            }
-//        };
-//    }
-//
-//    /**
-//     * Metodo para cancelar o swipeRefresh
-//     */
-//    private void stopRefresh() {
-//        if (swipeLayout.isRefreshing()) {
-//            swipeLayout.setRefreshing(false);
-//        }
-//    }
+
 }

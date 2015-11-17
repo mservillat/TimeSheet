@@ -10,37 +10,40 @@ import org.json.JSONObject;
  * Created by walky on 14/09/2015.
  */
 public class CallJsonNetwork {
-    private CallJsonNetwork instanceCallJsonNetwork;
-    private RequestQueue mRequestQueue;
-    private String TAG = "CLASS CallJsonNetwork";
 
     public void callJsonObjectGet(String url, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
-        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET, url, null, responseListener, errorListener);
+        RequestQueue mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET, url, responseListener, errorListener);
 
         mRequestQueue.add(request);
     }
 
 
     public void callJsonObjectPost(String url, JSONObject requestBody ,Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
-        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        RequestQueue mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, requestBody, responseListener, errorListener);
 
-        this.mRequestQueue.add(request);
+        mRequestQueue.add(request);
     }
 
-
-    public void callJsonObjectPut(String url, JSONObject requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
-        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+    public void callJsonImagePut(String url, JSONObject requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+        RequestQueue mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.PUT, url, requestBody, responseListener, errorListener);
 
-        this.mRequestQueue.add(request);
+        mRequestQueue.add(request);
     }
 
 
     public void callJsonObjectDelete(String url, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
-        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.DELETE, url, null, responseListener, errorListener);
+        RequestQueue mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.DELETE, url, responseListener, errorListener);
+
+        mRequestQueue.add(request);
+    }
+
+    public void callJsonImagePut(String url, String requestBody, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+        RequestQueue mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        CustomJsonImageRequest request = new CustomJsonImageRequest(Request.Method.PUT, url, requestBody, responseListener, errorListener);
 
         mRequestQueue.add(request);
     }

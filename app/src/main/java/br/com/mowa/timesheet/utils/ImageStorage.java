@@ -101,6 +101,7 @@ public class ImageStorage {
         File imageFile = new File(cachesDir + File.separator + imageName);
 
         if (imageFile.exists()) {
+            Log.d(LOG_TAG, "image storage exist");
             return ImageUtils.decodeSampledBitmapFromResource(imageFile, reqWidth, reqHeight);
         } else {
             return null;

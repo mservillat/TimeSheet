@@ -43,7 +43,7 @@ import br.com.mowa.timesheet.utils.SharedPreferencesUtil;
 /**
  * Created by walky on 10/8/15.
  */
-public class NewTaskActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ParseProject.OnParseFinish{
+public class NewTaskActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ParseProject.OnParseFinishListener {
     private FormTaskModel formTaskModel = new FormTaskModel();
     private List<ProjectModel> listaDeProjetosObjProject;
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -185,7 +185,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
     }
 
     @Override
-    public void onParseFinish(List<ProjectModel> list) {
+    public void onParseFinishListener(List<ProjectModel> list) {
         listaDeProjetosObjProject = list;
         listaDeProjetosString = parseProject.parseListProjectEntityToString(listaDeProjetosObjProject);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, listaDeProjetosString);
@@ -306,7 +306,7 @@ public class NewTaskActivity extends BaseActivity implements DatePickerDialog.On
                                     }
                                 });
                             } else {
-                                jsonNetwork.callJsonObjectPut(VolleySingleton.URL_PUT_TASK_ID + taskEditObject.getId(), requestBody, new Response.Listener<JSONObject>() {
+                                jsonNetwork.callJsonImagePut(VolleySingleton.URL_PUT_TASK_ID + taskEditObject.getId(), requestBody, new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
                                         snack(btEnviar, getResources().getString(R.string.activity_home_button_floating_msg_enviar));

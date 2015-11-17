@@ -32,7 +32,7 @@ import br.com.mowa.timesheet.parse.ParseProject;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 
-public class ProjectsActivity extends BaseActivity implements ParseProject.OnParseFinish {
+public class ProjectsActivity extends BaseActivity implements ParseProject.OnParseFinishListener {
     private ParseProject parseProject;
     private List<ProjectModel> listProjectModel;
     private ListView listViewProjetos;
@@ -78,7 +78,7 @@ public class ProjectsActivity extends BaseActivity implements ParseProject.OnPar
     }
 
     @Override
-    public void onParseFinish(List<ProjectModel> list) {
+    public void onParseFinishListener(List<ProjectModel> list) {
         this.listProjectModel = list;
         ProjectRecyclerviewAdapter adapter = new ProjectRecyclerviewAdapter(listProjectModel, getClickProject());
         recyclerView.setAdapter(adapter);
