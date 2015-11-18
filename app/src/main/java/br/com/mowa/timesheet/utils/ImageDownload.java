@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
 
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -17,7 +16,6 @@ import java.net.URLConnection;
 public class ImageDownload extends AsyncTask<Object, Object, Object> {
     public static final String LOG_TAG = "ImageDownload";
     private String requestUrl, imageName;
-    private ImageView imageView;
     private Bitmap bitmap ;
     private FileOutputStream fos;
     private OnImageDownloadListener listener;
@@ -27,9 +25,8 @@ public class ImageDownload extends AsyncTask<Object, Object, Object> {
         void onImageDownloadFinishListener(Bitmap imageDownload, String url);
     }
 
-    public ImageDownload(Context context, String requestUrl, ImageView view, String imageName, OnImageDownloadListener listener) {
+    public ImageDownload(Context context, String requestUrl, String imageName, OnImageDownloadListener listener) {
         this.requestUrl = requestUrl;
-        this.imageView = view;
         this.imageName = imageName ;
         this.listener = listener;
         this.context = context;

@@ -84,9 +84,10 @@ public class SharedPreferencesUtil {
     }
 
 
-
-
-
+    public static void updateUserSharedPreference(UserModel user) {
+        deleteSharedPreferencesUser(SharedPreferencesUtil.KEY_USER_LOGIN_PREFERENCE_USERNAME);
+        setUserInSharedPreferences(user);
+    }
 
 
 

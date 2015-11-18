@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -57,6 +56,7 @@ public class ProfileEditActivity extends BaseActivity {
     private Button btAlterarImage;
     private JSONObject requestBody;
     private ProgressDialog progress;
+    public static final String BROADCAST = "atualiza_perfil";
 
 
 
@@ -188,15 +188,14 @@ public class ProfileEditActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 progress.dismiss();
-                toast("updated image");
+                snack(floatingButton, "Image updaded");
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                toast("error");
-                Log.e("Volley", error.networkResponse.toString());
+                snack(floatingButton, "error image updaded");
             }
         });
     }
@@ -209,9 +208,9 @@ public class ProfileEditActivity extends BaseActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST || requestCode == RESULT_LOAD_IMG) {
                 Bitmap bitmap = getBitmapFromData(data);
+                ivImagePerfil.setImageBitmap(bitmap);
                 String imageDecodedString = getBitmapRequestBody(bitmap);
                 callJsonUpdateImageProfile(imageDecodedString);
-
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -250,6 +249,7 @@ public class ProfileEditActivity extends BaseActivity {
 
 
     public void onClickGallery() {
+        progress.show();
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
@@ -257,7 +257,7 @@ public class ProfileEditActivity extends BaseActivity {
     }
 
     public void onclickCamera() {
-
+        progress.show();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(getCropIntent(intent), CAMERA_REQUEST);
 
@@ -270,4 +270,9 @@ public class ProfileEditActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        sendBroadcast(new Intent(BROADCAST));
+        super.onBackPressed();
+    }
 }

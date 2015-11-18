@@ -1,9 +1,13 @@
 package br.com.mowa.timesheet.activity;
 
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +28,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +38,15 @@ import br.com.mowa.timesheet.network.CallJsonNetwork;
 import br.com.mowa.timesheet.network.VolleySingleton;
 import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
+import br.com.mowa.timesheet.utils.ImageDownload;
+import br.com.mowa.timesheet.utils.ImageStorage;
 import br.com.mowa.timesheet.utils.ListViewUtils;
 import br.com.mowa.timesheet.utils.UtilsTime;
 
 /**
  * Created by walky on 10/21/15.
  */
-public class ProjectDetailsActivity extends BaseActivity {
+public class ProjectDetailsActivity extends BaseActivity implements ImageDownload.OnImageDownloadListener{
     private ProjectModel project;
     private TextView tvTitleProject;
     private TextView tvSituation;
@@ -50,6 +57,8 @@ public class ProjectDetailsActivity extends BaseActivity {
     private List<TaskModel> listTask;
     private List<String> listAttendees;
     private String totalHours;
+    private ImageView imageView;
+    private ProgressDialog progress;
 
     private List<Long> hoursInProjectGraphic = new ArrayList<>();;
     private PieChart mChart;
@@ -60,12 +69,17 @@ public class ProjectDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_details);
 
+
+        this.progress = createProgressDialog("Loading", "loading information", true, true);
+        this.progress.show();
         createToolbar(R.id.activity_project_details_toolar);
         Gson gson = new Gson();
         this.project = gson.fromJson(getIntent().getStringExtra(ProjectsActivity.KEY_INTENT_PUT_EXTRA_PROJECT_DETAILS), ProjectModel.class);
 
         this.tvTitleProject = (TextView) findViewById(R.id.activity_project_details_text_title_project);
         this.tvTitleProject.setText(this.project.getName());
+
+        this.imageView = (ImageView) findViewById(R.id.activity_project_details_img);
 
         this.tvSituation = (TextView) findViewById(R.id.activity_project_details_text_situation);
         this.tvSituation.setText(this.project.isActivite()? "Ativo" : "Finalizado");
@@ -125,6 +139,22 @@ public class ProjectDetailsActivity extends BaseActivity {
 
 
         loadDetailsProject();
+        loadImageDownload();
+    }
+
+
+    @Override
+    public void onImageDownloadFinishListener(Bitmap imageDownload, String url) {
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        imageView.setImageBitmap(ImageStorage.getImage(ProjectDetailsActivity.this, url, params.width, params.height));
+        progress.dismiss();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 
 
@@ -184,11 +214,15 @@ public class ProjectDetailsActivity extends BaseActivity {
 
 
 
+    private void loadImageDownload() {
+        File image = ImageStorage.getImage(this, project.getImage());
+        if (image != null) {
 
+        } else {
+            new ImageDownload(this, project.getImage(), project.getImage(), this ).execute();
+        }
 
-
-
-
+    }
 
 
 
@@ -244,19 +278,6 @@ public class ProjectDetailsActivity extends BaseActivity {
         }
 
         addData();
-    }
-
-
-
-
-
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
     }
 
 }

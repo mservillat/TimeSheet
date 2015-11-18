@@ -25,8 +25,6 @@ public class ImageStorage {
 
             File imageFile = new File(cachesDir + File.separator, fileName);
 
-            //if (imageFile.canWrite()) {
-
                 try {
                     FileOutputStream out = new FileOutputStream(imageFile);
 
@@ -59,8 +57,6 @@ public class ImageStorage {
             } else {
                 Log.d(LOG_TAG, "Don't have permission to write in external directory");
             }
-
-
 
             return false;
         }
@@ -107,32 +103,6 @@ public class ImageStorage {
             return null;
         }
 
-
-
-
     }
 
-
-
-
-
-//    public static boolean checkifImageExists(String imageName)
-//    {
-//        Bitmap b = null ;
-//        File file = ImageStorage.getImage(imageName);
-//        String path = file.getPath();
-//
-//        if (path != null) {
-//            final BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inJustDecodeBounds = true;
-//            b = BitmapFactory.decodeFile(path, options);
-//            Log.d("walkyimage", "caminho existe");
-//        }
-//
-//        if(b == null ||  b.equals("")) {
-//            Log.d("walkyimage", "imagem não existe");
-//            return false ;
-//        }
-//        return true ;
-//    }
 }

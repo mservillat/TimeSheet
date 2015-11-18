@@ -1,11 +1,13 @@
 package br.com.mowa.timesheet.activity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,17 +110,22 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
                 Intent intent = new Intent(PerfilActivity.this, ProfileEditActivity.class);
                 Gson gson = new Gson();
                 intent.putExtra(KEY_INTENT_PUT_EXTRA_USER, gson.toJson(userModel));
-                Log.d("walkys", " " + userModel.getName());
+//                Log.d("walkys", " " + userModel.getName());
                 startActivity(intent);
             }
         });
 
-
-
-
         loadProjectInUser();
         loadProfileUser();
 
+        BroadcastReceiver broadcast = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                loadProfileUser();
+                loadImageProfile();
+            }
+        };
+        registerReceiver(broadcast, new IntentFilter(ProfileEditActivity.BROADCAST));
 
     }
 
@@ -154,7 +161,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
     @Override
     public void onImageBlurListener(Bitmap bitmap) {
         backgroundProfile.setImageBitmap(bitmap);
-        progress.dismiss();
+
     }
 
     @Override
@@ -235,8 +242,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
             new ImageUtils().ImageRenderBlur(imageFile, layoutParams.width, layoutParams.height, this);
 
             if (saveDateUpdate) {
-                SharedPreferencesUtil.deleteSharedPreferencesUser(SharedPreferencesUtil.KEY_USER_LOGIN_PREFERENCE_USERNAME);
-                SharedPreferencesUtil.setUserInSharedPreferences(userModel);
+                SharedPreferencesUtil.updateUserSharedPreference(userModel);
             }
 
             return true;
@@ -245,7 +251,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
     }
 
     private void getImageDownload(String imageUrl) {
-        new ImageDownload(this, userModel.getProfilePicture(), backgroundProfile, imageUrl, this).execute();
+        new ImageDownload(this, userModel.getProfilePicture(), imageUrl, this).execute();
     }
 
 
@@ -306,6 +312,7 @@ public class PerfilActivity extends BaseActivity implements ParseProject.OnParse
         listTask.add(new TaskModel(taskName, +  time));
         adapter.notifyDataSetChanged();
         ListViewUtils.getListViewSize(listView);
+        progress.dismiss();
     }
 
 }

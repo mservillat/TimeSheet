@@ -47,7 +47,6 @@ public class TasksActivity extends BaseActivity {
     private ParseTask parseTask;
     private List<TaskModel> listDisplay;
     private CallJsonNetwork callJson;
-//    private SwipeRefreshLayout swipeLayout;
     private LinearLayoutManager layoutManager;
     private ProgressDialog progress;
     private RecyclerView recycler;
