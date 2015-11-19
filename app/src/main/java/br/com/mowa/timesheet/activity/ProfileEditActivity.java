@@ -27,7 +27,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.regex.Pattern;
 
-import br.com.mowa.timesheet.dialog.HomeExitDialogFragment;
 import br.com.mowa.timesheet.dialog.ProfileEditGalleryOrCamera;
 import br.com.mowa.timesheet.model.UserModel;
 import br.com.mowa.timesheet.network.CallJsonNetwork;
@@ -171,7 +170,6 @@ public class ProfileEditActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 snack(floatingButton, getResources().getString(R.string.activity_profile_edit_password_changed_success));
-                HomeExitDialogFragment.setDeleteSharedPreference(true);
             }
         }, new Response.ErrorListener() {
             @Override

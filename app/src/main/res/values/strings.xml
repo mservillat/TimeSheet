@@ -103,5 +103,6 @@
     <string name="include_activity_home_text_view_total_de_horas">Total de horas</string>
 
     <string name="title_activity_scrolling">name</string>
+    <string name="title_activity_project_information">information</string>
 
 </resources>

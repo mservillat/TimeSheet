@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.mowa.timesheet.activity.ProjectInformationActivity"
+    tools:showIn="@layout/activity_project_information">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/activity_project_details_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:id="@+id/activity_project_details_text_title_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="12dp"
+                    android:textSize="24sp"
+                    android:text="Projeto 1"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/activity_project_details_text_situation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="situação"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="24dp"
+                    android:textColor="@color/primary_dark"/>
+                <TextView
+                    android:id="@+id/activity_project_details_text_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="24dp"
+                    android:textColor="@color/gray_subtitle"
+                    android:text="descricao descricao descricao descricao descricao descricao descricao descricao descricao descricao descricao"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"/>
+
+
+
+
+                <TextView
+                    android:id="@+id/activity_project_details_text_title_time_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/activity_project_details_text_title_time_total"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp">
+
+                    <ImageView
+                        android:id="@+id/activity_project_details_icon_total_hours"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="24dp"
+                        android:src="@drawable/ic_start_time" />
+                    <TextView
+                        android:id="@+id/activity_project_details_text_total_hours"
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:text="15hrs 20min"
+                        android:gravity="center_vertical"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="60dp" />
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"/>
+                <TextView
+                    android:id="@+id/activity_project_details_text_title_attendees"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="24sp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/black"
+                    android:text="@string/activity_project_details_text_title_attendees"/>
+                <ListView
+                    android:id="@+id/activity_project_details_list_view_attendees"
+                    android:layout_width="fill_parent"
+                    android:divider="@color/transparent"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activity_project_details_text_title_time_attendees"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/black"
+                    android:text="@string/activity_project_details_text_title_time_attendees"/>
+
+                <RelativeLayout
+                    android:id="@+id/relative_graphic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/piechart"
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"/>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

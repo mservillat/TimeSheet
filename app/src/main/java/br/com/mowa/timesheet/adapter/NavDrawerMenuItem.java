@@ -26,6 +26,7 @@ public class NavDrawerMenuItem {
         list.add(new NavDrawerMenuItem("Perfil", R.drawable.ic_person_black_24dp));
         list.add(new NavDrawerMenuItem("Tarefas", R.drawable.ic_task_black_24dp));
         list.add(new NavDrawerMenuItem("Projetos", R.drawable.ic_content_paste_black_24dp));
+        list.add(new NavDrawerMenuItem("scrolling", R.drawable.ic_content_paste_black_24dp));
 
 
         return list;

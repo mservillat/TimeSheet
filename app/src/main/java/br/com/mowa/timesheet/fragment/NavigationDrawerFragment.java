@@ -20,6 +20,7 @@ import java.util.List;
 
 import br.com.mowa.timesheet.activity.HomeActivity;
 import br.com.mowa.timesheet.activity.PerfilActivity;
+import br.com.mowa.timesheet.activity.ProjectInformationActivity;
 import br.com.mowa.timesheet.activity.ProjectsActivity;
 import br.com.mowa.timesheet.activity.TasksActivity;
 import br.com.mowa.timesheet.adapter.NavDrawerMenuAdapter;
@@ -81,6 +82,14 @@ public class NavigationDrawerFragment extends Fragment {
                         }
                         closeDrawer();
 
+                        break;
+                    case 4:
+                        if (!("br.com.mowa.timesheet.activity.ProjectInformationActivity".equals(getActivity().getLocalClassName()))) {
+                            Intent intentd = new Intent(getContext(), ProjectInformationActivity.class);
+                            closeDrawer();
+                            startActivity(intentd);
+                        }
+                        closeDrawer();
                         break;
 
                     default:

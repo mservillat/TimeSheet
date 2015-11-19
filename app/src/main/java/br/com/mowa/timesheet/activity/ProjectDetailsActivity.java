@@ -4,7 +4,12 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -40,6 +45,7 @@ import br.com.mowa.timesheet.parse.ParseTask;
 import br.com.mowa.timesheet.timesheet.R;
 import br.com.mowa.timesheet.utils.ImageDownload;
 import br.com.mowa.timesheet.utils.ImageStorage;
+import br.com.mowa.timesheet.utils.ImageUtils;
 import br.com.mowa.timesheet.utils.ListViewUtils;
 import br.com.mowa.timesheet.utils.UtilsTime;
 
@@ -67,14 +73,30 @@ public class ProjectDetailsActivity extends BaseActivity implements ImageDownloa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_details);
+        setContentView(R.layout.activity_project_information);
 
 
         this.progress = createProgressDialog("Loading", "loading information", true, true);
         this.progress.show();
-        createToolbar(R.id.activity_project_details_toolar);
+//        createToolbar(R.id.activity_project_details_toolar);
         Gson gson = new Gson();
         this.project = gson.fromJson(getIntent().getStringExtra(ProjectsActivity.KEY_INTENT_PUT_EXTRA_PROJECT_DETAILS), ProjectModel.class);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolBarLayout.setTitle(getTitle());
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+
 
         this.tvTitleProject = (TextView) findViewById(R.id.activity_project_details_text_title_project);
         this.tvTitleProject.setText(this.project.getName());
@@ -139,7 +161,8 @@ public class ProjectDetailsActivity extends BaseActivity implements ImageDownloa
 
 
         loadDetailsProject();
-        loadImageDownload();
+        loadImageCacheStorage();
+
     }
 
 
@@ -212,18 +235,23 @@ public class ProjectDetailsActivity extends BaseActivity implements ImageDownloa
 
 
 
-
-
-    private void loadImageDownload() {
-        File image = ImageStorage.getImage(this, project.getImage());
-        if (image != null) {
+    private void loadImageCacheStorage() {
+        File file = ImageStorage.getImage(this, project.getImage());
+        if (file != null) {
+            ViewGroup.LayoutParams params = imageView.getLayoutParams();
+            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(file, params.width, params.height);
+            imageView.setImageBitmap(bitmap);
+            progress.dismiss();
 
         } else {
-            new ImageDownload(this, project.getImage(), project.getImage(), this ).execute();
+            loadImageDownload();
         }
 
     }
 
+    private void loadImageDownload() {
+        new ImageDownload(this, project.getImage(), project.getImage(), this ).execute();
+    }
 
 
     private void loadDetailsProject() {
@@ -276,7 +304,6 @@ public class ProjectDetailsActivity extends BaseActivity implements ImageDownloa
             }
             hoursInProjectGraphic.add(time);
         }
-
         addData();
     }
 

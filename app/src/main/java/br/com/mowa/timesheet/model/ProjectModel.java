@@ -18,6 +18,7 @@ public class ProjectModel {
     private String description;
     private String color;
     private String image;
+    private String updatedAt;
 
     public String getName() {
         return name;
@@ -93,6 +94,14 @@ public class ProjectModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
